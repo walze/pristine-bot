@@ -10,8 +10,10 @@ export default class Command {
 
   }
 
-  run(message: Message) {
-    return this.action(message)
+  run(msg: Message) {
+    if (msg.content.match(/s-/))
+      if(msg.content.match(new RegExp(this.name)))
+      return this.action(msg)
   }
 
 }

@@ -3,6 +3,7 @@ import * as log from 'better-log'
 import { Client } from 'discord.js'
 import Command from './classes/Command';
 import Commands from './classes/Commands';
+import average_audits from './commands/audits';
 
 
 const app = Express()
@@ -21,12 +22,23 @@ client.on('ready', () => log('Bot ready...'))
 
 const commands = new Commands()
 
-const ping = new Command('ping', msg => {
-  msg.reply('pong')
+const audits = new Command('audits', msg => {
+  const who = msg.content.match(/<@!(.+?)>/) || msg.content.match(/<@(.+?)>/)
+
+  if (who)
+    msg.guild.fetchAuditLogs({
+      user: who[1],
+      limit: 100
+    }).then(audits => {
+      msg.channel.send(average_audits(audits, who[1]))
+    })
+  else
+    msg.reply('Must @someone')
 })
 
 commands.add([
-  ping,
+  audits,
+
 ])
 
 client.on('message', msg => commands.run(msg))
