@@ -11,9 +11,11 @@ export default class Command {
   }
 
   run(msg: Message) {
-    if (msg.content.match(/s-/))
-      if(msg.content.match(new RegExp(this.name)))
-      return this.action(msg)
+    if (msg.content.match(/^s-(\w)*\s?/))
+      if (msg.content.match(new RegExp(this.name)))
+        return this.action(msg)
+      else
+        msg.channel.send('Command not found')
   }
 
 }

@@ -20,6 +20,9 @@ client.login(config.token)
 client.on('ready', () => log('Bot ready...'))
 
 
+
+
+
 const commands = new Commands()
 
 const audits = new Command('audits', msg => {
@@ -29,11 +32,10 @@ const audits = new Command('audits', msg => {
     msg.guild.fetchAuditLogs({
       user: who[1],
       limit: 100
-    }).then(audits => {
-      msg.channel.send(average_audits(audits, who[1]))
     })
-  else
-    msg.reply('Must @someone')
+      .then(audits => msg.channel.send(average_audits(audits, who[1])))
+
+  else msg.reply('Must @someone')
 })
 
 commands.add([
