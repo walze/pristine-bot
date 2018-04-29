@@ -14,8 +14,6 @@ export default class Command {
     if (msg.content.match(/^s-(\w)*\s?/))
       if (msg.content.match(new RegExp(this.name)))
         return this.action(msg)
-      else
-        msg.channel.send('Command not found')
   }
 
 }

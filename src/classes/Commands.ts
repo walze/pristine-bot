@@ -1,18 +1,17 @@
-import Command from "./Command";
-import { isArray } from "util";
 import { Message } from "discord.js";
 
-export default class Commands {
-  private _commands: Command[] = []
+import Command from "./Command";
+import declarations from '../commands/declarations'
+import log from "../helpers/log";
 
-  public add(commands: Command | Command[]) {
-    if (isArray(commands))
-      commands.map(cmd => this._commands.push(cmd))
-    else
-      this._commands.push(commands)
+export default class Commands {
+  private _commands: Command[] = declarations
+
+  constructor() {
+    log('Listening to Commands:', ...this._commands.map(cmd => cmd.name))
   }
 
   public run(msg: Message) {
-    this._commands.map(cmd => cmd.run(msg))
+    return this._commands.map(cmd => cmd.run(msg))
   }
 }
