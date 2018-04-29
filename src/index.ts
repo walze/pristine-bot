@@ -5,19 +5,16 @@ import log from './helpers/log';
 
 
 const app = Express()
-app.listen(process.env.PORT || 3000, () => console.log('Express ready...'))
-app.get('/', (req, res) => res.send(`Bot working, noice...`))
+app.listen(process.env.PORT || 3000, () => log('Express Ready'))
+app.get('/', (req, res) => res.send(`Bot working...`))
 
 const client = new Client()
 const config = require('../config.json')
 
 client.login(config.token)
-client.on('ready', () => log('Bot ready...'))
-
-
+client.on('ready', () => log('Bot Ready'))
 
 
 const commands = new Commands()
-
 client.on('message', msg => commands.run(msg))
 
