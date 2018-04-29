@@ -11,6 +11,10 @@ export default class Commands {
     log('Listening to Commands:', ...this._commands.map(cmd => cmd.name))
   }
 
+  public add(command: Command) {
+    return this._commands.push(command)
+  }
+
   public run(msg: Message) {
     return this._commands.map(cmd => cmd.run(msg))
   }
