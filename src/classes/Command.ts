@@ -1,6 +1,8 @@
 import { Message } from "discord.js";
 import log from "../helpers/log";
 
+export type DiscordAction = (msg: Message, reference: Command) => void
+
 export interface At {
   id: string,
   tag: string

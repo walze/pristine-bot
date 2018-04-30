@@ -18,7 +18,7 @@ client.on('ready', () => {
   // Academic Server
   // listRoles(client, "354432374274260995")
 
-  log('\nBot Ready\n')
+  log('\nBot Ready\n')  
 })
 
 const commands = new Commands
