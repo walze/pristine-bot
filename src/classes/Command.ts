@@ -1,35 +1,56 @@
 import { Message } from "discord.js";
+import log from "../helpers/log";
+
+export interface At {
+  id: string,
+  tag: string
+}
+
+export interface CommandParams {
+  [key: string]: any
+  ats: At[]
+}
 
 export default class Command {
   public name: string
-  public params: { [key: string]: string | string[] } = {}
+  public params: CommandParams = { ats: [] }
   private _action: DiscordAction
+  private _paramRegex: RegExp = /\w+-\w+/g;
 
   constructor(name: string, action: DiscordAction) {
     this.name = name
     this._action = action
   }
 
+  // @s
+  public ats(pos: number) {
+    if (this.params.ats.length > 0)
+      return this.params.ats[pos]
+    else
+      return { id: '', tag: '' }
+  }
+
   private _getParams(msg: Message) {
-    const paramRegex = /\w+-\w+/g;
-    const params = msg.content.match(paramRegex)
 
-    const tagged = msg.content.match(/<@!?(.+?)>/g)
-    
-    if (tagged)
-      this.params.tagged = tagged
-
-    if (params)
-      params.map(el => {
-        const split = el.split('-')
-
-        if (split[0] !== 's')
-          this.params[split[0]] = split[1]
+    const ats = msg.content.match(/<@!?(.+?)>/g)
+    if (ats)
+      this.params.ats = ats.map(tag => {
+        return {
+          tag,
+          id: tag.replace(/<@!?/g, '').replace(/>/g, '')
+        }
       })
+
+    const params = msg.content.match(this._paramRegex)
+    if (params) params.map(el => {
+      const split = el.split('-')
+
+      if (split[0] !== 's') this.params[split[0]] = split[1]
+    })
   }
 
   public resetParams() {
-    this.params = {}
+    this.params = { ats: [] }
   }
 
   public run(msg: Message) {
@@ -39,6 +60,7 @@ export default class Command {
           this._getParams(msg)
           this._action(msg, this)
 
+          log(this.params)
           done()
         }
     })

@@ -1,6 +1,24 @@
-import { GuildAuditLogs } from "discord.js";
+import { GuildAuditLogs, Message } from "discord.js";
+import Command, { At } from "../classes/Command";
 
-export default function average_audits(audit: GuildAuditLogs, user: string) {
+export default function auditsHandler(msg: Message, ref: Command) {
+  const at = ref.ats(0)
+
+  if (at)
+    msg.guild.fetchAuditLogs({
+      user: at.id,
+      limit: Number(ref.params.amount) || 100,
+    })
+      .then(audits =>
+        msg.channel.send(
+          averageAudits(audits, at)
+        )
+      )
+
+  else msg.reply('Must @someone')
+}
+
+function averageAudits(audit: GuildAuditLogs, at: At) {
 
   if (audit.entries.size > 0) {
     // getting audit creation time
@@ -22,7 +40,7 @@ export default function average_audits(audit: GuildAuditLogs, user: string) {
     const average = diffs.reduce((prev, curr) => prev + curr) / diffs.length
 
     const text = `
-    <@!${user}>'s average is
+    ${at.tag}'s average is
     
     ${(average).toFixed(2)} Seconds
     ${(average / 60).toFixed(2)} Minutes
