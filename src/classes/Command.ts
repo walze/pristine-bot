@@ -2,7 +2,7 @@ import { Message } from "discord.js";
 
 export default class Command {
   public name: string
-  public params: string[] = []
+  public params: { [key: string]: string | string[] } = {}
   private _action: DiscordAction
 
   constructor(name: string, action: DiscordAction) {
@@ -10,18 +10,39 @@ export default class Command {
     this._action = action
   }
 
-  run(msg: Message) {
-    if (msg.content.match(/^s-(\w)*\s?/))
-      if (msg.content.match(new RegExp(this.name))) {
-        const paramRegex = /--\w+/g;
-        const params = msg.content.match(paramRegex)
+  private _getParams(msg: Message) {
+    const paramRegex = /\w+-\w+/g;
+    const params = msg.content.match(paramRegex)
 
-        if (params) this.params = params.map(prm => prm.replace(/--/g, ''))
+    const tagged = msg.content.match(/<@!?(.+?)>/g)
+    
+    if (tagged)
+      this.params.tagged = tagged
 
-        this._action(msg, this)
+    if (params)
+      params.map(el => {
+        const split = el.split('-')
 
-        this.params.length = 0
-      }
+        if (split[0] !== 's')
+          this.params[split[0]] = split[1]
+      })
   }
+
+  public resetParams() {
+    this.params = {}
+  }
+
+  public run(msg: Message) {
+    return new Promise(done => {
+      if (msg.content.match(/^s-(\w)*\s?/))
+        if (msg.content.match(new RegExp(this.name))) {
+          this._getParams(msg)
+          this._action(msg, this)
+
+          done()
+        }
+    })
+  }
+
 
 }

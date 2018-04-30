@@ -4,9 +4,11 @@ import log from "../helpers/log";
 import auditBansFilter from "./auditBansFilter";
 
 
+// s-audits argument-text
+// Eg. s-audits event-MEMBER_ADD_BAN amount-5 @wiva#9996
+
 const audits = new Command('audits', msg => {
   const who = msg.content.match(/<@!?(.+?)>/)
-
   if (who)
     msg.guild.fetchAuditLogs({
       user: who[1],
@@ -19,8 +21,10 @@ const audits = new Command('audits', msg => {
 
 
 const debug = new Command('debug', (msg, ref) => {
-  log('DEBUG MESSAGE:', msg.content)
-  msg.channel.send(`Arguments: ${ref.params}`)
+  log('MESSAGE:', msg.content)
+  log(ref)
+
+  msg.channel.send(`\`\`\`json\n${JSON.stringify(ref)} \`\`\``)
 })
 
 
