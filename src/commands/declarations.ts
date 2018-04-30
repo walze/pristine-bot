@@ -1,10 +1,11 @@
 import Command from "../classes/Command";
 import average_audits from "./audits";
 import log from "../helpers/log";
-import { User } from "discord.js";
+import auditBansFilter from "./auditBansFilter";
+
 
 const audits = new Command('audits', msg => {
-  const who = msg.content.match(/<@!(.+?)>/) || msg.content.match(/<@(.+?)>/)
+  const who = msg.content.match(/<@!?(.+?)>/)
 
   if (who)
     msg.guild.fetchAuditLogs({
@@ -16,8 +17,9 @@ const audits = new Command('audits', msg => {
   else msg.reply('Must @someone')
 })
 
+
 const debug = new Command('debug', (msg, ref) => {
-  log(msg.content)
+  log('DEBUG MESSAGE:', msg.content)
   msg.channel.send(`Arguments: ${ref.params}`)
 })
 
@@ -27,33 +29,54 @@ const bans = new Command('bans', (msg, ref) => {
     limit: Number(ref.params[0]) || 5,
     type: 'MEMBER_BAN_ADD'
   })
-    .then(audits => {
-      const audits_filtered = audits.entries.array().map(audit => {
-        if (audit.target instanceof User) {
-          const executor = audit.executor.tag
-          const executee = audit.target.tag
-          const reason = audit.reason || 'undefined'
+    .then(audits => auditBansFilter(audits, msg))
+})
 
-          return { executor, executee, reason }
-        } else return {}
-      })
+const auditfilters = new Command('auditfilters', (msg) => {
+  let text = 'Filter Name | Filter Value\n\n';
 
-      let text = ''
-      audits_filtered.map((obj) => {
-        text += `\`\`\`Executor: ${obj.executor}, \nVictim: ${obj.executee}, \nReason: ${obj.reason} \n\n\`\`\``
-      })
+  AuditLogEvents.map(el => text += `${el[0]}  |  ${el[1]}\n`)
 
-      msg.channel.send(text || "No bans here :thonk:")
-    })
+  msg.channel.send(text)
 })
 
 
 const declarations = [
   audits,
   debug,
-  bans
+  bans,
+  auditfilters,
 ]
 
 export default declarations
+
+const AuditLogEvents = [
+  ['GUILD_UPDATE', 1],
+  ['CHANNEL_CREATE', 10],
+  ['CHANNEL_UPDATE', 11],
+  ['CHANNEL_DELETE', 12],
+  ['CHANNEL_OVERWRITE_CREATE', 13],
+  ['CHANNEL_OVERWRITE_UPDATE', 14],
+  ['CHANNEL_OVERWRITE_DELETE', 15],
+  ['MEMBER_KICK', 20],
+  ['MEMBER_PRUNE', 21],
+  ['MEMBER_BAN_ADD', 22],
+  ['MEMBER_BAN_REMOVE', 23],
+  ['MEMBER_UPDATE', 24],
+  ['MEMBER_ROLE_UPDATE', 25],
+  ['ROLE_CREATE', 30],
+  ['ROLE_UPDATE', 31],
+  ['ROLE_DELETE', 32],
+  ['INVITE_CREATE', 40],
+  ['INVITE_UPDATE', 41],
+  ['INVITE_DELETE', 42],
+  ['WEBHOOK_CREATE', 50],
+  ['WEBHOOK_UPDATE', 51],
+  ['WEBHOOK_DELETE', 52],
+  ['EMOJI_CREATE', 60],
+  ['EMOJI_UPDATE', 61],
+  ['EMOJI_DELETE', 62],
+  ['MESSAGE_DELETE', 72]
+]
 
 

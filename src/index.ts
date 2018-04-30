@@ -1,44 +1,29 @@
 import * as Express from 'express'
 import { Client } from 'discord.js'
-import Commands from './classes/Commands';
-import log from './helpers/log';
-import Command from './classes/Command';
+import Commands from './classes/Commands'
+import log from './helpers/log'
+process.setMaxListeners(0)
 
 
 const app = Express()
-app.listen(process.env.PORT || 3000, () => log('Express Ready'))
-app.get('/', (req, res) => res.send(`Bot working...`))
+app.listen(process.env.PORT || 3000, () => log('\nExpress Ready'))
+app.get('/', (req, res) => res.send(`Bot is up`))
+
 
 const client = new Client()
 const config = require('../config.json')
 
-process.setMaxListeners(0)
-
 client.login(config.token)
 client.on('ready', () => {
-  log('Bot Ready')
+  // Academic Server
+  // listRoles(client, "354432374274260995")
 
-
-  const server = client.guilds.get("354432374274260995")
-
-  if (server) {
-    const roles = server.roles
-      .sort((roleA, roleB) => roleB.position - roleA.position)
-      .map(role => {
-        return {
-          id: role.id,
-          name: role.name,
-          pos: role.position
-        }
-      })
-
-    log(roles)
-  }
-
-  log('done')
+  log('\nBot Ready\n')
 })
 
-
-const commands = new Commands()
+const commands = new Commands
 
 client.on('message', msg => commands.run(msg))
+
+
+
