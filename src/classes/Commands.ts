@@ -16,10 +16,6 @@ export default class Commands {
   }
 
   public run(msg: Message) {
-    return this._commands.map(cmd =>
-      cmd.run(msg)
-        .then(done => cmd.resetParams())
-        .catch(log)
-    )
+    return this._commands.map(cmd => cmd.run(msg))
   }
 }

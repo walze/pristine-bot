@@ -11,7 +11,7 @@ const debug = new Command('debug', (msg, ref) => {
   log('MESSAGE:', msg.content)
   log(ref)
 
-  msg.channel.send(`\`\`\`json\n${JSON.stringify(ref)} \`\`\``)
+  msg.channel.send(`\`\`\`json\n${ref.name}\n${JSON.stringify(ref.params)}\n\`\`\``)
 })
 
 const audits = new Command('audits', auditsHandler)

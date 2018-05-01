@@ -2,7 +2,7 @@ import { GuildAuditLogs, Message } from "discord.js";
 import Command, { At } from "../../classes/Command";
 
 export default function auditsHandler(msg: Message, ref: Command) {
-  const at = ref.ats(0)
+  const at = ref.getAt(0)
 
   if (at)
     msg.guild.fetchAuditLogs({
