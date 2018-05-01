@@ -1,4 +1,6 @@
-export const Languages = {
+
+
+export const Languages: { [key: string]: string } = {
   'auto': 'Automatic',
   'af': 'Afrikaans',
   'sq': 'Albanian',

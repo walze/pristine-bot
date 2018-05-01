@@ -34,10 +34,10 @@ export default class Command {
     else
       return { id: '', tag: '' }
   }
-
+  
+  // Getting Params
   private _getParams(msg: Message) {
 
-    // Getting Params
     const params = msg.content.match(this._paramRegex)
     if (params) params.map(el => {
       const split = el.split('-')

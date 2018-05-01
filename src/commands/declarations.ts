@@ -16,11 +16,13 @@ const debug = new Command('debug', (msg, ref) => {
 
 const audits = new Command('audits', auditsHandler)
 const tl = new Command('tl', translator)
+const love = new Command('love', msg => msg.channel.send(':heart:'))
 
 const declarations = [
   debug,
   audits,
   tl,
+  love,
 ]
 
 export default declarations
