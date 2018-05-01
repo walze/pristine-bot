@@ -8,7 +8,7 @@ export default class Commands {
   private _commands: Command[] = declarations
 
   constructor() {
-    log('Listening to Commands:', ...this._commands.map(cmd => cmd.name))
+    log('Listening to Commands', this._commands.map(cmd => cmd.name))
   }
 
   public add(command: Command) {

@@ -79,7 +79,7 @@ export default class Command {
         this._action(msg, this)
         this.resetParams()
 
-        log(this.params)
+        log('Command', this.name)
       }
   }
 }

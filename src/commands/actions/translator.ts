@@ -21,9 +21,7 @@ export default function translator(msg: Message, ref: Command) {
 function switchText(language: string = ''): string | void {
   language = language.replace(/\b\w/g, l => l.toUpperCase())
 
-  for (let lang in Languages) {
-    if (Languages[lang] === language) {
+  for (let lang in Languages) 
+    if (Languages[lang] === language) 
       return Languages[lang]
-    }
-  }
 }
