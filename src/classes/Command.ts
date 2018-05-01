@@ -10,14 +10,14 @@ export interface At {
 
 export interface CommandParams {
   [key: string]: any
-  ats: At[]
+  ats: At[],
+  text: string
 }
 
 export default class Command {
   public name: string
-  public params: CommandParams = { ats: [] }
+  public params: CommandParams = { ats: [], text: '' }
   private _action: DiscordAction
-  private _paramRegex: RegExp = /\w+-\w+/g;
 
   constructor(name: string, action: DiscordAction) {
     this.name = name
@@ -33,8 +33,28 @@ export default class Command {
   }
 
   private _getParams(msg: Message) {
+    const paramRegex: RegExp = /\w+-\w+/g;
+    const textRegex: RegExp = /\w+-\w+\s/g;
 
-    const ats = msg.content.match(/<@!?(.+?)>/g)
+    // Getting Params
+    const params = msg.content.match(paramRegex)
+    if (params) params.map(el => {
+      const split = el.split('-')
+
+      if (split[0] !== 's') this.params[split[0]] = split[1]
+    })
+
+    // Removes params and gets text only
+    let text = msg.content
+    const blacklist = text.match(textRegex)
+
+    if (blacklist)
+      blacklist.map((blacklist: string) => text = text.replace(blacklist, ''))
+
+    this.params.text = text
+
+    // Getting @'s
+    const ats = msg.content.match(/<@!?([^>]+)>/g)
     if (ats)
       this.params.ats = ats.map(tag => {
         return {
@@ -42,17 +62,10 @@ export default class Command {
           id: tag.replace(/<@!?/g, '').replace(/>/g, '')
         }
       })
-
-    const params = msg.content.match(this._paramRegex)
-    if (params) params.map(el => {
-      const split = el.split('-')
-
-      if (split[0] !== 's') this.params[split[0]] = split[1]
-    })
   }
 
   public resetParams() {
-    this.params = { ats: [] }
+    this.params = { ats: [], text: '' }
   }
 
   public run(msg: Message) {

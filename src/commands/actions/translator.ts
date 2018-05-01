@@ -19,5 +19,4 @@ export default function translator(msg: Message, ref: Command) {
   log(msg.content)
   log(ref)
 
-  translate()
 }
