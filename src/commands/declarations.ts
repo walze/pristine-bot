@@ -1,6 +1,7 @@
 import Command from "../classes/Command";
 import log from "../helpers/log";
-import auditsHandler from "./averageAudits";
+import auditsHandler from "./actions/averageAudits";
+import translator from "./actions/translator";
 
 
 // s-debug argument-text
@@ -13,11 +14,13 @@ const debug = new Command('debug', (msg, ref) => {
   msg.channel.send(`\`\`\`json\n${JSON.stringify(ref)} \`\`\``)
 })
 
-const audits = new Command('audits', (msg, ref) => auditsHandler(msg, ref))
+const audits = new Command('audits', auditsHandler)
+const tl = new Command('tl', translator)
 
 const declarations = [
   debug,
   audits,
+  tl,
 ]
 
 export default declarations

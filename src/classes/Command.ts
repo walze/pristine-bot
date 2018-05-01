@@ -24,7 +24,7 @@ export default class Command {
     this._action = action
   }
 
-  // @s
+  // @[]
   public ats(pos: number) {
     if (this.params.ats.length > 0)
       return this.params.ats[pos]

@@ -4,8 +4,8 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "start": "concurrently \"tsc -w\" \"nodemon\"",
-    "cmds": "npm run typescript && npm run nodemon",
+    "start": "concurrently --no-color \"tsc -w\" \"nodemon\"",
+    "all": "npm run typescript && npm run nodemon",
     "typescript": "start cmd.exe @cmd /k \"tsc -w\"",
     "nodemon": "start cmd.exe @cmd /k \"nodemon\""
   },

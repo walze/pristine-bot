@@ -1,5 +1,5 @@
 import { GuildAuditLogs, Message } from "discord.js";
-import Command, { At } from "../classes/Command";
+import Command, { At } from "../../classes/Command";
 
 export default function auditsHandler(msg: Message, ref: Command) {
   const at = ref.ats(0)

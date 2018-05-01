@@ -4,3 +4,4 @@ declare module "*.json" {
 }
 
 declare module 'better-log';
+declare module 'google-translate-api';
