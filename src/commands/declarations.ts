@@ -1,5 +1,5 @@
 import Command from "../classes/Command";
-import log from "../helpers/log";
+import log from "../helpers/logger";
 import auditsHandler from "./actions/averageAudits";
 import translator from "./actions/translator";
 

@@ -1,5 +1,5 @@
 import { Message } from "discord.js"
-import log from "../helpers/log"
+import log from "../helpers/logger"
 
 export type DiscordAction = (msg: Message, reference: Command) => void
 
@@ -72,14 +72,27 @@ export default class Command {
     this.params = { ats: [], text: '' }
   }
 
+  @checkIfCommand
   public run(msg: Message): void {
+    this._getParams(msg)
+    this._action(msg, this)
+    this.resetParams()
+  }
+}
+
+export function checkIfCommand(target: any, key: string, descriptor: any) {
+  const action = descriptor.value;
+
+  descriptor.value = function () {
+    const msg = arguments[0]
+
     if (msg.content.match(/^s-(\w)*\s?/))
       if (msg.content.match(new RegExp(this.name))) {
-        this._getParams(msg)
-        this._action(msg, this)
-        this.resetParams()
-
-        log('Command', this.name)
+        // runs action
+        action.apply(this, arguments)
+        log('Command ran', this.name)
       }
+
   }
+  return descriptor;
 }

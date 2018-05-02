@@ -1,6 +1,6 @@
 import { Message } from 'discord.js'
 import Command from '../../classes/Command'
-import log from '../../helpers/log'
+import log from '../../helpers/logger'
 import { Languages } from './langs'
 import * as translate from 'google-translate-api'
 

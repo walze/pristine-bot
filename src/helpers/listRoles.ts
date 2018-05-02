@@ -1,4 +1,4 @@
-import log from "./log";
+import log from "./logger";
 import { Client } from "discord.js";
 
 export default function listRoles(client: Client, server_id: string) {

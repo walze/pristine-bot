@@ -1,13 +1,13 @@
 import { Message } from "discord.js";
 
 import Command from "./Command";
-import log from "../helpers/log";
+import log from "../helpers/logger";
 
 export default class Commands {
   private _commands: Command[] = []
 
   constructor(commands: Command[]) {
-    log('Listening to Commands', commands)
+    log('Listening to Commands', commands.map(cmd => cmd.name))
 
     commands.map(command => this.add(command))
   }
