@@ -1,7 +1,7 @@
 import { GuildAuditLogs, Message } from "discord.js";
 import Parameters, { At } from "../../classes/Parameters";
 
-export default function auditsHandler(msg: Message, params: Parameters) {
+export default function auditsAction(msg: Message, params: Parameters) {
   const at = params.getAt(0)
 
   if (at.id)

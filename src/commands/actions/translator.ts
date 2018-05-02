@@ -4,7 +4,7 @@ import { Languages } from './langs'
 import * as translate from 'google-translate-api'
 import Parameters from '../../classes/Parameters';
 
-export default function translator(msg: Message, params: Parameters) {
+export default function translatorAction(msg: Message, params: Parameters) {
   translate(params.text, {
     from: switchText(params.from) || 'auto',
     to: switchText(params.to) || 'en'

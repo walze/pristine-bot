@@ -1,7 +1,9 @@
 import Command from "../classes/Command";
 import log from "../helpers/logger";
-import auditsHandler from "./actions/averageAudits";
-import translator from "./actions/translator";
+import auditsAction from "./actions/averageAudits";
+import translatorAction from "./actions/translator";
+import { urban } from "../types";
+import urbanAction from "./actions/urban";
 
 // s-debug argument-text
 // Eg. s-debug event-MEMBER_ADD_BAN amount-5 @wiva#9996
@@ -29,15 +31,17 @@ const thonk = new Command('thonk', msg => {
   msg.channel.send('', { file: 'https://cdn.discordapp.com/emojis/409528321685061634.png' })
 })
 
-const audits = new Command('audits', auditsHandler)
-const tl = new Command('tl', translator)
+const audits = new Command('audits', auditsAction)
+const tl = new Command('tl', translatorAction)
+const urban = new Command('urban', urbanAction)
 
 const declarations = [
   debug,
   audits,
   tl,
   thonk,
-  say
+  say,
+  urban,
 ]
 
 export default declarations
