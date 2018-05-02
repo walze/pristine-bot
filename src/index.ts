@@ -15,5 +15,7 @@ const config = require('../config.json')
 client.login(config.token)
 client.on('ready', () => log('Bot Ready\n'))
 
-const commands = new Commands(declarations)
+export const commands = new Commands(declarations)
+log('\nListening to Commands', commands.list())
+
 client.on('message', msg => commands.run(msg))
