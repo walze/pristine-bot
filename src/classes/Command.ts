@@ -27,14 +27,13 @@ export default class Command {
     this._action = action
   }
 
-  // @[]
   public getAt(pos: number) {
     if (this.params.ats.length > 0)
       return this.params.ats[pos]
     else
       return { id: '', tag: '' }
   }
-  
+
   // Getting Params
   private _getParams(msg: Message) {
 
@@ -45,25 +44,26 @@ export default class Command {
       if (split[0] !== 's') this.params[split[0]] = split[1]
     })
 
-    this._getText(msg)
-    this._getAts(msg)
+    this.params.text = this._getText(msg)
+    this.params.ats = this._getAts(msg)
   }
 
   // Gets @'s
   private _getAts(msg: Message) {
     const ats = msg.content.match(this._atsRegex)
     if (ats)
-      this.params.ats = ats.map(tag => {
+      return ats.map(tag => {
         return {
           tag,
           id: tag.replace(/<@!?/g, '').replace(/>/g, '')
         }
       })
+    else return []
   }
 
   // Removes params and gets text only
   private _getText(msg: Message) {
-    this.params.text = msg.content
+    return msg.content
       .replace(this._textRegex, '')
       .replace(this._atsRegex, '')
   }
