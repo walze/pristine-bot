@@ -7,23 +7,37 @@ import translator from "./actions/translator";
 // Eg. s-debug event-MEMBER_ADD_BAN amount-5 @wiva#9996
 
 const debug = new Command('debug', (msg, params) => {
-  log('MESSAGE:', msg.content)
-  log(params)
+  log('\nMESSAGE:', msg.content)
+  log(params, '\n')
 
-  msg.channel.send(JSON.stringify(params))
+  const send: any = {}
+
+  for (let param in params)
+    if (param[0] != '_')
+      send[param] = params[param]
+
+  msg.channel.send(JSON.stringify(send))
+})
+
+const say = new Command('say', (msg, params) => {
+  msg.delete()
+  msg.channel.send(`${params.getAt(0).tag} ${params.text}`)
+})
+
+const thonk = new Command('thonk', msg => {
+  msg.delete()
+  msg.channel.send('', { file: 'https://cdn.discordapp.com/emojis/409528321685061634.png' })
 })
 
 const audits = new Command('audits', auditsHandler)
 const tl = new Command('tl', translator)
-const love = new Command('love', msg => msg.channel.send(':heart:'))
-const thonk = new Command('thonk', msg => msg.channel.send('', { file: 'https://cdn.discordapp.com/emojis/409528321685061634.png' }))
 
 const declarations = [
   debug,
   audits,
   tl,
-  love,
-  thonk
+  thonk,
+  say
 ]
 
 export default declarations

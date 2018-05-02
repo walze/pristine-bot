@@ -7,7 +7,7 @@ export default class Commands {
   private _commands: Command[] = []
 
   constructor(commands: Command[]) {
-    log('Listening to Commands', commands.map(cmd => cmd.name))
+    log('\nListening to Commands', commands.map(cmd => cmd.name))
 
     commands.map(command => this.add(command))
   }

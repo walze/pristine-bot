@@ -13,7 +13,7 @@ const client = new Client()
 const config = require('../config.json')
 
 client.login(config.token)
-client.on('ready', () => log('\nBot Ready\n'))
+client.on('ready', () => log('Bot Ready\n'))
 
 const commands = new Commands(declarations)
 client.on('message', msg => commands.run(msg))

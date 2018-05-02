@@ -12,7 +12,7 @@ export default class Parameters {
   private _emptyAt: At = { id: '', tag: '' }
   private _paramRegex: RegExp = /\w+-\w+/g
   private _atsRegex: RegExp = /<@!?(\d+)>/g
-  private _textRegex: RegExp = /\w+-\w+\s/g
+  private _textRegex: RegExp = /\w+-\w+\s?/g
 
   constructor(msg: Message) {
     const paramsMatch = msg.content.match(this._paramRegex)
