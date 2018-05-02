@@ -1,13 +1,13 @@
 import { GuildAuditLogs, Message } from "discord.js";
-import Command, { At } from "../../classes/Command";
+import Parameters, { At } from "../../classes/Parameters";
 
-export default function auditsHandler(msg: Message, ref: Command) {
-  const at = ref.getAt(0)
+export default function auditsHandler(msg: Message, params: Parameters) {
+  const at = params.getAt(0)
 
   if (at)
     msg.guild.fetchAuditLogs({
       user: at.id,
-      limit: Number(ref.params.amount) || 100,
+      limit: Number(params.amount) || 100,
     })
       .then(audits =>
         msg.channel.send(

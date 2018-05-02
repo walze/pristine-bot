@@ -6,9 +6,11 @@ import translator from "./actions/translator";
 // s-debug argument-text
 // Eg. s-debug event-MEMBER_ADD_BAN amount-5 @wiva#9996
 
-const debug = new Command('debug', (msg, ref) => {
+const debug = new Command('debug', (msg, params) => {
   log('MESSAGE:', msg.content)
-  log(ref)
+  log(params)
+
+  msg.channel.send(JSON.stringify(params))
 })
 
 const audits = new Command('audits', auditsHandler)
