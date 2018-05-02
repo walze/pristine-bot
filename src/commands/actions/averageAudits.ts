@@ -4,7 +4,7 @@ import Parameters, { At } from "../../classes/Parameters";
 export default function auditsHandler(msg: Message, params: Parameters) {
   const at = params.getAt(0)
 
-  if (at)
+  if (at.id)
     msg.guild.fetchAuditLogs({
       user: at.id,
       limit: Number(params.amount) || 100,
