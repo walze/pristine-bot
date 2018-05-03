@@ -7,6 +7,7 @@ import defineAction from "./actions/define";
 import Commands from "../classes/Commands";
 import { Message } from "discord.js";
 import Parameters from "../classes/Parameters";
+import googleAction from "./actions/googleAction";
 
 // s-debug argument-value
 // Eg. s-debug event-MEMBER_ADD_BAN amount-5 @wiva#9996
@@ -21,6 +22,7 @@ export const audits = new Command('audits', auditsAction)
 export const tl = new Command('tl', translatorAction)
 export const urban = new Command('urban', urbanAction)
 export const define = new Command('define', defineAction)
+export const google = new Command('google', googleAction)
 
 function debugAction(msg: Message, params: Parameters) {
   log('\nMESSAGE:', msg.content)
