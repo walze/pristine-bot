@@ -5,6 +5,7 @@ import translatorAction from "./actions/translator";
 import { urban } from "../types";
 import urbanAction from "./actions/urban";
 import { commands } from "..";
+import defineAction from "./actions/define";
 
 // s-debug argument-text
 // Eg. s-debug event-MEMBER_ADD_BAN amount-5 @wiva#9996
@@ -38,10 +39,10 @@ const image = new Command('image', (msg, params) => {
 })
 
 const help = new Command('help', msg => msg.channel.send(commands.list()))
-//https://boards.fscchan.nl/images/22169.jpg
 const audits = new Command('audits', auditsAction)
 const tl = new Command('tl', translatorAction)
 const urban = new Command('urban', urbanAction)
+const define = new Command('define', defineAction)
 
 const declarations: Command[] = [
   debug,
@@ -51,7 +52,8 @@ const declarations: Command[] = [
   say,
   urban,
   help,
-  image
+  image,
+  define,
 ]
 
 export default declarations

@@ -1,5 +1,5 @@
 import { Message } from "discord.js";
-import Axios from "axios";
+import Axios, { AxiosError } from "axios";
 import log from "../../helpers/logger";
 import { urban } from "../../types";
 import Parameters from "../../classes/Parameters";
@@ -24,5 +24,10 @@ ${resp.example}
         msg.channel.send(text.join('\n'))
       } else msg.reply('404\'d')
     })
-    .catch(log)
+    .catch((err: AxiosError) => {
+      log(err.response, err.message)
+
+      msg.channel.send(`Not Found
+${err.message}`)
+    })
 }
