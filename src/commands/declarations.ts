@@ -23,6 +23,11 @@ export const tl = new Command('tl', translatorAction)
 export const urban = new Command('urban', urbanAction)
 export const define = new Command('define', defineAction)
 export const google = new Command('google', googleAction)
+export const mafs = new Command('mafs', mafsAction)
+
+function mafsAction(msg: Message, params: Parameters) {
+  msg.channel.send(eval(params.text))
+}
 
 function debugAction(msg: Message, params: Parameters) {
   log('\nMESSAGE:', msg.content)
