@@ -1,6 +1,6 @@
 // used for global types
 
-export interface urban {
+export interface Urban {
   id: string
   term: string
   url: string

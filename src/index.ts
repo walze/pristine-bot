@@ -2,7 +2,6 @@ import * as Express from 'express'
 import { Client } from 'discord.js'
 import Commands from './classes/Commands'
 import log from './helpers/logger'
-import declarations from './commands/declarations';
 process.setMaxListeners(0)
 
 const app = Express()
@@ -15,7 +14,5 @@ const config = require('../config.json')
 client.login(config.token)
 client.on('ready', () => log('Bot Ready\n'))
 
-export const commands = new Commands(declarations)
-log('\nListening to Commands', commands.list())
-
-client.on('message', msg => commands.run(msg))
+log('\nListening to Commands', Commands.list())
+client.on('message', msg => Commands.run(msg))

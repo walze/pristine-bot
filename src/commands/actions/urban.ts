@@ -1,14 +1,14 @@
 import { Message } from "discord.js";
 import Axios, { AxiosError } from "axios";
 import log from "../../helpers/logger";
-import { urban } from "../../types";
+import { Urban } from "../../types";
 import Parameters from "../../classes/Parameters";
 
 
 export default function urbanAction(msg: Message, params: Parameters) {
   Axios.get(`http://urbanscraper.herokuapp.com/search/${params.text}`)
     .then(res => {
-      const urbanResponse: urban[] = res.data.slice(0, params.defs || 2)
+      const urbanResponse: Urban[] = res.data.slice(0, params.defs || 2)
 
       if (urbanResponse) {
 

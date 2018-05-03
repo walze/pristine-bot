@@ -1,23 +1,21 @@
 import { Message } from "discord.js";
-
 import Command from "./Command";
+import * as declarations from '../commands/declarations'
+import { objToArray } from "../helpers/obj_array";
+
 
 export default class Commands {
-  private _commands: Command[] = []
+  private static _commands: Command[] = objToArray(declarations)
 
-  constructor(commands: Command[]) {
-    commands.map(command => this.add(command))
-  }
-
-  public list(): string[] {
+  public static list(): string[] {
     return this._commands.map(cmd => cmd.name)
   }
 
-  public add(command: Command): void {
+  public static add(command: Command): void {
     this._commands.push(command)
   }
 
-  public run(msg: Message): void {
+  public static run(msg: Message): void {
     this._commands.map(cmd => cmd.run(msg))
   }
 }
