@@ -5,6 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "start": "npm run tsc && concurrently --no-color \"npm run tscw\" \"nodemon\"",
+    "boot": "npm run tsc && node dist/index",
     "tsc": "tsc",
     "tscw": "tsc -w"
   },
