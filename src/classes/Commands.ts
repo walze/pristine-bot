@@ -11,10 +11,6 @@ export default class Commands {
     return this._commands.map(cmd => cmd.name)
   }
 
-  public static add(command: Command): void {
-    this._commands.push(command)
-  }
-
   public static run(msg: Message): void {
     this._commands.map(cmd => cmd.run(msg))
   }
