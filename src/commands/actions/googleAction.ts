@@ -2,7 +2,6 @@ import { JSDOM } from 'jsdom';
 import { Message } from 'discord.js';
 import Parameters from '../../classes/Parameters';
 import Axios from 'axios';
-import log from '../../helpers/logger';
 
 export default function googleAction(msg: Message, params: Parameters) {
 
