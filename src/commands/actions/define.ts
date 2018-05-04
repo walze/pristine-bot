@@ -1,36 +1,22 @@
 import { Message } from "discord.js";
-import Axios, { AxiosError } from "axios";
-import log from "../../helpers/logger";
+//import log from "../../helpers/logger";
 import Parameters from "../../classes/Parameters";
-import { dictionary } from "../../types";
+import { definition } from "../../types";
+
+import * as wordnet from 'wordnet'
 
 export default function defineAction(msg: Message, params: Parameters) {
-  Axios.get(`http://api.pearson.com/v2/dictionaries/entries?headword=${params.text}`)
-    .then(res => {
-      const response: dictionary = res.data
+  wordnet.lookup(params.text, (err: any, defs: definition[]) => {
 
-      if (response.results.length > 0) {
-        const defs = response.results.slice(0, params.amount || 2)
+    if (!err) {
+      const text = defs.map((def, i) =>
+        `__**Definition #${i + 1}**__
+${def.glossary}
 
-        console.log(defs)
+`)
 
-        let text = defs.map((def, i) => `
-__*Definition #${i + 1}*__ *${def.part_of_speech}*
-${def.senses.map(sense => `${sense.definition || ''}
-
-*EXAMPLES*
-${sense.examples.map(eg => `${eg.text}`)}
-`)}`)
-
-
-        msg.channel.send(text)
-      }
-      else msg.reply('404\'d')
-    })
-    .catch((err: AxiosError) => {
-      log(err, 'define.ts')
-
-      msg.channel.send(`__Not found or error__
-${err.message}`)
-    })
+      msg.channel.send(text)
+    } else
+      msg.channel.send('404\'d')
+  })
 }

@@ -11,25 +11,15 @@ export interface Urban {
   posted: string
 }
 
-export interface dictionary {
-  status: string
-  offset: string
-  limit: string
-  count: string
-  total: string
-  url: string
-  results: [
-    {
-      datasets: string[],
-      headword: string,
-      id: string,
-      part_of_speech: string,
-      senses: [
-        {
-          definition: string,
-          examples: [{ text: string }]
-        }
-      ],
-      url: string
-    }]
+export interface definition {
+  meta: {
+    synsetOffset: number,
+    lexFilenum: number,
+    synsetType: string,
+    wordCount: number,
+    words: object[],
+    pointerCount: number,
+    pointers: object[]
+  },
+  glossary: string
 }

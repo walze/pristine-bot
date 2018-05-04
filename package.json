@@ -19,7 +19,8 @@
     "discord.js": "^11.2.1",
     "express": "^4.16.2",
     "google-translate-api": "^2.3.0",
-    "jsdom": "^11.10.0"
+    "jsdom": "^11.10.0",
+    "wordnet": "^0.1.2"
   },
   "devDependencies": {
     "typescript": "^2.8.3"

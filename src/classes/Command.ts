@@ -24,7 +24,7 @@ export function checkIfCommand(target: any, key: string, descriptor: any) {
 
   descriptor.value = function (msg: Message) {
     if (msg.content.match(/^s-(\w)*\s?/))
-      if (msg.content.match(new RegExp(this.name))) {
+      if (msg.content.match(new RegExp(`s-${this.name}`))) {
         // runs action
         action.apply(this, arguments)
         log('Command:', this.name)
