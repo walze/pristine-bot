@@ -1,5 +1,5 @@
 import { GuildAuditLogs, Message } from "discord.js";
-import Parameters, { At } from "../../classes/Parameters";
+import Parameters, { at } from "../../classes/Parameters";
 
 export default function auditsAction(msg: Message, params: Parameters) {
   const at = params.getAt(0)
@@ -18,7 +18,7 @@ export default function auditsAction(msg: Message, params: Parameters) {
   else msg.reply('Must @someone')
 }
 
-function averageAudits(audit: GuildAuditLogs, at: At) {
+function averageAudits(audit: GuildAuditLogs, at: at) {
 
   if (audit.entries.size > 0) {
     // getting audit creation time

@@ -1,6 +1,6 @@
 import { Message } from "discord.js";
 
-export interface At {
+export interface at {
   id: string,
   tag: string
 }
@@ -8,13 +8,16 @@ export interface At {
 export default class Parameters {
   [key: string]: any
   public text: string
-  public ats: At[]
-  private _emptyAt: At = { id: '', tag: '' }
+  public ats: at[]
+  public amount?: string
+
+  private _emptyAt: at = { id: '', tag: '' }
   private _paramRegex: RegExp = /\w+-\w+/g
   private _atsRegex: RegExp = /<@!?(\d+)>/g
   private _textRegex: RegExp = /\w+-\w+\s?/g
 
   constructor(msg: Message) {
+
     const paramsMatch = msg.content.match(this._paramRegex)
     if (paramsMatch) paramsMatch.map(el => {
       const split = el.split('-')
@@ -26,7 +29,7 @@ export default class Parameters {
     this.ats = this._filterAts(msg)
   }
 
-  public getAt(pos: number): At {
+  public getAt(pos: number): at {
     if (this.ats.length > 0)
       return this.ats[pos]
     else
@@ -34,9 +37,9 @@ export default class Parameters {
   }
 
   // Gets @'s
-  private _filterAts(msg: Message): At[] {
+  private _filterAts(msg: Message): at[] {
     const atsMatchеs = msg.content.match(this._atsRegex)
-    const ats: At[] = []
+    const ats: at[] = []
 
     if (atsMatchеs)
       atsMatchеs.map(tag => {
