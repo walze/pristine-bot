@@ -1,11 +1,10 @@
-import { Message } from "discord.js";
 import Axios, { AxiosError } from "axios";
 import log from "../../helpers/logger";
 import { Urban } from "../../types";
-import Parameters from "../../classes/Parameters";
+import { DiscordAction } from "../../classes/Command";
 
 
-export default function urbanAction(msg: Message, params: Parameters) {
+export const urbanAction: DiscordAction = (msg, params) => {
   Axios.get(`http://urbanscraper.herokuapp.com/search/${params.text}`)
     .then(res => {
       const urbanResponse: Urban[] = res.data.slice(0, params.amount || 2)

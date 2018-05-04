@@ -1,10 +1,9 @@
-import { Message } from 'discord.js'
 import log from '../../helpers/logger'
-import { Languages } from './langs'
+import { Languages } from './helpers/langs'
 import * as translate from 'google-translate-api'
-import Parameters from '../../classes/Parameters';
+import { DiscordAction } from '../../classes/Command';
 
-export default function translatorAction(msg: Message, params: Parameters) {
+export const translatorAction: DiscordAction = (msg, params) => {
   translate(params.text, {
     from: switchText(params.from) || 'auto',
     to: switchText(params.to) || 'en'

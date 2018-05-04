@@ -1,9 +1,8 @@
 import { JSDOM } from 'jsdom';
-import { Message } from 'discord.js';
-import Parameters from '../../classes/Parameters';
 import Axios from 'axios';
+import { DiscordAction } from '../../classes/Command';
 
-export default function googleAction(msg: Message, params: Parameters) {
+export const googleAction: DiscordAction = (msg, params) => {
 
   Axios.get(`https://www.google.com.br/search?q=${params.text}`)
     .then(res => {
@@ -22,7 +21,7 @@ export default function googleAction(msg: Message, params: Parameters) {
           .replace(/%3F/g, '?')
           .replace(/%26/g, '&')
       )
-      
+
       // remove images search
       links.filter(el => {
         if (el.indexOf('/search') < 0)

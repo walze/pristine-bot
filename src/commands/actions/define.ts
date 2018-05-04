@@ -1,11 +1,10 @@
-import { Message } from "discord.js";
 //import log from "../../helpers/logger";
-import Parameters from "../../classes/Parameters";
 import { definition } from "../../types";
 
 import * as wordnet from 'wordnet'
+import { DiscordAction } from "../../classes/Command";
 
-export default function defineAction(msg: Message, params: Parameters) {
+export const defineAction: DiscordAction = (msg, params) => {
   wordnet.lookup(params.text, (err: any, defs: definition[]) => {
 
     if (!err) {
