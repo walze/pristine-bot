@@ -20,7 +20,6 @@ export const currencyAction: action<currencyParams> = (msg, params) => {
 
     const fromTo = `${params.from}_${params.to}`
 
-
     Axios.get(`https://free.currencyconverterapi.com/api/v5/convert?q=${fromTo}&compact=y`)
       .then(res => {
         const val = res.data[fromTo].val
@@ -36,6 +35,9 @@ export const currencyAction: action<currencyParams> = (msg, params) => {
         msg.channel.send(`Not Found
 ${err.message}`)
       })
-  } else msg.channel.send('Wrong syntax. s-curr from-\"CURRENCY_CODE\" to-\"CURRENCY_CODE\" \"VALUE OR EMPTY\"')
+
+  }
+  else
+    msg.channel.send('Wrong syntax. s-curr from-\"CURRENCY_CODE\" to-\"CURRENCY_CODE\" \"VALUE OR EMPTY\"')
 
 }

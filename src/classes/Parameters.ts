@@ -7,13 +7,11 @@ export default class Parameters {
   public ats: at[]
   public amount?: string
 
-  private _emptyAt: at = { id: '', tag: '' }
   private _paramRegex: RegExp = /\w+-\w+/g
   private _atsRegex: RegExp = /<@!?(\d+)>/g
   private _textRegex: RegExp = /\w+-\w+\s?/g
 
   constructor(msg: Message) {
-
     const paramsMatch = msg.content.match(this._paramRegex)
     if (paramsMatch) paramsMatch.map(el => {
       const split = el.split('-')
@@ -29,7 +27,7 @@ export default class Parameters {
     if (this.ats.length > 0)
       return this.ats[pos]
     else
-      return this._emptyAt
+      return { id: '', tag: '' }
   }
 
   // Gets @'s

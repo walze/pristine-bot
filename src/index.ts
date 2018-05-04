@@ -14,5 +14,5 @@ const config = require('../config.json')
 client.login(config.token)
 client.on('ready', () => log('Bot Ready\n'))
 
-log('\nListening to Commands', Commands.list())
+log('\nListening to Commands\n', Commands.list())
 client.on('message', msg => Commands.run(msg))
