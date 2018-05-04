@@ -8,6 +8,7 @@ import Commands from "../classes/Commands";
 import { Message } from "discord.js";
 import Parameters from "../classes/Parameters";
 import googleAction from "./actions/googleAction";
+import { currencyAction } from "./actions/currency";
 
 // s-debug argument-value
 // Eg. s-debug event-MEMBER_ADD_BAN amount-5 @wiva#9996
@@ -24,6 +25,7 @@ export const urban = new Command('urban', urbanAction)
 export const define = new Command('define', defineAction)
 export const google = new Command('google', googleAction)
 export const mafs = new Command('mafs', mafsAction)
+export const curr = new Command('curr', currencyAction)
 
 function mafsAction(msg: Message, params: Parameters) {
   msg.channel.send(eval(params.text))
