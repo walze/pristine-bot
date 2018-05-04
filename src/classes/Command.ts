@@ -1,14 +1,14 @@
 import { Message } from "discord.js"
 import log from "../helpers/logger"
 import Parameters from "./Parameters";
+import { action } from "../types";
 
-export type DiscordAction<T = Parameters> = (message: Message, parameters: Parameters & T) => void
 
 export default class Command {
   public name: string
-  private _action: DiscordAction<any>
+  private _action: action<any>
 
-  constructor(name: string, action: DiscordAction<any>) {
+  constructor(name: string, action: action<any>) {
     this.name = name
     this._action = action
   }

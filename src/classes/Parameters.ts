@@ -1,9 +1,5 @@
 import { Message } from "discord.js";
-
-export interface at {
-  id: string,
-  tag: string
-}
+import { at } from "../types";
 
 export default class Parameters {
   [key: string]: any

@@ -1,13 +1,12 @@
 import Axios, { AxiosError } from "axios";
 import log from "../../helpers/logger";
-import { Urban } from "../../types";
-import { DiscordAction } from "../../classes/Command";
+import { urban, action } from "../../types";
 
 
-export const urbanAction: DiscordAction = (msg, params) => {
+export const urbanAction: action = (msg, params) => {
   Axios.get(`http://urbanscraper.herokuapp.com/search/${params.text}`)
     .then(res => {
-      const urbanResponse: Urban[] = res.data.slice(0, params.amount || 2)
+      const urbanResponse: urban[] = res.data.slice(0, params.amount || 2)
 
       if (urbanResponse) {
 

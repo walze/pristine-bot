@@ -1,8 +1,7 @@
 import { GuildAuditLogs } from "discord.js";
-import { at } from "../../classes/Parameters";
-import { DiscordAction } from "../../classes/Command";
+import { action, at } from "../../types";
 
-export const auditsAction: DiscordAction = (msg, params) => {
+export const auditsAction: action = (msg, params) => {
   const at = params.getAt(0)
 
   if (at.id)

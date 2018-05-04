@@ -1,9 +1,9 @@
 import log from '../../helpers/logger'
 import { Languages } from './helpers/langs'
 import * as translate from 'google-translate-api'
-import { DiscordAction } from '../../classes/Command';
+import { action } from '../../types';
 
-export const translatorAction: DiscordAction = (msg, params) => {
+export const translatorAction: action = (msg, params) => {
   translate(params.text, {
     from: switchText(params.from) || 'auto',
     to: switchText(params.to) || 'en'

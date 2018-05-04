@@ -1,8 +1,8 @@
 import { JSDOM } from 'jsdom';
 import Axios from 'axios';
-import { DiscordAction } from '../../classes/Command';
+import { action } from '../../types';
 
-export const googleAction: DiscordAction = (msg, params) => {
+export const googleAction: action = (msg, params) => {
 
   Axios.get(`https://www.google.com.br/search?q=${params.text}`)
     .then(res => {

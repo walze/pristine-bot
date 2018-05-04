@@ -1,6 +1,16 @@
+import Parameters from "./classes/Parameters";
+import { Message } from "discord.js";
+
 // used for global types
 
-export interface Urban {
+export type action<T = Parameters> = (message: Message, parameters: Parameters & T) => void
+
+export interface at {
+  id: string,
+  tag: string
+}
+
+export interface urban {
   id: string
   term: string
   url: string

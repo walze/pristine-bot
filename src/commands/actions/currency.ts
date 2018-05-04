@@ -1,14 +1,14 @@
 //import log from "../../helpers/logger";
 import Axios, { AxiosError } from "axios";
 import log from "../../helpers/logger";
-import { DiscordAction } from "../../classes/Command";
+import { action } from "../../types";
 
 export interface currencyParams {
   from: string,
   to: string
 }
 
-export const currencyAction: DiscordAction<currencyParams> = (msg, params) => {
+export const currencyAction: action<currencyParams> = (msg, params) => {
   if (params.text.indexOf('codes') > -1) {
     msg.channel.send('https://www.xe.com/iso4217.php')
     return null
