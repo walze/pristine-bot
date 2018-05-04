@@ -29,7 +29,7 @@ export default function googleAction(msg: Message, params: Parameters) {
           return el
       })
 
-      links = links.slice(0, params.amount || 1)
+      links = links.slice(0, Number(params.amount) || 1)
 
       const text = links.map((lk, i) => `
 **__#${i + 1}__**
