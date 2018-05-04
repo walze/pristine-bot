@@ -8,7 +8,7 @@ import Parameters from "../../classes/Parameters";
 export default function urbanAction(msg: Message, params: Parameters) {
   Axios.get(`http://urbanscraper.herokuapp.com/search/${params.text}`)
     .then(res => {
-      const urbanResponse: Urban[] = res.data.slice(0, params.defs || 2)
+      const urbanResponse: Urban[] = res.data.slice(0, params.amount || 2)
 
       if (urbanResponse) {
 

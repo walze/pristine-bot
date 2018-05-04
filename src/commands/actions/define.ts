@@ -10,7 +10,7 @@ export default function defineAction(msg: Message, params: Parameters) {
       const response: dictionary = res.data
 
       if (response.results.length > 0) {
-        const defs = response.results.slice(0, params.defs || 2)
+        const defs = response.results.slice(0, params.amount || 2)
 
         console.log(defs)
 
