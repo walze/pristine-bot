@@ -12,7 +12,7 @@ export default class Command {
 
   @checkIfCommand
   public run(msg: Message): void {
-    const result = this._action(msg, new Parameters(msg))
+    const result = this._action(msg, new Parameters(msg, this.name))
 
     if (result instanceof Promise)
       result

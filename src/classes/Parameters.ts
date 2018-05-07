@@ -11,7 +11,10 @@ export default class Parameters {
   private _atsRegex: RegExp = /<@!?(\d+)>/g
   private _textRegex: RegExp = /\w+-\w+\s?/g
 
-  constructor(msg: Message) {
+  constructor(
+    msg: Message,
+    public command?: string
+  ) {
     const paramsMatch = msg.content.match(this._paramRegex)
     if (paramsMatch) paramsMatch.map(el => {
       const split = el.split('-')

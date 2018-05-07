@@ -6,6 +6,15 @@ import { Message } from "discord.js";
 export type action<T = Parameters> = (message: Message, parameters: Parameters & T) =>
   void | Promise<Message | Message[]>
 
+export interface translator {
+  text: '',
+  from: {
+    language: { didYouMean: boolean, iso: '' },
+    text: { autoCorrected: boolean, value: '', didYouMean: boolean }
+  },
+  raw: ''
+}
+
 export interface at {
   id: string,
   tag: string

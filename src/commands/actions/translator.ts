@@ -4,16 +4,18 @@ import * as translate from 'google-translate-api'
 import { action } from '../../types';
 
 export const translatorAction: action = (msg, params) => {
-  translate(params.text, {
+  return translate(params.text, {
     from: switchText(params.from) || 'auto',
     to: switchText(params.to) || 'en'
   })
     .then((res: Response) => {
       msg.channel.send(`${res.text}`)
+      return res
     })
     .catch((err: Response) => {
       log(err)
       msg.channel.send(`Error: ${JSON.stringify(err)}`)
+      return err
     })
 }
 
