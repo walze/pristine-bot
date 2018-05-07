@@ -1,10 +1,15 @@
 import log from "../helpers/logger";
 import { action } from "../types";
+import { embed } from "../helpers/discordHelpers";
 
 export default class SmallActions {
 
   public static mafs: action = (msg, params) => {
-    msg.channel.send(eval(params.text))
+    try {
+      msg.channel.send(eval(params.text))
+    } catch (e) {
+      msg.channel.send(embed(e))
+    }
   }
 
   public static debug: action = (msg, params) => {
@@ -23,7 +28,7 @@ export default class SmallActions {
   public static image: action = async (msg, params) => {
     msg.delete()
 
-    if (params.text.match(/http/))
+    if (params.text.match(/https?:\/\//))
       return msg.channel.send('', { file: params.text })
     else
       return msg.channel.send('Invalid request')

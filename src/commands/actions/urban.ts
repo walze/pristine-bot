@@ -10,16 +10,24 @@ export const urbanAction: action = (msg, params) => {
 
       if (urbanResponse) {
 
-        const text = urbanResponse.map((resp, i) =>
-          `__**Definition #${i + 1}**__
-${resp.definition}
+        const embed = {
+          embed: {
+            author: {
+              name: msg.author.username,
+              icon_url: msg.author.avatarURL
+            },
+            title: "Definitions",
+            fields: urbanResponse.map((def, i) => {
+              return {
+                name: `Definition #${i + 1}`,
+                value: def.definition + `\n**Example**\n${def.example}`
+              }
+            }),
+            timestamp: new Date()
+          }
+        }
 
-*Example*
-${resp.example}
-
-`)
-
-        msg.channel.send(text.join('\n'))
+        msg.channel.send(embed)
       } else msg.reply('404\'d')
     })
     .catch((err: AxiosError) => {
