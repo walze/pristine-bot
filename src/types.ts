@@ -3,7 +3,8 @@ import { Message } from "discord.js";
 
 // used for global types
 
-export type action<T = Parameters> = (message: Message, parameters: Parameters & T) => void
+export type action<T = Parameters> = (message: Message, parameters: Parameters & T) =>
+  void | Promise<Message | Message[]>
 
 export interface at {
   id: string,

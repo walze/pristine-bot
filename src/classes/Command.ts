@@ -2,6 +2,7 @@ import { Message } from "discord.js"
 import Parameters from "./Parameters"
 import { action } from "../types"
 import { checkIfCommand } from "../decorators/checkIfCommand"
+import log from "../helpers/logger";
 
 export default class Command {
   constructor(
@@ -11,6 +12,11 @@ export default class Command {
 
   @checkIfCommand
   public run(msg: Message): void {
-    this._action(msg, new Parameters(msg))
+    const result = this._action(msg, new Parameters(msg))
+
+    if (result instanceof Promise)
+      result
+        .then(log)
+        .catch(log)
   }
 }

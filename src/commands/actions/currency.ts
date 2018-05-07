@@ -11,7 +11,7 @@ export interface currencyParams {
 export const currencyAction: action<currencyParams> = (msg, params) => {
   if (params.text.indexOf('codes') > -1) {
     msg.channel.send('https://www.xe.com/iso4217.php')
-    return null
+    return
   }
 
   if (Boolean(params.from) && Boolean(params.to)) {
