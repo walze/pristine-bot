@@ -1,11 +1,9 @@
 import { Message } from "discord.js";
 import Command from "./Command";
-import * as declarations from '../commands/declarations'
-import { objToArray } from "../helpers/obj_array";
-
+import Declarations from '../commands/declarations'
 
 export default class Commands {
-  private static _commands: Command[] = objToArray(declarations)
+  private static _commands: Command[] = Declarations
 
   public static list(): string[] {
     return this._commands.map(cmd => cmd.name)

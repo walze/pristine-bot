@@ -16,11 +16,11 @@ export const urbanAction: action = (msg, params) => {
               name: msg.author.username,
               icon_url: msg.author.avatarURL
             },
-            title: "Definitions",
+            title: "Urban Definitions",
             fields: urbanResponse.map((def, i) => {
               return {
                 name: `Definition #${i + 1}`,
-                value: def.definition + `\n**Example**\n${def.example}`
+                value: def.definition + `\n__**Example**__\n${def.example}`
               }
             }),
             timestamp: new Date()

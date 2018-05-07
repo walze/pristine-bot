@@ -12,15 +12,19 @@ import SmallActions from './smallActions'
 // Eg. s-debug event-MEMBER_ADD_BAN amount-5 @wiva#9996
 // params.argument will equals to value
 
-export const debug = new Command('debug', SmallActions.debug)
-export const say = new Command('say', SmallActions.say)
-export const thonkwot = new Command('thonkwot', SmallActions.thonkwot)
-export const image = new Command('image', SmallActions.image)
-export const help = new Command('help', msg => msg.channel.send(Commands.list()))
-export const audits = new Command('audits', auditsAction)
-export const tl = new Command('tl', translatorAction)
-export const urban = new Command('urban', urbanAction)
-export const define = new Command('define', defineAction)
-export const google = new Command('google', googleAction)
-export const mafs = new Command('mafs', SmallActions.mafs)
-export const curr = new Command('curr', currencyAction)
+const Declarations = [
+  new Command('debug', SmallActions.debug),
+  new Command('say', SmallActions.say),
+  new Command('thonkwot', SmallActions.thonkwot),
+  new Command('image', SmallActions.image),
+  new Command('help', msg => msg.channel.send(Commands.list())),
+  new Command('audits', auditsAction),
+  new Command('tl', translatorAction),
+  new Command('urban', urbanAction),
+  new Command('define', defineAction),
+  new Command('google', googleAction),
+  new Command('mafs', SmallActions.mafs),
+  new Command('curr', currencyAction)
+]
+
+export default Declarations
