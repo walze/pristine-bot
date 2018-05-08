@@ -4,6 +4,7 @@ import log from "../../helpers/logger";
 import { action, FromToParams } from "../../types";
 
 export const currencyAction: action<FromToParams> = req => {
+  log(req.log())
   if (req.text.indexOf('codes') > -1) {
     req.msg.channel.send('https://www.xe.com/iso4217.php')
     return
@@ -20,9 +21,9 @@ export const currencyAction: action<FromToParams> = req => {
         const val = res.data[fromTo].val
         const multiplier = Number(req.text)
         if (Boolean(multiplier))
-          req.msg.channel.send(`${req.text} ${req.params.from} = ${val * multiplier} ${req.params.to}`)
+          req.msg.channel.send(`\`\`${req.text} ${req.params.from} = ${val * multiplier} ${req.params.to}\`\``)
         else
-          req.msg.channel.send(`1 ${req.params.from} = ${val} ${req.params.to}`)
+          req.msg.channel.send(`\`\`1 ${req.params.from} = ${val} ${req.params.to}\`\``)
       })
       .catch((err: AxiosError) => {
         log(err.response, err.message)

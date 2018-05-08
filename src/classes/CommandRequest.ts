@@ -1,7 +1,7 @@
 import { Message } from "discord.js";
 import { at } from "../types";
 import Commands from "./CommandsEventEmmiter";
-import { log } from 'util';
+import { log } from 'console';
 
 export interface DefaultParams {
   [key: string]: string
@@ -15,24 +15,24 @@ export default class CommandRequest {
   public params: DefaultParams = { amount: '2' }
 
   private _paramRegex: RegExp = /\w+-\w+/g
-  private _commandRegex: RegExp = /s-(\w+)/
+  private _commandRegex: RegExp = /^s-(\w+)/
   private _atsRegex: RegExp = /<@!?(\d+)>/g
   private _textRegex: RegExp = /\w+-\w+\s?/g
 
   constructor(
     public msg: Message,
   ) {
-    this._checkIfCommand().then(() => this._getParams)
+    this._checkIfCommand(() => this._getParams())
   }
 
-  public log(): object {
+  public log(...extras: any[]): object {
     const filtered: any = {}
 
     for (let prop in this)
       if (prop[0] != '_' && prop != 'msg')
         filtered[prop] = this[prop]
 
-    log(filtered)
+    log(filtered, ...extras)
 
     return filtered
   }
@@ -54,19 +54,17 @@ export default class CommandRequest {
     }
   }
 
-  private _checkIfCommand() {
-    return new Promise((res, rej) => {
+  private _checkIfCommand(callback: Function) {
 
-      const command = this.msg.content.match(this._commandRegex)
+    const command = this.msg.content.match(this._commandRegex)
 
-      if (command) {
+    if (command) {
 
-        res()
+      callback()
 
-        this.command = command[1]
-        Commands.emit(this.command, this)
-      } else rej()
-    })
+      this.command = command[1]
+      Commands.emit(this.command, this)
+    }
   }
 
   public getAt(pos: number): at {
