@@ -4,7 +4,7 @@ import { action } from '../../types';
 
 export const googleAction: action = req => {
 
-  Axios.get(`https://www.google.com.br/search?q=${req.params.text}`)
+  Axios.get(`https://www.google.com.br/search?q=${req.text}`)
     .then(res => {
       const dom = new JSDOM(res.data, {
         contentType: "text/html",

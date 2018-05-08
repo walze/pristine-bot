@@ -2,7 +2,6 @@ process.setMaxListeners(0)
 
 import * as Express from 'express'
 import { Client } from 'discord.js'
-//import { Commands } from './classes/Commands'
 import log from './helpers/logger'
 import CommandRequest from './classes/CommandRequest';
 import { logDeclarations } from './commands/declarations';

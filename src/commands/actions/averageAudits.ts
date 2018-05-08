@@ -2,7 +2,7 @@ import { GuildAuditLogs } from "discord.js";
 import { action, at } from "../../types";
 
 export const auditsAction: action = req => {
-  const at = req.params.getAt(0)
+  const at = req.getAt(0)
   
   if (at.id) 
     req.msg.guild.fetchAuditLogs({

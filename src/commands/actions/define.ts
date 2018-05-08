@@ -3,7 +3,7 @@ import { definition, action } from "../../types";
 import * as wordnet from 'wordnet'
 
 export const defineAction: action = req => {
-  wordnet.lookup(req.params.text, (err: any, defs: definition[]) => {
+  wordnet.lookup(req.text, (err: any, defs: definition[]) => {
 
     if (!err) {
       const embed = {

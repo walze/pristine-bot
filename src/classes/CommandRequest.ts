@@ -22,24 +22,24 @@ export default class CommandRequest {
   constructor(
     public msg: Message,
   ) {
-    this._checkIfCommand(() => {
+    this._checkIfCommand()
+      .then(() => {
 
-      const paramsMatch = this.msg.content.match(this._paramRegex)
-      if (paramsMatch) {
+        const paramsMatch = this.msg.content.match(this._paramRegex)
+        if (paramsMatch) {
 
-        paramsMatch.map(el => {
-          const split = el.split('-')
-          const prop = split[0]
-          const value = split[1]
+          paramsMatch.map(el => {
+            const split = el.split('-')
+            const prop = split[0]
+            const value = split[1]
 
-          if (split[0] !== 's') this.params[prop] = value
-        })
+            if (split[0] !== 's') this.params[prop] = value
+          })
 
-        this.text = this._filterText(this.msg)
-        this.ats = this._filterAts(this.msg)
-      }
-
-    })
+          this.text = this._filterText(this.msg)
+          this.ats = this._filterAts(this.msg)
+        }
+      })
   }
 
   public log(): object {
@@ -54,16 +54,19 @@ export default class CommandRequest {
     return filtered
   }
 
-  private _checkIfCommand(then: () => void) {
-    const command = this.msg.content.match(this._commandRegex)
+  private _checkIfCommand() {
+    return new Promise((res, rej) => {
 
-    if (command) {
+      const command = this.msg.content.match(this._commandRegex)
 
-      then()
+      if (command) {
 
-      this.command = command[1]
-      Commands.emit(this.command, this)
-    }
+        res()
+
+        this.command = command[1]
+        Commands.emit(this.command, this)
+      } else rej()
+    })
   }
 
   public getAt(pos: number): at {
