@@ -1,8 +1,9 @@
+process.setMaxListeners(0)
+
 import * as Express from 'express'
 import { Client } from 'discord.js'
 import Commands from './classes/Commands'
 import log from './helpers/logger'
-process.setMaxListeners(0)
 
 const app = Express()
 app.listen(process.env.PORT || 3000, () => log('\nExpress Ready'))
@@ -16,3 +17,11 @@ client.on('ready', () => log('Bot Ready\n'))
 
 log('\nListening to Commands\n', Commands.list())
 client.on('message', msg => Commands.run(msg))
+
+
+// Error Handling
+const unhandledRejections = new Map();
+process.on('unhandledRejection', (reason, p) => {
+  unhandledRejections.set(p, reason);
+  log(reason, p)
+});
