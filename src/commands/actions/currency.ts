@@ -1,5 +1,5 @@
 //import log from "../../helpers/logger";
-import Axios, { AxiosError } from "axios";
+import Axios from "axios";
 import { action, FromToParams } from "../../types";
 
 export const currencyAction: action<FromToParams> = req => {
