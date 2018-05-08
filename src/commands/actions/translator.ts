@@ -3,18 +3,18 @@ import { Languages } from './helpers/langs'
 import * as translate from 'google-translate-api'
 import { action } from '../../types';
 
-export const translatorAction: action = (msg, params) => {
-  return translate(params.text, {
-    from: switchText(params.from) || 'auto',
-    to: switchText(params.to) || 'en'
+export const translatorAction: action = request => {
+  return translate(request.text, {
+    from: switchText(request.params.from) || 'auto',
+    to: switchText(request.params.to) || 'en'
   })
     .then((res: Response) => {
-      msg.channel.send(`${res.text}`)
+      request.msg.channel.send(`${res.text}`)
       return res
     })
     .catch((err: Response) => {
       log(err)
-      msg.channel.send(`Error: ${JSON.stringify(err)}`)
+      request.msg.channel.send(`Error: ${JSON.stringify(err)}`)
       return err
     })
 }

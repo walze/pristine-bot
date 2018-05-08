@@ -1,21 +1,21 @@
 import { GuildAuditLogs } from "discord.js";
 import { action, at } from "../../types";
 
-export const auditsAction: action = (msg, params) => {
-  const at = params.getAt(0)
-
-  if (at.id)
-    msg.guild.fetchAuditLogs({
+export const auditsAction: action = req => {
+  const at = req.params.getAt(0)
+  
+  if (at.id) 
+    req.msg.guild.fetchAuditLogs({
       user: at.id,
-      limit: Number(params.amount) || 100,
+      limit: Number(req.params.amount) || 100,
     })
       .then(audits =>
-        msg.channel.send(
+        req.msg.channel.send(
           averageAudits(audits, at)
         )
       )
 
-  else msg.reply('Must @someone')
+  else req.msg.reply('Must @someone')
 }
 
 function averageAudits(audit: GuildAuditLogs, at: at) {

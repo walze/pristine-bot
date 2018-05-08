@@ -3,18 +3,18 @@ import log from "../../helpers/logger";
 import { urban, action } from "../../types";
 
 
-export const urbanAction: action = (msg, params) => {
-  Axios.get(`http://urbanscraper.herokuapp.com/search/${params.text}`)
+export const urbanAction: action = (request) => {
+  Axios.get(`http://urbanscraper.herokuapp.com/search/${request.text}`)
     .then(res => {
-      const urbanResponse: urban[] = res.data.slice(0, params.amount || 2)
+      const urbanResponse: urban[] = res.data.slice(0, request.params.amount || 2)
 
       if (urbanResponse) {
 
         const embed = {
           embed: {
             author: {
-              name: msg.author.username,
-              icon_url: msg.author.avatarURL
+              name: request.msg.author.username,
+              icon_url: request.msg.author.avatarURL
             },
             title: "Urban Definitions",
             fields: urbanResponse.map((def, i) => {
@@ -27,13 +27,13 @@ export const urbanAction: action = (msg, params) => {
           }
         }
 
-        msg.channel.send(embed)
-      } else msg.reply('404\'d')
+        request.msg.channel.send(embed)
+      } else request.msg.reply('404\'d')
     })
     .catch((err: AxiosError) => {
       log(err.response, err.message)
 
-      msg.channel.send(`Not Found
+      request.msg.channel.send(`Not Found
 ${err.message}`)
     })
 }

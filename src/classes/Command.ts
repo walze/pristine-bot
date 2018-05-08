@@ -1,18 +1,23 @@
-import { Message } from "discord.js"
-import Parameters from "./Parameters"
+import CommandRequest from "./CommandRequest"
 import { action } from "../types"
-import { checkIfCommand } from "../decorators/checkIfCommand"
 import log from "../helpers/logger";
+import { Commands } from "./Commands";
 
 export default class Command {
   constructor(
     public name: string,
     private _action: action<any>
-  ) { }
+  ) {
+    Commands.on(this.name, (req: CommandRequest) => {
+      this._run(req)
+      log(`Running event ${req.command}`)
+    })
 
-  @checkIfCommand
-  public run(msg: Message): void {
-    const result = this._action(msg, new Parameters(msg, this.name))
+  }
+
+  private _run(request: CommandRequest): void {
+
+    const result = this._action(request)
 
     if (result instanceof Promise)
       result

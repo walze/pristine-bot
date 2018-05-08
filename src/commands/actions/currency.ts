@@ -8,36 +8,36 @@ export interface currencyParams {
   to: string
 }
 
-export const currencyAction: action<currencyParams> = (msg, params) => {
-  if (params.text.indexOf('codes') > -1) {
-    msg.channel.send('https://www.xe.com/iso4217.php')
+export const currencyAction: action<currencyParams> = req => {
+  if (req.params.text.indexOf('codes') > -1) {
+    req.msg.channel.send('https://www.xe.com/iso4217.php')
     return
   }
 
-  if (Boolean(params.from) && Boolean(params.to)) {
-    params.from = params.from.toUpperCase()
-    params.to = params.to.toUpperCase()
+  if (Boolean(req.params.from) && Boolean(req.params.to)) {
+    req.params.from = req.params.from.toUpperCase()
+    req.params.to = req.params.to.toUpperCase()
 
-    const fromTo = `${params.from}_${params.to}`
+    const fromTo = `${req.params.from}_${req.params.to}`
 
     Axios.get(`https://free.currencyconverterapi.com/api/v5/convert?q=${fromTo}&compact=y`)
       .then(res => {
         const val = res.data[fromTo].val
-        const multiplier = Number(params.text)
+        const multiplier = Number(req.params.text)
         if (Boolean(multiplier))
-          msg.channel.send(`${params.text} ${params.from} = ${val * multiplier} ${params.to}`)
+          req.msg.channel.send(`${req.params.text} ${req.params.from} = ${val * multiplier} ${req.params.to}`)
         else
-          msg.channel.send(`1 ${params.from} = ${val} ${params.to}`)
+          req.msg.channel.send(`1 ${req.params.from} = ${val} ${req.params.to}`)
       })
       .catch((err: AxiosError) => {
         log(err.response, err.message)
 
-        msg.channel.send(`Not Found
+        req.msg.channel.send(`Not Found
 ${err.message}`)
       })
 
   }
   else
-    msg.channel.send('Wrong syntax. s-curr from-\"CURRENCY_CODE\" to-\"CURRENCY_CODE\" \"VALUE OR EMPTY\"')
+    req.msg.channel.send('Wrong syntax. s-curr from-\"CURRENCY_CODE\" to-\"CURRENCY_CODE\" \"VALUE OR EMPTY\"')
 
 }

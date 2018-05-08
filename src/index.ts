@@ -2,8 +2,10 @@ process.setMaxListeners(0)
 
 import * as Express from 'express'
 import { Client } from 'discord.js'
-import Commands from './classes/Commands'
+//import { Commands } from './classes/Commands'
 import log from './helpers/logger'
+import CommandRequest from './classes/CommandRequest';
+import { logDeclarations } from './commands/declarations';
 
 const app = Express()
 app.listen(process.env.PORT || 3000, () => log('\nExpress Ready'))
@@ -15,8 +17,9 @@ const config = require('../config.json')
 client.login(config.token)
 client.on('ready', () => log('Bot Ready\n'))
 
-log('\nListening to Commands\n', Commands.list())
-client.on('message', msg => Commands.run(msg))
+logDeclarations()
+
+client.on('message', msg => new CommandRequest(msg))
 
 
 // Error Handling

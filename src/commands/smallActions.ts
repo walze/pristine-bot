@@ -4,43 +4,38 @@ import { embed } from "../helpers/discordHelpers";
 
 export default class SmallActions {
 
-  public static mafs: action = (msg, params) => {
+  public static mafs: action = req => {
     try {
-      msg.channel.send(eval(params.text))
+      req.msg.channel.send(eval(req.params.text))
     } catch (e) {
-      msg.channel.send(embed(e))
+      req.msg.channel.send(embed(e))
     }
   }
 
-  public static debug: action = (msg, params) => {
-    log('\nMESSAGE:', msg.content)
-    log(params, '\n')
+  public static debug: action = req => {
+    log('\nMESSAGE:', req.msg.content, '\n')
 
-    const send: any = {}
+    const logs = req.log()
 
-    for (let param in params)
-      if (param[0] != '_')
-        send[param] = params[param]
-
-    msg.channel.send(JSON.stringify(send))
+    req.msg.channel.send(`\`\`\`json\n${JSON.stringify(logs)}\`\`\``)
   }
 
-  public static image: action = async (msg, params) => {
-    msg.delete()
+  public static image: action = async req => {
+    req.msg.delete()
 
-    if (params.text.match(/https?:\/\//))
-      return msg.channel.send('', { file: params.text })
+    if (req.params.text.match(/https?:\/\//))
+      return req.msg.channel.send('', { file: req.params.text })
     else
-      return msg.channel.send('Invalid request')
+      return req.msg.channel.send('Invalid request')
   }
 
-  public static say: action = (msg, params) => {
-    msg.delete()
-    msg.channel.send(`${params.getAt(0).tag} ${params.text}`)
+  public static say: action = req => {
+    req.msg.delete()
+    req.msg.channel.send(`${req.params.getAt(0).tag} ${req.params.text}`)
   }
 
-  public static thonkwot: action = (msg) => {
-    msg.delete()
-    msg.channel.send('', { file: 'https://cdn.discordapp.com/emojis/409528321685061634.png' })
+  public static thonkwot: action = req => {
+    req.msg.delete()
+    req.msg.channel.send('', { file: 'https://cdn.discordapp.com/emojis/409528321685061634.png' })
   }
 }
