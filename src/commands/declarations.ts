@@ -24,7 +24,6 @@ const Declarations: Command[] =
     new Command('urban', urbanAction),
     new Command('define', defineAction),
     new Command('google', googleAction),
-    new Command('mafs', SmallActions.mafs),
     new Command('curr', currencyAction)
   ]
 

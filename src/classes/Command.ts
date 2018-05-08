@@ -1,7 +1,7 @@
 import CommandRequest from "./CommandRequest"
 import { action } from "../types"
 import log from "../helpers/logger";
-import { Commands } from "./Commands";
+import Commands from "./CommandsEventEmmiter";
 
 export default class Command {
   constructor(
@@ -10,7 +10,7 @@ export default class Command {
   ) {
     Commands.on(this.name, (req: CommandRequest) => {
       this._run(req)
-      log(`Running event ${req.command}`)
+      log(`Ran command "${req.command}"`)
     })
 
   }

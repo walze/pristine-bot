@@ -1,9 +1,9 @@
 import log from '../../helpers/logger'
 import { Languages } from './helpers/langs'
 import * as translate from 'google-translate-api'
-import { action } from '../../types';
+import { action, FromToParams } from '../../types';
 
-export const translatorAction: action = request => {
+export const translatorAction: action<FromToParams> = request => {
   return translate(request.text, {
     from: switchText(request.params.from) || 'auto',
     to: switchText(request.params.to) || 'en'

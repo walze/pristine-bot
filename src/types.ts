@@ -6,6 +6,14 @@ import { Message } from "discord.js";
 export type action<T = CommandRequest> = (request: CommandRequest & T) =>
   void | Promise<Message | Message[]>
 
+
+export interface FromToParams {
+  params: {
+    from: string,
+    to: string
+  }
+}
+
 export interface translator {
   text: '',
   from: {

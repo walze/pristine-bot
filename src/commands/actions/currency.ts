@@ -1,15 +1,10 @@
 //import log from "../../helpers/logger";
 import Axios, { AxiosError } from "axios";
 import log from "../../helpers/logger";
-import { action } from "../../types";
+import { action, FromToParams } from "../../types";
 
-export interface currencyParams {
-  from: string,
-  to: string
-}
-
-export const currencyAction: action<currencyParams> = req => {
-  if (req.params.text.indexOf('codes') > -1) {
+export const currencyAction: action<FromToParams> = req => {
+  if (req.text.indexOf('codes') > -1) {
     req.msg.channel.send('https://www.xe.com/iso4217.php')
     return
   }
@@ -23,9 +18,9 @@ export const currencyAction: action<currencyParams> = req => {
     Axios.get(`https://free.currencyconverterapi.com/api/v5/convert?q=${fromTo}&compact=y`)
       .then(res => {
         const val = res.data[fromTo].val
-        const multiplier = Number(req.params.text)
+        const multiplier = Number(req.text)
         if (Boolean(multiplier))
-          req.msg.channel.send(`${req.params.text} ${req.params.from} = ${val * multiplier} ${req.params.to}`)
+          req.msg.channel.send(`${req.text} ${req.params.from} = ${val * multiplier} ${req.params.to}`)
         else
           req.msg.channel.send(`1 ${req.params.from} = ${val} ${req.params.to}`)
       })

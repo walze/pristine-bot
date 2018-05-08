@@ -1,13 +1,18 @@
 import { Message } from "discord.js";
 import { at } from "../types";
-import { Commands } from "./Commands";
+import Commands from "./CommandsEventEmmiter";
 import log from "../helpers/logger";
+
+export interface DefaultParams {
+  [key: string]: string
+  amount: string
+}
 
 export default class CommandRequest {
   public command: string = ''
   public text: string = ''
   public ats: at[] = []
-  public params: { [key: string]: any } = {}
+  public params: DefaultParams = { amount: '2' }
 
   private _paramRegex: RegExp = /\w+-\w+/g
   private _commandRegex: RegExp = /s-(\w+)/
@@ -24,8 +29,10 @@ export default class CommandRequest {
 
         paramsMatch.map(el => {
           const split = el.split('-')
+          const prop = split[0]
+          const value = split[1]
 
-          if (split[0] !== 's') this.params[split[0]] = split[1]
+          if (split[0] !== 's') this.params[prop] = value
         })
 
         this.text = this._filterText(this.msg)
