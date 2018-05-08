@@ -1,10 +1,8 @@
 //import log from "../../helpers/logger";
 import Axios, { AxiosError } from "axios";
-import log from "../../helpers/logger";
 import { action, FromToParams } from "../../types";
 
 export const currencyAction: action<FromToParams> = req => {
-  log(req.log())
   if (req.text.indexOf('codes') > -1) {
     req.msg.channel.send('https://www.xe.com/iso4217.php')
     return
@@ -16,7 +14,7 @@ export const currencyAction: action<FromToParams> = req => {
 
     const fromTo = `${req.params.from}_${req.params.to}`
 
-    Axios.get(`https://free.currencyconverterapi.com/api/v5/convert?q=${fromTo}&compact=y`)
+    return Axios.get(`https://free.currencyconverterapi.com/api/v5/convert?q=${fromTo}&compact=y`)
       .then(res => {
         const val = res.data[fromTo].val
         const multiplier = Number(req.text)
@@ -24,12 +22,6 @@ export const currencyAction: action<FromToParams> = req => {
           req.msg.channel.send(`\`\`${req.text} ${req.params.from} = ${val * multiplier} ${req.params.to}\`\``)
         else
           req.msg.channel.send(`\`\`1 ${req.params.from} = ${val} ${req.params.to}\`\``)
-      })
-      .catch((err: AxiosError) => {
-        log(err.response, err.message)
-
-        req.msg.channel.send(`Not Found
-${err.message}`)
       })
 
   }

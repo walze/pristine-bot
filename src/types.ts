@@ -1,10 +1,9 @@
 import CommandRequest from "./classes/CommandRequest";
-import { Message } from "discord.js";
 
 // used for global types
 
 export type action<T = CommandRequest> = (request: CommandRequest & T) =>
-  void | Promise<Message | Message[]>
+  void | Promise<any>
 
 
 export interface FromToParams {
