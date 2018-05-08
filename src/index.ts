@@ -22,8 +22,7 @@ client.on('message', msg => new CommandRequest(msg))
 
 
 // Error Handling
-const unhandledRejections = new Map();
-process.on('unhandledRejection', (reason, p) => {
-  unhandledRejections.set(p, reason);
-  log(reason, p)
+process.on('unhandledRejection', (reason, promise) => {
+  console.log('Unhandled Rejection')
+  promise.catch((...args: any[]) => console.log(...args))
 });

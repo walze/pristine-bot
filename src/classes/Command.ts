@@ -8,16 +8,16 @@ export default class Command {
     public name: string,
     private _action: action<any>
   ) {
-    Commands.on(this.name, (req: CommandRequest) => {
-      this._run(req)
-      log(`Ran command "${req.command}"`)
+    Commands.on(this.name, request => {
+      this._run(request)
+      log(`Ran command "${request.command}"`)
     })
 
   }
 
-  private _run(request: CommandRequest): void {
+  private _run(req: CommandRequest): void {
 
-    const result = this._action(request)
+    const result = this._action(req)
 
     if (result instanceof Promise)
       result

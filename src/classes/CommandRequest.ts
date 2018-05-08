@@ -1,7 +1,7 @@
 import { Message } from "discord.js";
 import { at } from "../types";
 import Commands from "./CommandsEventEmmiter";
-import log from "../helpers/logger";
+import { log } from 'util';
 
 export interface DefaultParams {
   [key: string]: string
@@ -22,24 +22,7 @@ export default class CommandRequest {
   constructor(
     public msg: Message,
   ) {
-    this._checkIfCommand()
-      .then(() => {
-
-        const paramsMatch = this.msg.content.match(this._paramRegex)
-        if (paramsMatch) {
-
-          paramsMatch.map(el => {
-            const split = el.split('-')
-            const prop = split[0]
-            const value = split[1]
-
-            if (split[0] !== 's') this.params[prop] = value
-          })
-
-          this.text = this._filterText(this.msg)
-          this.ats = this._filterAts(this.msg)
-        }
-      })
+    this._checkIfCommand().then(() => this._getParams)
   }
 
   public log(): object {
@@ -52,6 +35,23 @@ export default class CommandRequest {
     log(filtered)
 
     return filtered
+  }
+
+  private _getParams() {
+    const paramsMatch = this.msg.content.match(this._paramRegex)
+    if (paramsMatch) {
+
+      paramsMatch.map(el => {
+        const split = el.split('-')
+        const prop = split[0]
+        const value = split[1]
+
+        if (split[0] !== 's') this.params[prop] = value
+      })
+
+      this.text = this._filterText(this.msg)
+      this.ats = this._filterAts(this.msg)
+    }
   }
 
   private _checkIfCommand() {
