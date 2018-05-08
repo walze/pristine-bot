@@ -24,6 +24,7 @@
     "wordnet": "^0.1.2"
   },
   "devDependencies": {
+    "tslib": "^1.9.0",
     "typescript": "^2.8.3"
   }
 }

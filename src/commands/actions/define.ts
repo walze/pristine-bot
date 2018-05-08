@@ -2,15 +2,15 @@
 import { definition, action } from "../../types";
 import * as wordnet from 'wordnet'
 
-export const defineAction: action = (msg, params) => {
-  wordnet.lookup(params.text, (err: any, defs: definition[]) => {
+export const defineAction: action = req => {
+  wordnet.lookup(req.text, (err: any, defs: definition[]) => {
 
     if (!err) {
       const embed = {
         embed: {
           author: {
-            name: msg.author.username,
-            icon_url: msg.author.avatarURL
+            name: req.msg.author.username,
+            icon_url: req.msg.author.avatarURL
           },
           title: "Definitions",
           fields: defs.map((def, i) => {
@@ -24,8 +24,8 @@ export const defineAction: action = (msg, params) => {
       }
 
 
-      msg.channel.send(embed)
+      req.msg.channel.send(embed)
     } else
-      msg.channel.send('404\'d')
+      req.msg.channel.send('404\'d')
   })
 }

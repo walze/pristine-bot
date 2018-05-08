@@ -2,8 +2,9 @@ process.setMaxListeners(0)
 
 import * as Express from 'express'
 import { Client } from 'discord.js'
-import Commands from './classes/Commands'
 import log from './helpers/logger'
+import CommandRequest from './classes/CommandRequest';
+import { logDeclarations } from './commands/declarations';
 
 const app = Express()
 app.listen(process.env.PORT || 3000, () => log('\nExpress Ready'))
@@ -15,13 +16,13 @@ const config = require('../config.json')
 client.login(config.token)
 client.on('ready', () => log('Bot Ready\n'))
 
-log('\nListening to Commands\n', Commands.list())
-client.on('message', msg => Commands.run(msg))
+logDeclarations()
+
+client.on('message', msg => new CommandRequest(msg))
 
 
 // Error Handling
-const unhandledRejections = new Map();
-process.on('unhandledRejection', (reason, p) => {
-  unhandledRejections.set(p, reason);
-  log(reason, p)
+process.on('unhandledRejection', (reason, promise) => {
+  console.log('Unhandled Rejection')
+  promise.catch((...args: any[]) => console.log(...args))
 });

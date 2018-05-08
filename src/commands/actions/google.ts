@@ -2,9 +2,9 @@ import { JSDOM } from 'jsdom';
 import Axios from 'axios';
 import { action } from '../../types';
 
-export const googleAction: action = (msg, params) => {
+export const googleAction: action = req => {
 
-  Axios.get(`https://www.google.com.br/search?q=${params.text}`)
+  Axios.get(`https://www.google.com.br/search?q=${req.text}`)
     .then(res => {
       const dom = new JSDOM(res.data, {
         contentType: "text/html",
@@ -28,13 +28,13 @@ export const googleAction: action = (msg, params) => {
           return el
       })
 
-      links = links.slice(0, Number(params.amount) || 1)
+      links = links.slice(0, Number(req.params.amount) || 1)
 
       const text = links.map((lk, i) => `
 **__#${i + 1}__**
 ${lk}
 
 `)
-      msg.channel.send(text)
+      req.msg.channel.send(text)
     })
 }
