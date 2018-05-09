@@ -1,9 +1,9 @@
 //import log from "../../helpers/logger";
-import { definition, action } from "../../types";
+import { definitionResponse, action } from "../../types";
 import * as wordnet from 'wordnet'
 
-export const defineAction: action = req => {
-  wordnet.lookup(req.text, (err: any, defs: definition[]) => {
+export const defineAction: action = async req => {
+  return await wordnet.lookup(req.text, async (err: any, defs: definitionResponse[]) => {
 
     if (!err) {
       const embed = {
@@ -12,7 +12,7 @@ export const defineAction: action = req => {
             name: req.msg.author.username,
             icon_url: req.msg.author.avatarURL
           },
-          title: "Definitions",
+          title: "Definitions of " + req.text,
           fields: defs.map((def, i) => {
             return {
               name: `Definition #${i + 1}`,
@@ -24,8 +24,7 @@ export const defineAction: action = req => {
       }
 
 
-      req.msg.channel.send(embed)
-    } else
-      req.msg.channel.send('404\'d')
+      return await req.msg.channel.send(embed)
+    } else return await req.msg.channel.send('\`\`404\'d\`\`')
   })
 }

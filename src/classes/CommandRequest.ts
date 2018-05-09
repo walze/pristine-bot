@@ -12,7 +12,7 @@ export default class CommandRequest {
   public command: string = ''
   public text: string = ''
   public ats: at[] = []
-  public params: DefaultParams = { amount: '2' }
+  public params: DefaultParams = { amount: '1' }
 
   private _paramRegex: RegExp = /\w+-\w+/g
   private _commandRegex: RegExp = /^s-(\w+)/
@@ -25,14 +25,15 @@ export default class CommandRequest {
     this._checkIfCommand(() => this._getParams())
   }
 
-  public log(...extras: any[]): object {
+  public log(logBool?: boolean, ...extras: any[]): object {
     const filtered: any = {}
 
     for (let prop in this)
       if (prop[0] != '_' && prop != 'msg')
         filtered[prop] = this[prop]
 
-    log(filtered, ...extras)
+    if (logBool)
+      log(filtered, ...extras)
 
     return filtered
   }

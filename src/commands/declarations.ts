@@ -8,6 +8,7 @@ import { googleAction } from "./actions/google"
 import { currencyAction } from "./actions/currency"
 import SmallActions from './smallActions'
 import log from "../helpers/logger";
+import { imgurAction } from './actions/imgur/imgurAction';
 
 // s-debug argument-value
 // Eg. s-debug event-MEMBER_ADD_BAN amount-5 @wiva#9996
@@ -24,7 +25,8 @@ const Declarations: Command[] =
     new Command('urban', urbanAction),
     new Command('define', defineAction),
     new Command('google', googleAction),
-    new Command('curr', currencyAction)
+    new Command('curr', currencyAction),
+    new Command('imgur', imgurAction)
   ]
 
 export default Declarations

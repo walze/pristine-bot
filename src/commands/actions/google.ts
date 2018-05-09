@@ -2,10 +2,10 @@ import { JSDOM } from 'jsdom';
 import Axios from 'axios';
 import { action } from '../../types';
 
-export const googleAction: action = req => {
-
-  Axios.get(`https://www.google.com.br/search?q=${req.text}`)
-    .then(res => {
+export const googleAction: action = async req => {
+  // https://www.google.com.br/search?q=loli&tbm=isch
+  return await Axios.get(`https://www.google.com.br/search?q=${req.text}`)
+    .then(async res => {
       const dom = new JSDOM(res.data, {
         contentType: "text/html",
         includeNodeLocations: true
@@ -13,7 +13,7 @@ export const googleAction: action = req => {
       const doc = dom.window.document
       const linksOriginal = Array.from(doc.querySelectorAll('.g .r a')).map((el) => el.getAttribute('href') || '')
 
-      // bypass
+      // bypass codes
       let links = linksOriginal.map(lk =>
         lk.replace(/\/url\?q=/g, '')
           .replace(/&sa=.+/g, '')
@@ -23,18 +23,13 @@ export const googleAction: action = req => {
       )
 
       // remove images search
-      links.filter(el => {
-        if (el.indexOf('/search') < 0)
-          return el
-      })
+      links = links.filter(el => el.indexOf('/search') === -1)
 
+      // slice by amount
       links = links.slice(0, Number(req.params.amount) || 1)
 
-      const text = links.map((lk, i) => `
-**__#${i + 1}__**
-${lk}
+      const text = links.map(lk => `${lk}\n`)
 
-`)
-      req.msg.channel.send(text)
+      return await req.msg.channel.send(text)
     })
 }

@@ -1,14 +1,14 @@
-import Axios, { AxiosError } from "axios";
-import log from "../../helpers/logger";
-import { urban, action } from "../../types";
+import Axios from "axios";
+import { urbanResponse, action } from "../../types";
 
+export const urbanAction: action = async (request) => {
+  return await Axios
+    .get(`http://urbanscraper.herokuapp.com/search/${request.text}`)
+    .then(async res => {
 
-export const urbanAction: action = (request) => {
-  Axios.get(`http://urbanscraper.herokuapp.com/search/${request.text}`)
-    .then(res => {
-      const urbanResponse: urban[] = res.data.slice(0, request.params.amount || 2)
+      const response: urbanResponse[] = res.data.slice(0, request.params.amount)
 
-      if (urbanResponse) {
+      if (response) {
 
         const embed = {
           embed: {
@@ -17,23 +17,35 @@ export const urbanAction: action = (request) => {
               icon_url: request.msg.author.avatarURL
             },
             title: "Urban Definitions",
-            fields: urbanResponse.map((def, i) => {
-              return {
-                name: `Definition #${i + 1}`,
-                value: def.definition + `\n__**Example**__\n${def.example}`
-              }
-            }),
+            url: `https://www.urbandictionary.com/define.php?term=${request.text}`.replace(/\s/g, '%20'),
+            description: 'Some definitions are too long for Discord, click the link to see them complete.',
+            fields: fieldsSort(response),
             timestamp: new Date()
           }
         }
 
-        request.msg.channel.send(embed)
-      } else request.msg.reply('404\'d')
+        return await request.msg.channel.send(embed)
+      } else return await request.msg.reply('404\'d')
     })
-    .catch((err: AxiosError) => {
-      log(err.response, err.message)
+}
 
-      request.msg.channel.send(`Not Found
-${err.message}`)
-    })
+
+function fieldsSort(response: urbanResponse[]) {
+  const fields: object[] = []
+
+  response.map((def, i) => {
+
+    fields.push({
+      name: `Definition #${i + 1}`,
+      value: def.definition.slice(0, 1023),
+      inline: true
+    });
+
+    fields.push({
+      name: `*Example*`,
+      value: def.example.slice(0, 1023)
+    });
+  });
+
+  return fields
 }
