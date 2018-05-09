@@ -8,6 +8,10 @@ export interface DefaultParams {
   amount: string
 }
 
+// s-debug argument-value
+// Eg. s-debug event-MEMBER_ADD_BAN amount-5 @wiva#9996
+// params.argument will equals to value
+
 export default class CommandRequest {
   public command: string = ''
   public text: string = ''
