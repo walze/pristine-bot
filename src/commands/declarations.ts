@@ -1,14 +1,8 @@
 //import Commands from "../classes/Commands"
 import Command from "../classes/Command"
-import { auditsAction } from "./actions/averageAudits"
-import { translatorAction } from "./actions/translator"
-import { urbanAction } from "./actions/urban"
-import { defineAction } from "./actions/define"
-import { googleAction } from "./actions/google"
-import { currencyAction } from "./actions/currency"
-import { imgurAction } from './actions/imgurAction';
 import SmallActions from './smallActions'
 import log from "../helpers/logger";
+import { auditsAction, translatorAction, urbanAction, defineAction, googleAction, currencyAction, imgurAction } from './actions';
 
 // s-debug argument-value
 // Eg. s-debug event-MEMBER_ADD_BAN amount-5 @wiva#9996
