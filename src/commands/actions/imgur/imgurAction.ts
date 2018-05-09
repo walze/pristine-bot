@@ -3,8 +3,7 @@ import Axios from 'axios';
 import { log } from 'console';
 
 const config = {
-  "client_id": "bebb4e6140bcb51",
-  "secret": "d1d0d99626c94aa6f740842a02365769178a1cc7"
+  "client_id": "bebb4e6140bcb51"
 }
 
 export const imgurAction: action = async req => {
