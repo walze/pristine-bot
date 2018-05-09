@@ -6,9 +6,9 @@ import { urbanAction } from "./actions/urban"
 import { defineAction } from "./actions/define"
 import { googleAction } from "./actions/google"
 import { currencyAction } from "./actions/currency"
+import { imgurAction } from './actions/imgurAction';
 import SmallActions from './smallActions'
 import log from "../helpers/logger";
-import { imgurAction } from './actions/imgur/imgurAction';
 
 // s-debug argument-value
 // Eg. s-debug event-MEMBER_ADD_BAN amount-5 @wiva#9996

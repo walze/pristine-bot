@@ -78,7 +78,7 @@ export interface imgurResponse {
     downs: any,
     points: any,
     score: any
-  }]
+  }] | null
 }
 
 export interface translator {
