@@ -1,6 +1,5 @@
 import { action, imgurResponse } from '../../types';
 import Axios from 'axios';
-import { isArray } from 'util';
 import { RichEmbedOptions } from 'discord.js';
 import { indexObj } from '../../helpers/obj_array';
 
@@ -49,13 +48,14 @@ export const imgurAction: action = async req => {
 }
 
 function filter(albums: imgurResponse[]) {
-  return albums.map(album => {
-    return {
-      title: album.title,
-      description: album.description,
-      images: isArray(album.images) ? album.images.map(img => img.link) : [],
-      count: album.images_count
-    };
-  })
-    .filter(filter => filter.count >= 1);
+  return albums
+    .filter(album => album.images_count >= 1)
+    .map(album => {
+      return {
+        title: album.title,
+        description: album.description,
+        images: album.images.map(img => img.link),
+        count: album.images_count
+      };
+    })
 }
