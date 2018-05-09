@@ -14,7 +14,10 @@ const client = new Client()
 const config = require('../config.json')
 
 client.login(config.token)
-client.on('ready', () => log('Bot Ready\n'))
+client.on('ready', () => {
+  client.user.setActivity('with papi')
+  log('Bot Ready\n')
+})
 
 logDeclarations()
 
