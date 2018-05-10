@@ -8,20 +8,21 @@ import { AxiosError } from 'axios';
 export default class Command {
   constructor(
     public name: string,
-    private _action: action<any>
+    private _action: action<any>,
+    private prefixNeeded: boolean = true
   ) {
-    Commands.on(this.name, (request: CommandRequest) => {
-      this._run(request)
-      log(`Ran command "${request.command}" @${request.msg.guild.name}`)
-    })
-
+    Commands.on(this.name, (request: CommandRequest, prefix: boolean) =>
+      this._run(request, prefix)
+    )
   }
 
-  private _run(req: CommandRequest): void {
-
-    const result = this._action(req)
-
-    if (result instanceof Promise) this._handleError(result, req)
+  private _run(req: CommandRequest, prefix: boolean): void {
+    if (this.prefixNeeded && prefix || !this.prefixNeeded && !prefix) {
+      const result = this._action(req)
+      if (result instanceof Promise) this._handleError(result, req)
+      log(req.log())
+      log(`Ran command "${req.command}" @${req.msg.guild.name}`)
+    }
   }
 
   private _handleError(prom: Promise<any>, req: CommandRequest) {

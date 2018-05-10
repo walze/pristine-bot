@@ -1,5 +1,6 @@
 import Command from "../classes/Command"
 import SmallActions from './smallActions'
+import noPrefix from './actions/noPrefix';
 import log from "../helpers/logger";
 import {
   auditsAction,
@@ -23,7 +24,8 @@ const Declarations: Command[] =
     new Command('define', defineAction),
     new Command('google', googleAction),
     new Command('curr', currencyAction),
-    new Command('imgur', imgurAction)
+    new Command('imgur', imgurAction),
+    new Command('mom gay', noPrefix.momgay, false)
   ]
 
 export default Declarations

@@ -2,6 +2,7 @@ import { Message } from "discord.js";
 import { at } from "../types";
 import Commands from "./CommandsEventEmmiter";
 import { log } from 'console';
+import { isString } from 'util';
 
 export interface DefaultParams {
   [key: string]: string
@@ -13,7 +14,7 @@ export interface DefaultParams {
 // params.argument will equals to value
 
 export default class CommandRequest {
-  public command: string = ''
+  public command: string | symbol = ''
   public text: string = ''
   public ats: at[] = []
   public params: DefaultParams = { amount: '1' }
@@ -26,7 +27,7 @@ export default class CommandRequest {
   constructor(
     public msg: Message,
   ) {
-    this._checkIfCommand(() => this._getParams())
+    this._getParams()
   }
 
   public log(logBool?: boolean, ...extras: any[]): object {
@@ -43,6 +44,19 @@ export default class CommandRequest {
   }
 
   private _getParams() {
+    const command = this.msg.content.match(this._commandRegex)
+
+    if (command) {
+      this.command = command[1]
+    } else {
+      this.command = Commands.eventNames().filter((e) => {
+        if (isString(e))
+          return this.msg.content.includes(e)
+      })[0]
+
+      this._commandRegex = new RegExp(`${this.command}`)
+    }
+
     const paramsMatch = this.msg.content.match(this._paramRegex)
     if (paramsMatch) {
 
@@ -57,19 +71,8 @@ export default class CommandRequest {
       this.text = this._filterText(this.msg)
       this.ats = this._filterAts(this.msg)
     }
-  }
 
-  private _checkIfCommand(callback: Function) {
-
-    const command = this.msg.content.match(this._commandRegex)
-
-    if (command) {
-
-      callback()
-
-      this.command = command[1]
-      Commands.emit(this.command, this)
-    }
+    Commands.emit(this.command, this, Boolean(command))
   }
 
   public getAt(pos: number): at {
