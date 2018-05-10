@@ -25,7 +25,4 @@ export const currencyAction: action<FromToParams> = req => {
       })
 
   }
-  else
-    req.msg.channel.send('Wrong syntax. s-curr from-\"CURRENCY_CODE\" to-\"CURRENCY_CODE\" \"VALUE OR EMPTY\"')
-
 }

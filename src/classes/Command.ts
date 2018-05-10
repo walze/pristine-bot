@@ -3,57 +3,84 @@ import { action } from "../types"
 import log from "../helpers/logger";
 import Commands from "./CommandsEventEmitter";
 import { RichEmbedOptions } from 'discord.js';
-import { AxiosError } from 'axios';
+import { isUndefined } from 'util';
+
+export interface Requirements {
+  prefix?: boolean,
+  text?: boolean,
+  ats?: boolean,
+}
 
 export default class Command {
   constructor(
     public name: string,
     private _action: action<any>,
-    private prefixNeeded: boolean = true
+    public required: Requirements = {}
   ) {
-    Commands.on(this.name, (request: CommandRequest, prefix: boolean) =>
-      this._run(request, prefix)
+    this.required = {
+      prefix: isUndefined(required.prefix) ? true : required.prefix,
+      text: isUndefined(required.text) ? true : required.text,
+      ats: isUndefined(required.ats) ? false : required.ats
+    }
+
+    Commands.on(this.name, (request: CommandRequest, hasPrefix: boolean) =>
+      this._handleError(
+        this._checkRequirements(request, hasPrefix).then(() => this._run(request)),
+        request
+      )
     )
   }
 
-  private _run(req: CommandRequest, prefix: boolean): void {
-    if (this.prefixNeeded && prefix || !this.prefixNeeded && !prefix) {
-      const result = this._action(req)
-      if (result instanceof Promise) this._handleError(result, req)
-      log(req.log())
-      log(`Ran command "${req.command}" @${req.msg.guild.name}`)
-    }
+  private _checkRequirements(request: CommandRequest, hasPrefix: boolean) {
+    return new Promise((res, rej) => {
+      let errorString = ''
+
+      if (this.required.prefix === hasPrefix) {
+        if (this.required.text !== (request.text !== ''))
+          errorString += '\nThis command requires some text'
+        if (this.required.ats !== (request.ats.length > 0))
+          errorString += '\nThis command requires @someone'
+
+        if (errorString === '') res()
+        else rej(new Error(errorString))
+      }
+
+    })
+  }
+
+  private _run(req: CommandRequest): void {
+    const result = this._action(req)
+
+    if (result instanceof Promise) this._handleError(result, req)
+
+    log(req.log())
+    log(`Ran command "${req.command}" @${req.msg.guild.name}`)
   }
 
   private _handleError(prom: Promise<any>, req: CommandRequest) {
     prom
-      .catch((err: AxiosError) => {
-        log('COMMAND CATCH LOG:', err)
+      .catch((err: Error) => {
+        log('COMMAND CATCH LOG:', err.stack)
 
         const embed: RichEmbedOptions = {
-          url: 'https://en.wikipedia.org/wiki/List_of_HTTP_status_codes',
-          description: 'Something went wrong with your request. Possibly there were no matching results.',
           author: {
             name: req.msg.author.username,
             icon_url: req.msg.author.avatarURL
           },
           title: "Error Information",
+          description: err.message,
           fields: [
             {
-              name: "Message",
-              value: err.message,
-              inline: true
-            },
-            {
               name: 'Request Arguments',
-              value: `\`\`${JSON.stringify(req.log(false))}\`\``
+              value: `\`\`\`json\n${JSON.stringify(req.log(false))}\`\`\``,
+              inline: true
             }
           ],
           timestamp: new Date()
         }
 
 
-        req.msg.channel.send({ embed })
+        req.msg.channel.send('Something went wrong with your request, check your syntax.', { embed })
       })
   }
 }

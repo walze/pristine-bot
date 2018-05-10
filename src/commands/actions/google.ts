@@ -3,7 +3,6 @@ import Axios from 'axios';
 import { action } from '../../types';
 
 export const googleAction: action = async req => {
-  // https://www.google.com.br/search?q=loli&tbm=isch
   return await Axios.get(`https://www.google.com.br/search?q=${req.text}`)
     .then(async res => {
       const dom = new JSDOM(res.data, {

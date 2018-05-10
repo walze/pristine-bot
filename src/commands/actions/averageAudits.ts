@@ -14,8 +14,6 @@ export const auditsAction: action = req => {
           averageAudits(audits, at)
         )
       )
-
-  else req.msg.reply('Must @someone')
 }
 
 function averageAudits(audit: GuildAuditLogs, at: at) {

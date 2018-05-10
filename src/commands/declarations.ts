@@ -14,18 +14,18 @@ import {
 
 const Declarations: Command[] =
   [
-    new Command('debug', SmallActions.debug),
+    new Command('debug', SmallActions.debug, { text: false, ats: false, prefix: false }),
     new Command('say', SmallActions.say),
-    new Command('thonkwot', SmallActions.thonkwot),
+    new Command('thonkwot', SmallActions.thonkwot, { text: false }),
     new Command('image', SmallActions.image),
-    new Command('audits', auditsAction),
-    new Command('tl', translatorAction),
+    new Command('mom gay', noPrefix.momgay, { prefix: false, text: false }),
+    new Command('audits', auditsAction, { ats: true }),
     new Command('urban', urbanAction),
     new Command('define', defineAction),
     new Command('google', googleAction),
-    new Command('curr', currencyAction),
     new Command('imgur', imgurAction),
-    new Command('mom gay', noPrefix.momgay, false)
+    new Command('curr', currencyAction),
+    new Command('tl', translatorAction),
   ]
 
 export default Declarations

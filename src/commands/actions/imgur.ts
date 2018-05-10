@@ -14,6 +14,9 @@ export const imgurAction: action = async req => {
       })
       .then(async res => {
         const albums: imgurResponse[] = res.data.data
+
+        if (albums.length < 1) throw new Error(`Nothing found on "${req.text}"`)
+
         const filtered = filter(albums)
 
         const indexes = {

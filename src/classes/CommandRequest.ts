@@ -33,9 +33,9 @@ export default class CommandRequest {
   ) {
     const command = this.msg.content.match(this._commandRegex)
 
-    if (command) {
+    if (command)
       this.command = command[1]
-    } else {
+    else {
       this.command = Commands.eventNames().filter((e) => {
         if (isString(e)) return this.msg.content.includes(e)
       })[0]
@@ -43,21 +43,28 @@ export default class CommandRequest {
       this._commandRegex = new RegExp(`${this.command}`, 'g')
     }
 
+
+
+    if (this.command) this._emit(Boolean(command))
+  }
+
+  private _emit(hasPrefix: boolean) {
     const paramsMatch = this.msg.content.match(this._paramRegex)
-    if (paramsMatch) {
+
+    if (paramsMatch)
       paramsMatch.map(el => {
-        const split = el.split('-')
+        const split = el.split(separator)
         const prop = split[0]
         const value = split[1]
 
-        if (split[0] !== 's') this.params[prop] = value
+        if (split[0] !== prefix && split[0] !== prefix[0])
+          this.params[prop] = value
       })
-    }
 
     this.text = this._filterText()
     this.ats = this._filterAts()
 
-    Commands.emit(this.command, this, Boolean(command))
+    Commands.emit(this.command, this, hasPrefix)
   }
 
   public log(logBool?: boolean, ...args: any[]): object {
