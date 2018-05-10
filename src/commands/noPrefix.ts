@@ -1,4 +1,4 @@
-import { action } from '../../types';
+import { action } from '../types';
 
 export default class noPrefix {
 

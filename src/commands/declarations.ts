@@ -1,6 +1,6 @@
 import Command from "../classes/Command"
 import SmallActions from './smallActions'
-import noPrefix from './actions/noPrefix';
+import noPrefix from './noPrefix';
 import log from "../helpers/logger";
 import {
   auditsAction,

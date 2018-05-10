@@ -1,7 +1,7 @@
 import CommandRequest from "./CommandRequest"
 import { action } from "../types"
 import log from "../helpers/logger";
-import Commands from "./CommandsEventEmmiter";
+import Commands from "./CommandsEventEmitter";
 import { RichEmbedOptions } from 'discord.js';
 import { AxiosError } from 'axios';
 

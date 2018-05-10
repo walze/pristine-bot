@@ -1,7 +1,6 @@
 import { action, imgurResponse } from '../../types';
 import Axios from 'axios';
 import { RichEmbedOptions } from 'discord.js';
-import { indexObj } from '../../helpers/obj_array';
 
 const config = {
   "client_id": "bebb4e6140bcb51"
@@ -15,7 +14,7 @@ export const imgurAction: action = async req => {
       })
       .then(async res => {
         const albums: imgurResponse[] = res.data.data
-        const filtered: indexObj = filter(albums)
+        const filtered = filter(albums)
 
         const indexes = {
           album: Number(req.params.album) - 1,
@@ -54,8 +53,7 @@ function filter(albums: imgurResponse[]) {
       return {
         title: album.title,
         description: album.description,
-        images: album.images.map(img => img.link),
-        count: album.images_count
+        images: album.images.map(img => img.link)
       };
     })
 }
