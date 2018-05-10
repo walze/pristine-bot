@@ -1,10 +1,12 @@
 import { GuildAuditLogs } from "discord.js";
 import { action, at } from "../../types";
 
+
+
 export const auditsAction: action = req => {
   const at = req.getAt(0)
-  
-  if (at.id) 
+
+  if (at.id)
     req.msg.guild.fetchAuditLogs({
       user: at.id,
       limit: Number(req.params.amount) || 100,

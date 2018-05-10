@@ -1,8 +1,8 @@
-import { Message } from "discord.js";
-import { at } from "../types";
-import Commands from "./CommandsEventEmitter";
-import { log } from 'console';
-import { isString } from 'util';
+import { Message } from "discord.js"
+import { at } from "../types"
+import Commands from "./CommandsEventEmitter"
+import { log } from 'console'
+import { isString } from 'util'
 
 export interface DefaultParams {
   [key: string]: string
@@ -33,38 +33,42 @@ export default class CommandRequest {
   ) {
     const command = this.msg.content.match(this._commandRegex)
 
+    if (this._getCommand(command))
+      this._emit(Boolean(command))
+  }
+
+  private _emit(hasPrefix: boolean) {
+    this._filterArguments()
+    this._filterText()
+    this._filterAts()
+
+    Commands.emit(this.command, this, hasPrefix)
+  }
+
+  private _getCommand(command: RegExpMatchArray | null) {
     if (command)
       this.command = command[1]
     else {
       this.command = Commands.eventNames().filter((e) => {
-        if (isString(e)) return this.msg.content.includes(e)
+        if (isString(e))
+          return this.msg.content.includes(e)
       })[0]
-
       this._commandRegex = new RegExp(`${this.command}`, 'g')
     }
 
-
-
-    if (this.command) this._emit(Boolean(command))
+    return this.command
   }
 
-  private _emit(hasPrefix: boolean) {
+  private _filterArguments() {
     const paramsMatch = this.msg.content.match(this._paramRegex)
-
     if (paramsMatch)
       paramsMatch.map(el => {
         const split = el.split(separator)
         const prop = split[0]
         const value = split[1]
-
         if (split[0] !== prefix && split[0] !== prefix[0])
           this.params[prop] = value
       })
-
-    this.text = this._filterText()
-    this.ats = this._filterAts()
-
-    Commands.emit(this.command, this, hasPrefix)
   }
 
   public log(logBool?: boolean, ...args: any[]): object {
@@ -88,7 +92,7 @@ export default class CommandRequest {
   }
 
   // Gets @'s
-  private _filterAts(): at[] {
+  private _filterAts(): void {
     const atsMatchеs = this.msg.content.match(this._atsRegex)
     const ats: at[] = []
 
@@ -100,12 +104,12 @@ export default class CommandRequest {
           ats.push({ tag, id: tag.replace(/<@!?/g, '').replace(/>/g, '') })
       })
 
-    return ats
+    this.ats = ats
   }
 
   // Removes params and gets text only
-  private _filterText(): string {
-    return this.msg.content
+  private _filterText() {
+    this.text = this.msg.content
       .replace(this._textRegex, '')
       .replace(this._commandRegex, '')
       .replace(this._atsRegex, '')

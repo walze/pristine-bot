@@ -4,27 +4,18 @@ import log from "../helpers/logger";
 import Commands from "./CommandsEventEmitter";
 import { RichEmbedOptions } from 'discord.js';
 import { isUndefined } from 'util';
-
-export interface Requirements {
-  prefix?: boolean,
-  text?: boolean,
-  ats?: boolean,
-}
+import { Requirements } from './Requirements';
 
 export default class Command {
   constructor(
     public name: string,
     private _action: action<any>,
-    public required: Requirements = {}
+    public required = new Requirements
   ) {
-    this.required = {
-      prefix: isUndefined(required.prefix) ? true : required.prefix,
-      text: isUndefined(required.text) ? true : required.text,
-      ats: isUndefined(required.ats) ? false : required.ats
-    }
-
+    this.required = new Requirements(required)
+    log(this.required)
     Commands.on(this.name, (request: CommandRequest, hasPrefix: boolean) =>
-      this._handleError(
+      this._DiscordErrorDisplayer(
         this._checkRequirements(request, hasPrefix).then(() => this._run(request)),
         request
       )
@@ -41,6 +32,12 @@ export default class Command {
         if (this.required.ats !== (request.ats.length > 0))
           errorString += '\nThis command requires @someone'
 
+        if (this.required.params && this.required.params.obligatory)
+          this.required.params.props.map(param => {
+            if (isUndefined(request.params[param]) || !request.params[param])
+              errorString += `\nArgument "${param}" is required for this command`
+          })
+
         if (errorString === '') res()
         else rej(new Error(errorString))
       }
@@ -51,13 +48,13 @@ export default class Command {
   private _run(req: CommandRequest): void {
     const result = this._action(req)
 
-    if (result instanceof Promise) this._handleError(result, req)
+    if (result instanceof Promise) this._DiscordErrorDisplayer(result, req)
 
     log(req.log())
     log(`Ran command "${req.command}" @${req.msg.guild.name}`)
   }
 
-  private _handleError(prom: Promise<any>, req: CommandRequest) {
+  private _DiscordErrorDisplayer(prom: Promise<any>, req: CommandRequest) {
     prom
       .catch((err: Error) => {
         log('COMMAND CATCH LOG:', err.stack)
