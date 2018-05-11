@@ -1,8 +1,8 @@
-import CommandRequest from "./classes/CommandRequest";
+import Request from "./classes/Request";
 
 // used for global types
 
-export type action<T = CommandRequest> = (request: CommandRequest & T) => Promise<any> | void
+export type action<T = Request> = (request: Request & T) => Promise<any> | void
 
 
 export interface FromToParams {

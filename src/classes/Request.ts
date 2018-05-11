@@ -1,37 +1,35 @@
 import { Message } from "discord.js"
 import { at } from "../types"
-import Commands from "./CommandsEventEmitter"
+import Commands from "./Commands"
 import { log } from 'console'
-import { isString } from 'util'
 
 export interface DefaultParams {
   [key: string]: string
   amount: string
 }
 
+
 // s-debug argument-value
 // Eg. s-debug event-MEMBER_ADD_BAN amount-5 @wiva#9996
 // params.argument will equals to value
 
-export let prefix = 's-'
-export let separator = '-'
 
-export default class CommandRequest {
+export default class Request {
 
   public command: string | symbol = ''
   public text: string = ''
   public ats: at[] = []
   public params: DefaultParams = { amount: '1' }
 
-  private _paramRegex: RegExp = new RegExp(`\\w+${separator}\\w+`, 'g')
-  private _commandRegex: RegExp = new RegExp(`^${prefix}(\\w+)`)
+  private _paramRegex: RegExp = new RegExp(`\\w+${Commands.separator}\\w+`, 'g')
+  private _commandRegex: RegExp = new RegExp(`^${Commands.prefix}(\\w+)`)
   private _atsRegex: RegExp = new RegExp(`<@!?(\\d+)>`, 'g')
-  private _textRegex: RegExp = new RegExp(`\\w+${separator}\\w+\\s?`, 'g')
+  private _textRegex: RegExp = new RegExp(`\\w+${Commands.separator}\\w+\\s?`, 'g')
 
   constructor(
     public msg: Message,
   ) {
-    const command = this.msg.content.match(this._commandRegex)
+    const command = this.msg.content.toLowerCase().match(this._commandRegex)
 
     if (this._getCommand(command))
       this._emit(Boolean(command))
@@ -42,17 +40,15 @@ export default class CommandRequest {
     this._filterText()
     this._filterAts()
 
-    Commands.emit(this.command, this, hasPrefix)
+    Commands.event.emit(this.command, this, hasPrefix)
   }
 
   private _getCommand(command: RegExpMatchArray | null) {
     if (command)
       this.command = command[1]
     else {
-      this.command = Commands.eventNames().filter((e) => {
-        if (isString(e))
-          return this.msg.content.includes(e)
-      })[0]
+      this.command = Commands.findEvent(this.msg.content)
+
       this._commandRegex = new RegExp(`${this.command}`, 'g')
     }
 
@@ -60,13 +56,13 @@ export default class CommandRequest {
   }
 
   private _filterArguments() {
-    const paramsMatch = this.msg.content.match(this._paramRegex)
+    const paramsMatch = this.msg.content.toLowerCase().match(this._paramRegex)
     if (paramsMatch)
       paramsMatch.map(el => {
-        const split = el.split(separator)
+        const split = el.split(Commands.separator)
         const prop = split[0]
         const value = split[1]
-        if (split[0] !== prefix && split[0] !== prefix[0])
+        if (split[0] !== Commands.prefix && split[0] !== Commands.prefix[0])
           this.params[prop] = value
       })
   }
