@@ -9,9 +9,9 @@ export const imgurReqs: Requirements = {
     props: ['album', 'image']
   }
 }
-const config = {
-  "client_id": "bebb4e6140bcb51"
-}
+
+// yes, i know
+const config = { "client_id": "bebb4e6140bcb51" }
 
 export const imgurAction: action = async req => {
   return await
