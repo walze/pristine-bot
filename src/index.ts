@@ -16,7 +16,7 @@ const config = require('../config.json')
 
 client.login(config.token)
 client.on('ready', () => {
-  client.user.setActivity('self-hatred')
+  client.user.setActivity('self-hatred | s-help')
   log('Bot Ready\n')
 })
 

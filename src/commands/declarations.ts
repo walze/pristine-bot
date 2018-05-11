@@ -10,9 +10,9 @@ import currency from './actions/currency';
 import translator from './actions/translator';
 import help from './actions/help';
 import Commands from '../classes/Commands';
+import dm from './dm';
 
 
-// Defaults = { text: true, ats: false, prefix: true, params: undefined }
 Commands.declarations =
   [
     new Command('debug', SmallActions.debug),
@@ -28,4 +28,6 @@ Commands.declarations =
     new Command('curr', currency),
     new Command('tl', translator),
     new Command('help', help),
+    new Command('dm', dm)
   ]
+

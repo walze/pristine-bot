@@ -34,7 +34,7 @@ export default class Command {
       if (this.act.required.prefix === hasPrefix) {
         if ((this.act.required.text !== (req.text !== '')) && this.act.required.text)
           errorString += '\nThis command requires some text'
-        if (this.act.required.ats !== (req.ats.length > 0))
+        if ((this.act.required.ats !== (req.ats.length > 0)) && this.act.required.ats)
           errorString += '\nThis command requires @someone'
 
         if (this.act.required.params && this.act.required.params.obligatory)

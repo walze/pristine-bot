@@ -36,7 +36,9 @@ const action: actionType = async req => {
       if (prop === 'params')
         if (value.props.length > 0)
           return value.props
-    }).filter((el: any) => el)[0].join(' | ')
+    }).filter((el: any) => el)[0]
+
+    if (args) args.join(' | ')
 
     const requirements = mapObj(Commands.findCommand(req.text).act.required, (value, prop) => {
       if (value && prop !== 'params')
