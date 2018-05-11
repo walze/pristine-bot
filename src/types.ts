@@ -1,16 +1,8 @@
-import Request from "./classes/Request";
+import Call from "./classes/Call";
 
 // used for global types
 
-export type action<T = Request> = (request: Request & T) => Promise<any> | void
-
-
-export interface FromToParams {
-  params: {
-    from: string,
-    to: string
-  }
-}
+export type actionType = (request: Call) => Promise<any> | void
 
 export interface imgurResponse {
   id: string,

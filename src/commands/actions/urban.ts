@@ -1,7 +1,13 @@
 import Axios from "axios";
-import { urbanResponse, action } from "../../types";
+import { urbanResponse, actionType } from "../../types";
+import Act from '../../classes/Act';
+import { Requirements } from '../../classes/Requirements';
 
-export const urbanAction: action = async (request) => {
+const requirements: Requirements = {}
+
+const description = 'Searches text on Urban Dictionary'
+
+const action: actionType = async (request) => {
   return await Axios
     .get(`http://urbanscraper.herokuapp.com/search/${request.text}`)
     .then(async res => {
@@ -29,6 +35,8 @@ export const urbanAction: action = async (request) => {
     })
 }
 
+const urban = new Act(requirements, action, description)
+export default urban
 
 function fieldsSort(response: urbanResponse[]) {
   const fields: object[] = []

@@ -1,10 +1,11 @@
 import log from '../../helpers/logger'
 import { Languages } from './helpers/langs'
 import * as translate from 'google-translate-api'
-import { action, FromToParams } from '../../types';
+import { actionType } from '../../types';
 import { Requirements } from '../../classes/Requirements';
+import Act from '../../classes/Act';
 
-export const translatorReqs: Requirements = {
+const requirements: Requirements = {
   text: true,
   params: {
     obligatory: true,
@@ -12,7 +13,9 @@ export const translatorReqs: Requirements = {
   }
 }
 
-export const translatorAction: action<FromToParams> = request => {
+const description = 'Translates given text to ~~almost~~ any language ~~precision not guaranteed~~'
+
+const action: actionType = request => {
   return translate(request.text, {
     from: switchText(request.params.from) || 'auto',
     to: switchText(request.params.to) || 'en'
@@ -27,6 +30,9 @@ export const translatorAction: action<FromToParams> = request => {
       return err
     })
 }
+
+const translator = new Act(requirements, action, description)
+export default translator
 
 function switchText(language: string = ''): string | void {
   language = language.replace(/\b\w/g, l => l.toUpperCase())

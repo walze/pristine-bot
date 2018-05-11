@@ -1,13 +1,16 @@
 import { GuildAuditLogs } from "discord.js";
-import { action, at } from "../../types";
+import { actionType, at } from "../../types";
 import { Requirements } from '../../classes/Requirements';
+import Act from '../../classes/Act';
 
-export const auditsReqs: Requirements = {
+const requirements: Requirements = {
   ats: true,
   text: false,
 }
 
-export const auditsAction: action = req => {
+const description = 'Shows average between audits from a user'
+
+const action: actionType = req => {
   const at = req.getAt(0)
 
   if (at.id)
@@ -17,12 +20,16 @@ export const auditsAction: action = req => {
     })
       .then(audits =>
         req.msg.channel.send(
-          averageAudits(audits, at)
+          calculateAverage(audits, at)
         )
       )
 }
 
-function averageAudits(audit: GuildAuditLogs, at: at) {
+const audits = new Act(requirements, action, description)
+export default audits
+
+
+function calculateAverage(audit: GuildAuditLogs, at: at) {
 
   if (audit.entries.size > 0) {
     // getting audit creation time

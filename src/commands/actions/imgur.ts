@@ -1,19 +1,22 @@
-import { action, imgurResponse } from '../../types';
+import { actionType, imgurResponse } from '../../types';
 import Axios from 'axios';
 import { RichEmbedOptions } from 'discord.js';
 import { Requirements } from '../../classes/Requirements';
+import Act from '../../classes/Act';
 
-export const imgurReqs: Requirements = {
+const requirements: Requirements = {
   params: {
     obligatory: false,
     props: ['album', 'image']
   }
 }
 
+const description = 'Searches images on Imgur'
+
 // yes, i know
 const config = { "client_id": "bebb4e6140bcb51" }
 
-export const imgurAction: action = async req => {
+const action: actionType = async req => {
   return await
     Axios
       .get(`https://api.imgur.com/3/gallery/search/?q=${req.text}`, {
@@ -55,6 +58,9 @@ export const imgurAction: action = async req => {
       })
 
 }
+
+const imgur = new Act(requirements, action, description)
+export default imgur
 
 function filter(albums: imgurResponse[]) {
   return albums

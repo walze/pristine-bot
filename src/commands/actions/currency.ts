@@ -1,9 +1,10 @@
 //import log from "../../helpers/logger";
 import Axios from "axios";
-import { action, FromToParams } from "../../types";
+import { actionType } from "../../types";
 import { Requirements } from '../../classes/Requirements';
+import Act from '../../classes/Act';
 
-export const currencyReqs: Requirements = {
+const requirements: Requirements = {
   text: false,
   params: {
     obligatory: true,
@@ -11,7 +12,9 @@ export const currencyReqs: Requirements = {
   }
 }
 
-export const currencyAction: action<FromToParams> = req => {
+const description = 'Converts currencies'
+
+const action: actionType = req => {
   if (req.text.indexOf('codes') > -1) {
     req.msg.channel.send('https://www.xe.com/iso4217.php')
     return
@@ -33,3 +36,6 @@ export const currencyAction: action<FromToParams> = req => {
     })
 
 }
+
+const currency = new Act(requirements, action, description)
+export default currency

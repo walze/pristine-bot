@@ -1,40 +1,47 @@
-import Request from "./Request"
-import { action } from "../types"
+import Call from "./Call"
 import log from "../helpers/logger";
 import Commands from "./Commands";
 import { RichEmbedOptions } from 'discord.js';
 import { isUndefined } from 'util';
-import { Requirements } from './Requirements';
+import Act from './Act';
 
 export default class Command {
   constructor(
     public name: string,
-    private _action: action<any>,
-    public required = new Requirements
+    private _act: Act,
   ) {
-    this.required = new Requirements(required)
+    Commands.event.on(this.name, (req: Call, hasPrefix: boolean) => {
+      req.log(true, this._act)
 
-    Commands.event.on(this.name, (request: Request, hasPrefix: boolean) =>
       this._discordErrorDisplayer(
-        this._checkRequirements(request, hasPrefix).then(() => this._run(request)),
-        request
+        this._checkRequirements(req, hasPrefix).then(() => this._run(req)),
+        req
       )
-    )
+    })
   }
 
-  private _checkRequirements(request: Request, hasPrefix: boolean) {
+  private _run(req: Call): void {
+    const result = this._act.action(req)
+
+    if (result instanceof Promise) this._discordErrorDisplayer(result, req)
+
+    log(req.log())
+    log(`Ran command "${req.command}" @${req.msg.guild.name}`)
+  }
+
+  private _checkRequirements(req: Call, hasPrefix: boolean) {
     return new Promise((res, rej) => {
       let errorString = ''
 
-      if (this.required.prefix === hasPrefix) {
-        if ((this.required.text !== (request.text !== '')) && this.required.text)
+      if (this._act.required.prefix === hasPrefix) {
+        if ((this._act.required.text !== (req.text !== '')) && this._act.required.text)
           errorString += '\nThis command requires some text'
-        if (this.required.ats !== (request.ats.length > 0))
+        if (this._act.required.ats !== (req.ats.length > 0))
           errorString += '\nThis command requires @someone'
 
-        if (this.required.params && this.required.params.obligatory)
-          this.required.params.props.map(param => {
-            if (isUndefined(request.params[param]) || !request.params[param])
+        if (this._act.required.params && this._act.required.params.obligatory)
+          this._act.required.params.props.map(param => {
+            if (isUndefined(req.params[param]) || !req.params[param])
               errorString += `\nArgument "${param}" is required for this command`
           })
 
@@ -45,16 +52,7 @@ export default class Command {
     })
   }
 
-  private _run(req: Request): void {
-    const result = this._action(req)
-
-    if (result instanceof Promise) this._discordErrorDisplayer(result, req)
-
-    log(req.log())
-    log(`Ran command "${req.command}" @${req.msg.guild.name}`)
-  }
-
-  private _discordErrorDisplayer(prom: Promise<any>, req: Request) {
+  private _discordErrorDisplayer(prom: Promise<any>, req: Call) {
     prom
       .catch((err: Error) => {
         log('COMMAND CATCH LOG:', err.stack)

@@ -1,12 +1,15 @@
 //import log from "../../helpers/logger";
-import { definitionResponse, action } from "../../types";
+import { definitionResponse, actionType } from "../../types";
 import * as wordnet from 'wordnet'
 import { Requirements } from '../../classes/Requirements';
+import Act from '../../classes/Act';
 
-export const defineReqs: Requirements = {
+const requirements: Requirements = {
 }
 
-export const defineAction: action = async req => {
+const description = 'Shows the definition of a word ~~or not~~'
+
+const action: actionType = async req => {
   return await wordnet.lookup(req.text, async (err: any, defs: definitionResponse[]) => {
 
     if (!err) {
@@ -32,3 +35,6 @@ export const defineAction: action = async req => {
     } else return await req.msg.channel.send('\`\`404\'d\`\`')
   })
 }
+
+const define = new Act(requirements, action, description)
+export default define

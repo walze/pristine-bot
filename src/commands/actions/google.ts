@@ -1,15 +1,19 @@
 import { JSDOM } from 'jsdom';
 import Axios from 'axios';
-import { action } from '../../types';
+import { actionType } from '../../types';
 import { Requirements } from '../../classes/Requirements';
+import Act from '../../classes/Act';
 
-export const googleReqs: Requirements = {
+const requirements: Requirements = {
   params: {
     obligatory: false,
     props: ['amount']
   }
 }
-export const googleAction: action = async req => {
+
+const description = 'Googles some text'
+
+const action: actionType = async req => {
   return await Axios.get(`https://www.google.com.br/search?q=${req.text}`)
     .then(async res => {
       const dom = new JSDOM(res.data, {
@@ -39,3 +43,6 @@ export const googleAction: action = async req => {
       return await req.msg.channel.send(text)
     })
 }
+
+const google = new Act(requirements, action, description)
+export default google

@@ -14,7 +14,7 @@ export interface DefaultParams {
 // params.argument will equals to value
 
 
-export default class Request {
+export default class Call {
 
   public command: string | symbol = ''
   public text: string = ''

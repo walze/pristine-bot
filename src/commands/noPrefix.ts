@@ -1,8 +1,10 @@
-import { action } from '../types';
+import Act from '../classes/Act';
 
 export default class noPrefix {
 
-  public static momgay: action = req => {
-    req.msg.channel.send('no u')
-  }
+  public static momgay: Act = new Act({},
+    req => {
+      req.msg.channel.send('no u')
+    }
+  )
 }
