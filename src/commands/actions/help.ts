@@ -36,7 +36,7 @@ const action: actionType = async req => {
       if (prop === 'params')
         if (value.props.length > 0)
           return value.props.join(' | ')
-        else return 'This command doesn\'t have any arguments'
+        else return 'None'
     }).filter((el: any) => el)
 
     const requirements = mapObj(Commands.findCommand(req.text).act.required, (value, prop) => {
@@ -44,15 +44,15 @@ const action: actionType = async req => {
         return prop
 
       if (prop === 'params' && value.obligatory === true)
-        return 'params'
+        return 'arguments'
       else return false
     }).filter((el: string) => el).join(' | ')
 
     embed.embed.title = `${req.text} details`
     embed.embed.fields = [
       {
-        name: 'Requirements',
-        value: requirements
+        name: 'Required',
+        value: requirements || 'None'
       },
       {
         name: 'Arguments',
