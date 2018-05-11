@@ -27,7 +27,7 @@ export default class Command {
       let errorString = ''
 
       if (this.required.prefix === hasPrefix) {
-        if (this.required.text !== (request.text !== ''))
+        if ((this.required.text !== (request.text !== '')) && this.required.text)
           errorString += '\nThis command requires some text'
         if (this.required.ats !== (request.ats.length > 0))
           errorString += '\nThis command requires @someone'
