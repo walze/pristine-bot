@@ -1,6 +1,10 @@
 //import log from "../../helpers/logger";
 import { definitionResponse, action } from "../../types";
 import * as wordnet from 'wordnet'
+import { Requirements } from '../../classes/Requirements';
+
+export const defineReqs: Requirements = {
+}
 
 export const defineAction: action = async req => {
   return await wordnet.lookup(req.text, async (err: any, defs: definitionResponse[]) => {

@@ -13,9 +13,9 @@ export default class Command {
     public required = new Requirements
   ) {
     this.required = new Requirements(required)
-    log(this.required)
+
     Commands.on(this.name, (request: CommandRequest, hasPrefix: boolean) =>
-      this._DiscordErrorDisplayer(
+      this._discordErrorDisplayer(
         this._checkRequirements(request, hasPrefix).then(() => this._run(request)),
         request
       )
@@ -48,13 +48,13 @@ export default class Command {
   private _run(req: CommandRequest): void {
     const result = this._action(req)
 
-    if (result instanceof Promise) this._DiscordErrorDisplayer(result, req)
+    if (result instanceof Promise) this._discordErrorDisplayer(result, req)
 
     log(req.log())
     log(`Ran command "${req.command}" @${req.msg.guild.name}`)
   }
 
-  private _DiscordErrorDisplayer(prom: Promise<any>, req: CommandRequest) {
+  private _discordErrorDisplayer(prom: Promise<any>, req: CommandRequest) {
     prom
       .catch((err: Error) => {
         log('COMMAND CATCH LOG:', err.stack)

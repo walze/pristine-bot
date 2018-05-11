@@ -1,6 +1,15 @@
 //import log from "../../helpers/logger";
 import Axios from "axios";
 import { action, FromToParams } from "../../types";
+import { Requirements } from '../../classes/Requirements';
+
+export const currencyReqs: Requirements = {
+  text: false,
+  params: {
+    obligatory: true,
+    props: ['from', 'to']
+  }
+}
 
 export const currencyAction: action<FromToParams> = req => {
   if (req.text.indexOf('codes') > -1) {

@@ -1,7 +1,14 @@
 import { JSDOM } from 'jsdom';
 import Axios from 'axios';
 import { action } from '../../types';
+import { Requirements } from '../../classes/Requirements';
 
+export const googleReqs: Requirements = {
+  params: {
+    obligatory: false,
+    props: ['amount']
+  }
+}
 export const googleAction: action = async req => {
   return await Axios.get(`https://www.google.com.br/search?q=${req.text}`)
     .then(async res => {

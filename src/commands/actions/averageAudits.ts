@@ -1,7 +1,11 @@
 import { GuildAuditLogs } from "discord.js";
 import { action, at } from "../../types";
+import { Requirements } from '../../classes/Requirements';
 
-
+export const auditsReqs: Requirements = {
+  ats: true,
+  text: false,
+}
 
 export const auditsAction: action = req => {
   const at = req.getAt(0)

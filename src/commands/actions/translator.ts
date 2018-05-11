@@ -2,6 +2,15 @@ import log from '../../helpers/logger'
 import { Languages } from './helpers/langs'
 import * as translate from 'google-translate-api'
 import { action, FromToParams } from '../../types';
+import { Requirements } from '../../classes/Requirements';
+
+export const translatorReqs: Requirements = {
+  text: true,
+  params: {
+    obligatory: true,
+    props: ['from', 'to']
+  }
+}
 
 export const translatorAction: action<FromToParams> = request => {
   return translate(request.text, {

@@ -9,7 +9,13 @@ import {
   defineAction,
   googleAction,
   currencyAction,
-  imgurAction
+  imgurAction,
+  translatorReqs,
+  currencyReqs,
+  imgurReqs,
+  googleReqs,
+  defineReqs,
+  auditsReqs
 } from './actions';
 
 
@@ -21,13 +27,13 @@ const Declarations: Command[] =
     new Command('thonkwot', SmallActions.thonkwot),
     new Command('image', SmallActions.image),
     new Command('mom gay', noPrefix.momgay),
-    new Command('audits', auditsAction),
+    new Command('audits', auditsAction, auditsReqs),
     new Command('urban', urbanAction),
-    new Command('define', defineAction),
-    new Command('google', googleAction),
-    new Command('imgur', imgurAction),
-    new Command('curr', currencyAction),
-    new Command('tl', translatorAction),
+    new Command('define', defineAction, defineReqs),
+    new Command('google', googleAction, googleReqs),
+    new Command('imgur', imgurAction, imgurReqs),
+    new Command('curr', currencyAction, currencyReqs),
+    new Command('tl', translatorAction, translatorReqs),
   ]
 
 export default Declarations

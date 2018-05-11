@@ -1,7 +1,14 @@
 import { action, imgurResponse } from '../../types';
 import Axios from 'axios';
 import { RichEmbedOptions } from 'discord.js';
+import { Requirements } from '../../classes/Requirements';
 
+export const imgurReqs: Requirements = {
+  params: {
+    obligatory: false,
+    props: ['album', 'image']
+  }
+}
 const config = {
   "client_id": "bebb4e6140bcb51"
 }
