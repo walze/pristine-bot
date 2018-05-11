@@ -4,7 +4,8 @@ import * as Express from 'express'
 import { Client } from 'discord.js'
 import log from './helpers/logger'
 import Call from './classes/Call';
-import { logDeclarations } from './commands/declarations';
+import './commands/declarations'
+import Commands from './classes/Commands';
 
 const app = Express()
 app.listen(process.env.PORT || 3000, () => log('\nExpress Ready'))
@@ -19,7 +20,7 @@ client.on('ready', () => {
   log('Bot Ready\n')
 })
 
-logDeclarations()
+Commands.logCommands()
 
 client.on('message', msg => new Call(msg))
 

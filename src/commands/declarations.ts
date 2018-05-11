@@ -1,7 +1,6 @@
 import Command from "../classes/Command"
 import SmallActions from './smallActions'
 import noPrefix from './noPrefix';
-import log from "../helpers/logger";
 import audits from './actions/averageAudits';
 import urban from './actions/urban';
 import define from './actions/define';
@@ -10,10 +9,11 @@ import imgur from './actions/imgur';
 import currency from './actions/currency';
 import translator from './actions/translator';
 import help from './actions/help';
+import Commands from '../classes/Commands';
 
 
 // Defaults = { text: true, ats: false, prefix: true, params: undefined }
-const Declarations: Command[] =
+Commands.declarations =
   [
     new Command('debug', SmallActions.debug),
     new Command('say', SmallActions.say),
@@ -29,10 +29,3 @@ const Declarations: Command[] =
     new Command('tl', translator),
     new Command('help', help),
   ]
-
-export default Declarations
-
-export function logDeclarations() {
-  const text = `\nListening to Commands:\n${Declarations.map(cmd => cmd.name).join('\n')}`
-  log(text)
-}

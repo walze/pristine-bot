@@ -13,6 +13,6 @@ export function mapObj(obj: indexObj, callback: mapObjCallback): any {
   return array
 }
 
-export function objToArray(obj: indexObj) {
+export function objToArray(obj: object) {
   return mapObj(obj, value => value)
 }

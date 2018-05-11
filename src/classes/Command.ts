@@ -11,8 +11,6 @@ export default class Command {
     public act: Act,
   ) {
     Commands.event.on(this.name, (req: Call, hasPrefix: boolean) => {
-      req.log(true, this.act)
-
       this._discordErrorDisplayer(
         this._checkRequirements(req, hasPrefix).then(() => this._run(req)),
         req
