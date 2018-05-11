@@ -8,7 +8,7 @@ export default class Act {
   constructor(
     requirements: Requirements,
     public action: actionType,
-    public description: string = '',
+    public description: string = 'None',
   ) {
     this.required = new Requirements(requirements)
   }

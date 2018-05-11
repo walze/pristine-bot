@@ -8,10 +8,10 @@ import Act from './Act';
 export default class Command {
   constructor(
     public name: string,
-    private _act: Act,
+    public act: Act,
   ) {
     Commands.event.on(this.name, (req: Call, hasPrefix: boolean) => {
-      req.log(true, this._act)
+      req.log(true, this.act)
 
       this._discordErrorDisplayer(
         this._checkRequirements(req, hasPrefix).then(() => this._run(req)),
@@ -21,7 +21,7 @@ export default class Command {
   }
 
   private _run(req: Call): void {
-    const result = this._act.action(req)
+    const result = this.act.action(req)
 
     if (result instanceof Promise) this._discordErrorDisplayer(result, req)
 
@@ -33,14 +33,14 @@ export default class Command {
     return new Promise((res, rej) => {
       let errorString = ''
 
-      if (this._act.required.prefix === hasPrefix) {
-        if ((this._act.required.text !== (req.text !== '')) && this._act.required.text)
+      if (this.act.required.prefix === hasPrefix) {
+        if ((this.act.required.text !== (req.text !== '')) && this.act.required.text)
           errorString += '\nThis command requires some text'
-        if (this._act.required.ats !== (req.ats.length > 0))
+        if (this.act.required.ats !== (req.ats.length > 0))
           errorString += '\nThis command requires @someone'
 
-        if (this._act.required.params && this._act.required.params.obligatory)
-          this._act.required.params.props.map(param => {
+        if (this.act.required.params && this.act.required.params.obligatory)
+          this.act.required.params.props.map(param => {
             if (isUndefined(req.params[param]) || !req.params[param])
               errorString += `\nArgument "${param}" is required for this command`
           })

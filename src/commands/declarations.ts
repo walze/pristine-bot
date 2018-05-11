@@ -1,6 +1,6 @@
 import Command from "../classes/Command"
-// import SmallActions from './smallActions'
-// import noPrefix from './noPrefix';
+import SmallActions from './smallActions'
+import noPrefix from './noPrefix';
 import log from "../helpers/logger";
 import audits from './actions/averageAudits';
 import urban from './actions/urban';
@@ -15,11 +15,11 @@ import help from './actions/help';
 // Defaults = { text: true, ats: false, prefix: true, params: undefined }
 const Declarations: Command[] =
   [
-    // new Command('debug', SmallActions.debug),
-    // new Command('say', SmallActions.say),
-    // new Command('thonkwot', SmallActions.thonkwot),
-    // new Command('image', SmallActions.image),
-    // new Command('mom gay', noPrefix.momgay),
+    new Command('debug', SmallActions.debug),
+    new Command('say', SmallActions.say),
+    new Command('thonkwot', SmallActions.thonkwot),
+    new Command('image', SmallActions.image),
+    new Command('mom gay', noPrefix.momgay),
     new Command('audits', audits),
     new Command('urban', urban),
     new Command('define', define),
