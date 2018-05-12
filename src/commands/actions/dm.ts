@@ -1,4 +1,4 @@
-import Act from '../classes/Act';
+import Act from '../../classes/Act';
 
 const dm = new Act(
   { ats: true },

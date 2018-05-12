@@ -10,7 +10,7 @@ import currency from './actions/currency';
 import translator from './actions/translator';
 import help from './actions/help';
 import Commands from '../classes/Commands';
-import dm from './dm';
+import dm from './actions/dm';
 
 
 Commands.declarations =

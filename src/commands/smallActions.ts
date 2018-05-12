@@ -34,7 +34,7 @@ export default class SmallActions {
     'Bot says whatever you type'
   )
 
-  public static thonkwot: Act = new Act({},
+  public static thonkwot: Act = new Act({ text: false },
     req => {
       req.msg.delete()
       req.msg.channel.send('', { file: 'https://cdn.discordapp.com/emojis/409528321685061634.png' })
