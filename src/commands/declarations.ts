@@ -11,6 +11,7 @@ import translator from './actions/translator';
 import help from './actions/help';
 import Commands from '../classes/Commands';
 import dm from './actions/dm';
+import talk from './actions/talk';
 
 
 Commands.declarations =
@@ -28,6 +29,7 @@ Commands.declarations =
     new Command('curr', currency),
     new Command('tl', translator),
     new Command('help', help),
-    new Command('dm', dm)
+    new Command('dm', dm),
+    new Command('talk', talk)
   ]
 

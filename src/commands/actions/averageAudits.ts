@@ -8,7 +8,7 @@ const requirements: Requirements = {
   text: false,
 }
 
-const description = 'Shows average between audits from a user'
+const description = 'Shows average time between audits from a user'
 
 const action: actionType = req => {
   const at = req.getAt(0)
