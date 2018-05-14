@@ -31,8 +31,9 @@ const action: actionType = async req => {
   }
 
   if (req.text !== '') {
-    const args = mapObj(Commands.findCommand(req.text).act.required, (value, prop) => {
-      console.log(prop, value)
+    const command = Commands.findCommand(req.text)
+
+    const args = mapObj(command.act.required, (value, prop) => {
       if (prop === 'params')
         if (value.props.length > 0)
           return value.props
@@ -40,7 +41,7 @@ const action: actionType = async req => {
 
     if (args) args.join(' | ')
 
-    const requirements = mapObj(Commands.findCommand(req.text).act.required, (value, prop) => {
+    const requirements = mapObj(command.act.required, (value, prop) => {
       if (value && prop !== 'params')
         return prop
 
@@ -51,6 +52,10 @@ const action: actionType = async req => {
 
     embed.embed.title = `${req.text} details`
     embed.embed.fields = [
+      {
+        name: 'Description',
+        value: command.act.description
+      },
       {
         name: 'Required',
         value: requirements || 'None'

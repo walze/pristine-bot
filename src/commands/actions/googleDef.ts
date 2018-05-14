@@ -6,7 +6,10 @@ import { JSDOM } from 'jsdom';
 
 
 const requirements: Requirements = {
-
+  params: {
+    obligatory: false,
+    props: ['amount']
+  }
 }
 
 const description = 'Give you the google definition of a word'
@@ -29,48 +32,30 @@ const action: actionType = async req => {
       if (nounsLIs) nounsLIs.forEach(el => nouns.push(el.innerHTML))
       if (verbsLIs) verbsLIs.forEach(el => verbs.push(el.innerHTML))
 
-      const embedNouns = {
+      const all = nouns.concat(verbs)
+
+      const embed = {
         embed: {
           author: {
             name: req.msg.author.username,
             icon_url: req.msg.author.avatarURL
           },
-          title: "Noun definitions of " + req.text,
-          fields: nouns.map((noun, i) => {
+          title: "Google definitions on " + req.text,
+          fields: all.map((def, i) => {
             return {
               name: `#${i + 1}`,
-              value: noun
+              value: def
             }
           }),
           timestamp: new Date()
         }
       }
 
-      const embedVerbs = {
-        embed: {
-          author: {
-            name: req.msg.author.username,
-            icon_url: req.msg.author.avatarURL
-          },
-          title: "Verb definitions of " + req.text,
-          fields: verbs.map((verb, i) => {
-            return {
-              name: `#${i + 1}`,
-              value: verb
-            }
-          }),
-          timestamp: new Date()
-        }
-      }
 
-      if (nouns.length > 0)
-        req.msg.channel.send(embedNouns)
-      if (verbs.length > 0)
-        req.msg.channel.send(embedVerbs)
-
-      if (nouns.length < 1 && verbs.length < 1) {
+      if (all.length > 0)
+        req.msg.channel.send(embed)
+      else
         throw new Error('Not Found 404\'d')
-      }
     })
 }
 
