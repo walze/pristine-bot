@@ -13,7 +13,7 @@ export default class Command {
   ) {
     Commands.event.on(this.name, (req: Call, hasPrefix: boolean) => {
       this._discordErrorDisplayer(
-        this._checkRequirements(req, hasPrefix).then(() => this._run(req)),
+        this._checkRequirements(req, hasPrefix).then(req => this._run(req)),
         req
       )
     })
@@ -24,12 +24,11 @@ export default class Command {
 
     if (result instanceof Promise) this._discordErrorDisplayer(result, req)
 
-    log(req.log())
     log(`Ran command "${req.command}" @${req.msg.guild.name}`)
   }
 
   private _checkRequirements(req: Call, hasPrefix: boolean) {
-    return new Promise((res, rej) => {
+    return new Promise((res: (request: Call) => void, rej) => {
       let errorString = ''
 
       if (this.act.required.prefix === hasPrefix) {
@@ -44,7 +43,7 @@ export default class Command {
               errorString += `\nArgument "${param}" is required for this command`
           })
 
-        if (errorString === '') res()
+        if (errorString === '') res(req)
         else rej(new Error(errorString))
       }
 
@@ -53,39 +52,42 @@ export default class Command {
 
   private _discordErrorDisplayer(prom: Promise<any>, req: Call) {
 
-    prom
-      .catch((err: Error) => {
-        log('COMMAND CATCH LOG:', err.stack)
+    prom.catch((err: Error) => {
+      log('COMMAND CATCH LOG:', err.stack)
 
-        const embed: RichEmbedOptions = {
-          author: {
-            name: req.msg.author.username,
-            icon_url: req.msg.author.avatarURL
+      const embed: RichEmbedOptions = {
+        author: {
+          name: req.msg.author.username,
+          icon_url: req.msg.author.avatarURL
+        },
+        title: "Error Information",
+        description: err.message,
+        fields: [
+          {
+            name: 'Command',
+            value: req.command,
+            inline: true
           },
-          title: "Error Information",
-          description: err.message,
-          fields: [
-            {
-              name: 'Command',
-              value: req.command,
-            },
-            {
-              name: 'Text',
-              value: req.text,
-            },
-            {
-              name: '@\'s',
-              value: req.ats.length > 0 ? req.ats.map(at => at.tag).join('') : 'None',
-            },
-            {
-              name: 'Arguments',
-              value: mapObj(req.params, (val, name) => `${name}-${val}`).join(' '),
-            }
-          ],
-          timestamp: new Date()
-        }
+          {
+            name: 'Text',
+            value: req.text || '*empty*',
+            inline: true
+          },
+          {
+            name: '@\'s',
+            value: req.ats.length > 0 ? req.ats.map(at => at.tag).join('') : '*none*',
+            inline: true
+          },
+          {
+            name: 'Arguments',
+            value: mapObj(req.params, (val, name) => `${name}-${val}`).join(' '),
+            inline: true
+          }
+        ],
+        timestamp: new Date()
+      }
 
-        req.msg.channel.send('Something went wrong with your request, check your syntax.', { embed })
-      })
+      req.msg.channel.send('Something went wrong with your request, check your syntax.', { embed })
+    })
   }
 }

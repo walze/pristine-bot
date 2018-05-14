@@ -16,7 +16,7 @@ const description = 'Give you the google definition of a word'
 
 const action: actionType = async req => {
   return await Axios.get(`https://www.google.com.br/search?q=${req.text}+meaning`)
-    .then(res => {
+    .then(async res => {
       const dom = new JSDOM(res.data, {
         contentType: "text/html",
         includeNodeLocations: true
@@ -53,7 +53,7 @@ const action: actionType = async req => {
 
 
       if (all.length > 0)
-        req.msg.channel.send(embed)
+        return await req.msg.channel.send(embed)
       else
         throw new Error('Not Found 404\'d')
     })
