@@ -10,6 +10,8 @@ export default class Act {
     public action: actionType,
     public description: string = 'None',
   ) {
+    if (!this.description) throw new Error('Description property cannot be empty')
+
     this.required = new Requirements(requirements)
   }
 }

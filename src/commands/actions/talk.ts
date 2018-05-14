@@ -15,7 +15,7 @@ const requirements: Requirements = {
 
 }
 
-const description = ''
+const description = 'Talk with me :3'
 
 const action: actionType = async req => {
   req.msg.channel.send('*typing...*').then(afterTyping => {
