@@ -4,6 +4,7 @@ import Commands from "./Commands";
 import { RichEmbedOptions } from 'discord.js';
 import { isUndefined } from 'util';
 import Act from './Act';
+import { mapObj } from '../helpers/obj_array';
 
 export default class Command {
   constructor(
@@ -51,6 +52,7 @@ export default class Command {
   }
 
   private _discordErrorDisplayer(prom: Promise<any>, req: Call) {
+
     prom
       .catch((err: Error) => {
         log('COMMAND CATCH LOG:', err.stack)
@@ -64,14 +66,24 @@ export default class Command {
           description: err.message,
           fields: [
             {
-              name: 'Request Arguments',
-              value: `\`\`\`json\n${JSON.stringify(req.log(false))}\`\`\``,
-              inline: true
+              name: 'Command',
+              value: req.command,
+            },
+            {
+              name: 'Text',
+              value: req.text,
+            },
+            {
+              name: '@\'s',
+              value: req.ats.length > 0 ? req.ats.map(at => at.tag).join('') : 'None',
+            },
+            {
+              name: 'Arguments',
+              value: mapObj(req.params, (val, name) => `${name}-${val}`).join(' '),
             }
           ],
           timestamp: new Date()
         }
-
 
         req.msg.channel.send('Something went wrong with your request, check your syntax.', { embed })
       })
