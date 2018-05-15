@@ -1,8 +1,8 @@
-import Call from "./classes/Call";
+import Handler from "./classes/Handler";
 
 // used for global types
 
-export type actionType = (request: Call) => Promise<any> | void
+export type actionType = (request: Handler) => Promise<any> | void
 
 export interface imgurResponse {
   id: string,
