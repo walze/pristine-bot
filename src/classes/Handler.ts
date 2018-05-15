@@ -31,8 +31,8 @@ export default class Handler {
   ) {
     const command = this.msg.content.toLowerCase().match(this._commandRegex)
 
-    if (this._getCommand(command))
-      this._emit(Boolean(command))
+    this._getCommand(command)
+      .then(this._emit.bind(this))
   }
 
   private _emit(hasPrefix: boolean) {
@@ -44,15 +44,18 @@ export default class Handler {
   }
 
   private _getCommand(command: RegExpMatchArray | null) {
-    if (command)
-      this.command = command[1]
-    else {
-      this.command = Commands.findEvent(this.msg.content)
+    return new Promise((res: (prefix: boolean) => void) => {
+      if (command) this.command = command[1]
+      else {
+        this.command = Commands.findEvent(this.msg.content)
+        this._commandRegex = new RegExp(`${this.command}`, 'g')
+      }
 
-      this._commandRegex = new RegExp(`${this.command}`, 'g')
-    }
+      if (this.msg.author.id === this.msg.client.user.id)
+        this.command = ''
 
-    return this.command
+      res(Boolean(this.command))
+    })
   }
 
   private _filterArguments() {
