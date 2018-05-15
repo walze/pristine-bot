@@ -75,19 +75,19 @@ export default class Command {
           },
           {
             name: '@\'s',
-            value: req.ats.length > 0 ? req.ats.map(at => at.tag).join('') : '*none*',
+            value: req.ats.length > 0 ? req.ats.map(at => at.tag).join(' | ') : '*none*',
             inline: true
           },
           {
             name: 'Arguments',
-            value: mapObj(req.params, (val, name) => `${name}-${val}`).join(' '),
+            value: mapObj(req.params, (val, name) => `${name}-${val}`).join(' | '),
             inline: true
           }
         ],
         timestamp: new Date()
       }
 
-      req.msg.channel.send('Something went wrong with your request, check your syntax.', { embed })
+      req.msg.channel.send(`Use help __${req.command}__ for more information about this command.`, { embed })
     })
   }
 }

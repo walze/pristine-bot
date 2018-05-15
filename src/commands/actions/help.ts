@@ -1,9 +1,8 @@
-//import log from "../../helpers/logger";
-import { actionType } from "../../types";
-import { Requirements } from '../../classes/Requirements';
-import Act from '../../classes/Act';
-import Commands from '../../classes/Commands';
-import { mapObj } from '../../helpers/obj_array';
+import { actionType } from "../../types"
+import { Requirements } from '../../classes/Requirements'
+import Act from '../../classes/Act'
+import Commands from '../../classes/Commands'
+import { mapObj } from '../../helpers/obj_array'
 
 
 const requirements: Requirements = {
@@ -39,8 +38,6 @@ const action: actionType = async req => {
           return value.props
     }).filter((el: any) => el)[0]
 
-    if (args) args.join(' | ')
-
     const requirements = mapObj(command.act.required, (value, prop) => {
       if (value && prop !== 'params')
         return prop
@@ -58,11 +55,11 @@ const action: actionType = async req => {
       },
       {
         name: 'Required',
-        value: requirements || 'None'
+        value: requirements || '*none*'
       },
       {
         name: 'Arguments',
-        value: args || 'None'
+        value: args ? args.join(' | ') : '*none*'
       }
     ]
   }

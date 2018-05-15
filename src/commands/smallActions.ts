@@ -7,9 +7,9 @@ export default class SmallActions {
     req => {
       log('\nMESSAGE:', req.msg.content, '\n')
 
-      const logs = req.log()
+      req.log(true)
 
-      req.msg.channel.send(`\`\`\`json\n${JSON.stringify(logs)}\`\`\``)
+      throw new Error('Debug message')
     },
     'debug for dev~~s~~'
   )
