@@ -44,7 +44,7 @@ export default class Handler {
   }
 
   private _getCommand(command: RegExpMatchArray | null) {
-    return new Promise((res: (prefix: boolean) => void) => {
+    return new Promise((done: (prefix: boolean) => void) => {
       if (command) this.command = command[1]
       else {
         this.command = Commands.findEvent(this.msg.content)
@@ -54,7 +54,7 @@ export default class Handler {
       if (this.msg.author.id === this.msg.client.user.id)
         this.command = ''
 
-      res(Boolean(this.command))
+      done(Boolean(this.command))
     })
   }
 
