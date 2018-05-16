@@ -12,7 +12,7 @@ const requirements: Requirements = {
   }
 }
 
-const description = 'Converts currencies'
+const description = 'Converts currencies, default "from" is USD'
 
 const action: actionType = req => {
   if (req.text.indexOf('codes') > -1) {
@@ -20,10 +20,10 @@ const action: actionType = req => {
     return
   }
 
-  req.params.from = req.params.from.toUpperCase()
+  req.params.from = req.params.from ? req.params.from.toUpperCase() : 'USD'
   req.params.to = req.params.to.toUpperCase()
 
-  const fromTo = `${req.params.from || 'USD'}_${req.params.to}`
+  const fromTo = `${req.params.from}_${req.params.to}`
 
   return Axios.get(`https://free.currencyconverterapi.com/api/v5/convert?q=${fromTo}&compact=y`)
     .then(res => {
