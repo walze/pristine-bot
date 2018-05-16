@@ -19,14 +19,14 @@ export default class Commands {
     })[0]
   }
 
-  static findCommand(name: string) {
+  static find(name: string) {
     const found = this.declarations.find(cmd => cmd.name === name)
     if (found) return found
 
     throw new Error(`Command "${name}" not found`)
   }
 
-  static logCommands() {
+  static log() {
     const text = `\nListening to Commands:\n${this.declarations.map(cmd => cmd.name).join('\n')}`
     console.log(text)
   }

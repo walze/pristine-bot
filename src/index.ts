@@ -20,7 +20,7 @@ client.on('ready', () => {
   log('Bot Ready\n')
 })
 
-Commands.logCommands()
+Commands.log()
 
 client.on('message', msg => new Handler(msg))
 
