@@ -35,9 +35,10 @@ export default class Command {
           errorString += '\nThis command requires some text'
         if ((this.act.required.ats !== (req.ats.length > 0)) && this.act.required.ats)
           errorString += '\nThis command requires @someone'
-        
+
         mapObj(this.act.required.params, (val, prop) => {
-          return [prop, val]
+          if (!req.params[prop] && val)
+            errorString += `\nArgument "${prop}" is required for this command`
         })
 
         if (errorString === '') res(req)
