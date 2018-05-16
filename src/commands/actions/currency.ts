@@ -15,10 +15,6 @@ const requirements: Requirements = {
 const description = 'Converts currencies, default "from" is USD'
 
 const action: actionType = async req => {
-  if (req.text.indexOf('codes') > -1) {
-    req.msg.channel.send('https://www.xe.com/iso4217.php')
-    return
-  }
 
   req.params.from = req.params.from ? req.params.from.toUpperCase() : 'USD'
   req.params.to = req.params.to.toUpperCase()
