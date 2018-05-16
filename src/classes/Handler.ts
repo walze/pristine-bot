@@ -21,10 +21,10 @@ export default class Handler {
   public ats: at[] = []
   public params: DefaultParams = { amount: '1' }
 
-  private readonly _paramRegex: RegExp = new RegExp(`\\w+${Commands.separator}\\w+`, 'g')
-  private _commandRegex: RegExp = new RegExp(`^${Commands.prefix}(\\w+)`)
-  private readonly _atsRegex: RegExp = new RegExp(`<@!?(\\d+)>`, 'g')
-  private readonly _textRegex: RegExp = new RegExp(`\\w+${Commands.separator}\\w+\\s?`, 'g')
+  private readonly _paramRegex = new RegExp(`\\w+${Commands.separator}\\w+`, 'g')
+  private _commandRegex = new RegExp(`^${Commands.prefix}(\\w+)`)
+  private readonly _atsRegex = new RegExp(`<@!?(\\d+)>`, 'g')
+  private readonly _textRegex = new RegExp(`\\w+${Commands.separator}\\w+\\s?`, 'g')
 
   constructor(
     public readonly msg: Message,
