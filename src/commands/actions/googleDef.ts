@@ -7,8 +7,7 @@ import { JSDOM } from 'jsdom';
 
 const requirements: Requirements = {
   params: {
-    obligatory: false,
-    props: ['amount']
+    amount: false
   }
 }
 

@@ -7,8 +7,8 @@ import Act from '../../classes/Act';
 const requirements: Requirements = {
   text: false,
   params: {
-    obligatory: true,
-    props: ['from', 'to']
+    from: false,
+    to: true
   }
 }
 
@@ -23,7 +23,7 @@ const action: actionType = req => {
   req.params.from = req.params.from.toUpperCase()
   req.params.to = req.params.to.toUpperCase()
 
-  const fromTo = `${req.params.from}_${req.params.to}`
+  const fromTo = `${req.params.from || 'USD'}_${req.params.to}`
 
   return Axios.get(`https://free.currencyconverterapi.com/api/v5/convert?q=${fromTo}&compact=y`)
     .then(res => {

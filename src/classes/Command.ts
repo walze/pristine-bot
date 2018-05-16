@@ -2,7 +2,6 @@ import Handler from "./Handler"
 import log from "../helpers/logger";
 import Commands from "./Commands";
 import { RichEmbedOptions } from 'discord.js';
-import { isUndefined } from 'util';
 import Act from './Act';
 import { mapObj } from '../helpers/obj_array';
 
@@ -36,12 +35,10 @@ export default class Command {
           errorString += '\nThis command requires some text'
         if ((this.act.required.ats !== (req.ats.length > 0)) && this.act.required.ats)
           errorString += '\nThis command requires @someone'
-
-        if (this.act.required.params && this.act.required.params.obligatory)
-          this.act.required.params.props.map(param => {
-            if (isUndefined(req.params[param]) || !req.params[param])
-              errorString += `\nArgument "${param}" is required for this command`
-          })
+        
+        mapObj(this.act.required.params, (val, prop) => {
+          return [prop, val]
+        })
 
         if (errorString === '') res(req)
         else rej(new Error(errorString))
