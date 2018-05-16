@@ -1,4 +1,4 @@
-import Handler from "./Handler"
+import Request from "./Request"
 import log from "../helpers/logger";
 import Commands from "./Commands";
 import { RichEmbedOptions } from 'discord.js';
@@ -10,7 +10,7 @@ export default class Command {
     public name: string,
     public act: Act,
   ) {
-    Commands.event.on(this.name, (req: Handler, hasPrefix: boolean) => {
+    Commands.event.on(this.name, (req: Request, hasPrefix: boolean) => {
       this._discordErrorDisplayer(
         this._checkRequirements(req, hasPrefix).then(req => this._run(req)),
         req
@@ -18,7 +18,7 @@ export default class Command {
     })
   }
 
-  private _run(req: Handler): void {
+  private _run(req: Request): void {
     const result = this.act.action(req)
 
     if (result instanceof Promise) this._discordErrorDisplayer(result, req)
@@ -26,8 +26,8 @@ export default class Command {
     log(`Ran command "${req.command}" @${req.msg.guild.name}`)
   }
 
-  private _checkRequirements(req: Handler, hasPrefix: boolean) {
-    return new Promise((res: (request: Handler) => void, rej) => {
+  private _checkRequirements(req: Request, hasPrefix: boolean) {
+    return new Promise((res: (request: Request) => void, rej) => {
       let errorString = ''
 
       if (this.act.required.prefix === hasPrefix) {
@@ -48,7 +48,7 @@ export default class Command {
     })
   }
 
-  private _discordErrorDisplayer(prom: Promise<any>, req: Handler) {
+  private _discordErrorDisplayer(prom: Promise<any>, req: Request) {
 
     prom.catch((err: Error) => {
       log('COMMAND CATCH LOG:', err.stack)

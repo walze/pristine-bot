@@ -14,9 +14,13 @@ export default class Commands {
   static readonly events = event.eventNames()
 
   static findEvent(name: string) {
-    return this.event.eventNames().filter((e) => {
+    const found = this.event.eventNames().find((e) => {
       if (isString(e)) return name.includes(e)
-    })[0]
+      else return false
+    })
+
+    if (found) return found
+    else return ''
   }
 
   static find(name: string) {
