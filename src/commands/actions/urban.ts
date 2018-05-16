@@ -12,7 +12,7 @@ const action: actionType = async (request) => {
     .get(`http://urbanscraper.herokuapp.com/search/${request.text}`)
     .then(async res => {
 
-      const response: urbanResponse[] = res.data.slice(0, request.params.amount)
+      const response: urbanResponse[] = res.data.slice(0, request.params.amount || 1)
 
       if (response) {
 

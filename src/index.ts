@@ -3,7 +3,7 @@ process.setMaxListeners(0)
 import * as Express from 'express'
 import { Client } from 'discord.js'
 import log from './helpers/logger'
-import Handler from './classes/Handler';
+import Request from './classes/Request';
 import './commands/declarations'
 import Commands from './classes/Commands';
 
@@ -20,9 +20,9 @@ client.on('ready', () => {
   log('Bot Ready\n')
 })
 
-Commands.logCommands()
+Commands.log()
 
-client.on('message', msg => new Handler(msg))
+client.on('message', msg => new Request(msg))
 
 
 // Error Handling

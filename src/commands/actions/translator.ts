@@ -8,8 +8,8 @@ import Act from '../../classes/Act';
 const requirements: Requirements = {
   text: true,
   params: {
-    obligatory: false,
-    props: ['from', 'to']
+    from: false,
+    to: false
   }
 }
 

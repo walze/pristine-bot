@@ -9,24 +9,28 @@ export default class Commands {
   static declarations: Command[]
   static prefix = 's-'
   static separator = '-'
-  static event = event
+  static readonly event = event
 
-  static events = event.eventNames()
+  static readonly events = event.eventNames()
 
   static findEvent(name: string) {
-    return this.event.eventNames().filter((e) => {
+    const found = this.event.eventNames().find((e) => {
       if (isString(e)) return name.includes(e)
-    })[0]
+      else return false
+    })
+
+    if (found) return found
+    else return ''
   }
 
-  static findCommand(name: string) {
+  static find(name: string) {
     const found = this.declarations.find(cmd => cmd.name === name)
     if (found) return found
 
     throw new Error(`Command "${name}" not found`)
   }
 
-  static logCommands() {
+  static log() {
     const text = `\nListening to Commands:\n${this.declarations.map(cmd => cmd.name).join('\n')}`
     console.log(text)
   }

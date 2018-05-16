@@ -7,12 +7,12 @@ import Act from '../../classes/Act';
 const requirements: Requirements = {
   text: false,
   params: {
-    obligatory: true,
-    props: ['from', 'to']
+    from: false,
+    to: true
   }
 }
 
-const description = 'Converts currencies'
+const description = 'Converts currencies, default "from" is USD'
 
 const action: actionType = req => {
   if (req.text.indexOf('codes') > -1) {
@@ -20,7 +20,7 @@ const action: actionType = req => {
     return
   }
 
-  req.params.from = req.params.from.toUpperCase()
+  req.params.from = req.params.from ? req.params.from.toUpperCase() : 'USD'
   req.params.to = req.params.to.toUpperCase()
 
   const fromTo = `${req.params.from}_${req.params.to}`

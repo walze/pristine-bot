@@ -6,8 +6,7 @@ import Act from '../../classes/Act';
 
 const requirements: Requirements = {
   params: {
-    obligatory: false,
-    props: ['amount']
+    amount: false
   }
 }
 

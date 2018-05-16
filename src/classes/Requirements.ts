@@ -4,10 +4,7 @@ export class Requirements {
   public prefix?: boolean = true
   public text?: boolean = true
   public ats?: boolean = false
-  public params?: { obligatory: boolean, props: string[] } = {
-    obligatory: false,
-    props: []
-  }
+  public params?: { [key: string]: boolean } = {}
 
   constructor(required?: { [key: string]: any }) {
     if (required)
