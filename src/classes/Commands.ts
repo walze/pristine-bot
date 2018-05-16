@@ -9,9 +9,9 @@ export default class Commands {
   static declarations: Command[]
   static prefix = 's-'
   static separator = '-'
-  static event = event
+  static readonly event = event
 
-  static events = event.eventNames()
+  static readonly events = event.eventNames()
 
   static findEvent(name: string) {
     return this.event.eventNames().filter((e) => {

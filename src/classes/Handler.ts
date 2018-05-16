@@ -21,13 +21,13 @@ export default class Handler {
   public ats: at[] = []
   public params: DefaultParams = { amount: '1' }
 
-  private _paramRegex: RegExp = new RegExp(`\\w+${Commands.separator}\\w+`, 'g')
+  private readonly _paramRegex: RegExp = new RegExp(`\\w+${Commands.separator}\\w+`, 'g')
   private _commandRegex: RegExp = new RegExp(`^${Commands.prefix}(\\w+)`)
-  private _atsRegex: RegExp = new RegExp(`<@!?(\\d+)>`, 'g')
-  private _textRegex: RegExp = new RegExp(`\\w+${Commands.separator}\\w+\\s?`, 'g')
+  private readonly _atsRegex: RegExp = new RegExp(`<@!?(\\d+)>`, 'g')
+  private readonly _textRegex: RegExp = new RegExp(`\\w+${Commands.separator}\\w+\\s?`, 'g')
 
   constructor(
-    public msg: Message,
+    public readonly msg: Message,
   ) {
     const command = this.msg.content.toLowerCase().match(this._commandRegex)
 
