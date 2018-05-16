@@ -12,7 +12,7 @@ const requirements: Requirements = {
   }
 }
 
-const description = 'Converts currencies, default "from" is USD'
+const description = 'Converts currencies, default "from" is USD\nhttps://www.xe.com/iso4217.php'
 
 const action: actionType = async req => {
 
