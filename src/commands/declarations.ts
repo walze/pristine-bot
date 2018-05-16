@@ -24,7 +24,7 @@ Commands.declarations =
     new Command('mom gay', noPrefix.momgay),
     new Command('audits', audits),
     new Command('urban', urban),
-    new Command('define', define),
+    new Command('def', define),
     new Command('google', google),
     new Command('imgur', imgur),
     new Command('curr', currency),
@@ -32,6 +32,6 @@ Commands.declarations =
     new Command('help', help),
     new Command('dm', dm),
     new Command('talk', talk),
-    new Command('googledef', googleDef)
+    new Command('gdef', googleDef)
   ]
 

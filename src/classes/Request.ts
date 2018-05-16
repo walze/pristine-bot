@@ -3,10 +3,7 @@ import { at } from "../types"
 import Commands from "./Commands"
 import { log } from 'console'
 
-export interface DefaultParams {
-  [key: string]: string
-  amount: string
-}
+export interface DefaultParams { [key: string]: string }
 
 
 // s-debug argument-value
@@ -19,7 +16,7 @@ export default class Request {
   public command: string | symbol = ''
   public text: string = ''
   public ats: at[] = []
-  public params: DefaultParams = { amount: '1' }
+  public params: DefaultParams = {}
 
   private readonly _paramRegex = new RegExp(`\\w+${Commands.separator}\\w+`, 'g')
   private _commandRegex = new RegExp(`^${Commands.prefix}(\\w+)`)

@@ -78,7 +78,7 @@ export default class Command {
           },
           {
             name: 'Arguments',
-            value: mapObj(req.params, (val, name) => `${name}-${val}`).join(' | '),
+            value: mapObj(req.params, (val, name) => `${name}-${val}`).join(' | ') || '*none*',
             inline: true
           }
         ],
