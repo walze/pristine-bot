@@ -14,7 +14,7 @@ const requirements: Requirements = {
 
 const description = 'Converts currencies, default "from" is USD'
 
-const action: actionType = req => {
+const action: actionType = async req => {
   if (req.text.indexOf('codes') > -1) {
     req.msg.channel.send('https://www.xe.com/iso4217.php')
     return
@@ -25,14 +25,17 @@ const action: actionType = req => {
 
   const fromTo = `${req.params.from}_${req.params.to}`
 
-  return Axios.get(`https://free.currencyconverterapi.com/api/v5/convert?q=${fromTo}&compact=y`)
-    .then(res => {
-      const val = res.data[fromTo].val
+  return await Axios.get(`https://free.currencyconverterapi.com/api/v5/convert?q=${fromTo}&compact=y`)
+    .then(async res => {
+      const resFromTo = res.data[fromTo]
+      if (!resFromTo) throw new Error('Error, your request could not be found or fulfilled')
+      const val = resFromTo.val
       const multiplier = Number(req.text)
+      
       if (Boolean(multiplier))
-        req.msg.channel.send(`\`\`${req.text} ${req.params.from} = ${val * multiplier} ${req.params.to}\`\``)
+        return await req.msg.channel.send(`\`\`${req.text} ${req.params.from} = ${val * multiplier} ${req.params.to}\`\``)
       else
-        req.msg.channel.send(`\`\`1 ${req.params.from} = ${val} ${req.params.to}\`\``)
+        return await req.msg.channel.send(`\`\`1 ${req.params.from} = ${val} ${req.params.to}\`\``)
     })
 
 }

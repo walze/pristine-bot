@@ -36,5 +36,5 @@ const action: actionType = async req => {
   })
 }
 
-const define = new Act(requirements, action, description)
-export default define
+const def = new Act(requirements, action, description)
+export default def

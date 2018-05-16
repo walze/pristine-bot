@@ -59,6 +59,6 @@ const action: actionType = async req => {
 }
 
 
-const googleDef = new Act(requirements, action, description)
+const gdef = new Act(requirements, action, description)
 
-export default googleDef
+export default gdef
