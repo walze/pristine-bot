@@ -10,9 +10,9 @@ export default class Command {
     public name: string,
     public act: Act,
   ) {
-    Commands.event.on(this.name, (req: Request, hasPrefix: boolean) => {
+    Commands.event.on(this.name, (req: Request) => {
       this._discordErrorDisplayer(
-        this._checkRequirements(req, hasPrefix).then(req => this._run(req)),
+        this._checkRequirements(req).then(req => this._run(req)),
         req
       )
     })
@@ -26,11 +26,11 @@ export default class Command {
     log(`Ran command "${req.command}" @${req.msg.guild.name}`)
   }
 
-  private _checkRequirements(req: Request, hasPrefix: boolean) {
+  private _checkRequirements(req: Request) {
     return new Promise((res: (request: Request) => void, rej) => {
       let errorString = ''
 
-      if (this.act.required.prefix === hasPrefix) {
+      if (this.act.required.prefix === req.hasPrefix) {
         if ((this.act.required.text !== (req.text !== '')) && this.act.required.text)
           errorString += '\nThis command requires some text'
         if ((this.act.required.ats !== (req.ats.length > 0)) && this.act.required.ats)

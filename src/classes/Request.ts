@@ -17,6 +17,7 @@ export default class Request {
   public text: string = ''
   public ats: at[] = []
   public params: DefaultParams = {}
+  public hasPrefix: boolean = false
 
   private readonly _paramRegex = new RegExp(`\\w+${Commands.separator}\\w+`, 'g')
   private _commandRegex = new RegExp(`^${Commands.prefix}(\\w+)`)
@@ -37,12 +38,15 @@ export default class Request {
     this._filterText()
     this._filterAts()
 
-    Commands.event.emit(this.command, this, hasPrefix)
+    Commands.event.emit(this.command, this)
   }
 
   private _getCommand(command: RegExpMatchArray | null) {
     return new Promise((done: (prefix: boolean) => void) => {
-      if (command) this.command = command[1]
+      if (command) {
+        this.command = command[1]
+        this.hasPrefix = true
+      }
       else {
         this.command = Commands.findEvent(this.msg.content)
         this._commandRegex = new RegExp(`${this.command}`, 'g')
@@ -51,7 +55,7 @@ export default class Request {
       if (this.msg.author.id === this.msg.client.user.id)
         this.command = ''
 
-      done(Boolean(this.command))
+      done(this.hasPrefix)
     })
   }
 
