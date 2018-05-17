@@ -1,15 +1,15 @@
 process.setMaxListeners(0)
 
-import * as Express from 'express'
 import { Client } from 'discord.js'
 import log from './helpers/logger'
 import Request from './classes/Request';
 import './commands/declarations'
 import Commands from './classes/Commands';
 
-const app = Express()
-app.listen(process.env.PORT || 3000, () => log('\nExpress Ready'))
-app.get('/', (req, res) => res.send(`Bot's up`))
+// import * as Express from 'express'
+// const app = Express()
+// app.listen(process.env.PORT || 3000, () => log('\nExpress Ready'))
+// app.get('/', (req, res) => res.send(`Bot's up`))
 
 const client = new Client()
 const config = require('../config.json')
