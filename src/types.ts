@@ -1,8 +1,8 @@
 import Request from "./classes/Request";
 
-// used for global types
-
 export type actionType = (request: Request) => Promise<any> | void
+
+
 
 export interface imgurResponse {
   id: string,

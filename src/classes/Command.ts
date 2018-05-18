@@ -11,81 +11,87 @@ export default class Command {
     public act: Act,
   ) {
     Commands.event.on(this.name, (req: Request) => {
-      this._discordErrorDisplayer(
-        this._checkRequirements(req).then(req => this._run(req)),
-        req
-      )
+      const result = this._checkRequirements(req)
+
+      if (result === false) return
+      if (result instanceof Error) this._errorHandler(req, result)
+      else this._run(req)
     })
   }
 
-  private _run(req: Request): void {
+  private _run(req: Request): Request {
     const result = this.act.action(req)
 
-    if (result instanceof Promise) this._discordErrorDisplayer(result, req)
+    if (result instanceof Promise)
+      result.catch(err => this._errorHandler(req, err))
+    else
+      log('WARNING... Action returned non-promise: ', result)
 
     log(`Ran command "${req.command}" @${req.msg.guild.name}`)
+
+    return req
   }
 
-  private _checkRequirements(req: Request) {
-    return new Promise((res: (request: Request) => void, rej) => {
-      let errorString = ''
+  /*
+    Error = has error
+    False = isn't command
+    Void = no errors
+  */
+  private _checkRequirements(req: Request): Error | false | void {
+    let errorString = ''
 
-      if (this.act.required.prefix === req.hasPrefix) {
-        if ((this.act.required.text !== (req.text !== '')) && this.act.required.text)
-          errorString += '\nThis command requires some text'
-        if ((this.act.required.ats !== (req.ats.length > 0)) && this.act.required.ats)
-          errorString += '\nThis command requires @someone'
+    if (this.act.required.prefix === req.hasPrefix) {
+      if ((this.act.required.text !== (req.text !== '')) && this.act.required.text)
+        errorString += '\nThis command requires some text'
+      if ((this.act.required.ats !== (req.ats.length > 0)) && this.act.required.ats)
+        errorString += '\nThis command requires @someone'
 
-        mapObj(this.act.required.params, (required, prop) => {
-          if (!req.params[prop] && required)
-            errorString += `\nArgument "${prop}" is required for this command`
-        })
+      mapObj(this.act.required.params, (required, prop) => {
+        if (!req.params[prop] && required)
+          errorString += `\nArgument "${prop}" is required for this command`
+      })
 
-        if (errorString === '') res(req)
-        else rej(new Error(errorString))
-      }
-
-    })
+      if (errorString != '') return new Error(errorString)
+      else return
+    }
+    else return false
   }
 
-  private _discordErrorDisplayer(prom: Promise<any>, req: Request) {
+  private _errorHandler(req: Request, err: Error) {
+    log('COMMAND CATCH LOG:', err, req.log())
 
-    prom.catch((err: Error) => {
-      log('COMMAND CATCH LOG:', err.stack)
-
-      const embed: RichEmbedOptions = {
-        author: {
-          name: req.msg.author.username,
-          icon_url: req.msg.author.avatarURL
+    const embed: RichEmbedOptions = {
+      author: {
+        name: req.msg.author.username,
+        icon_url: req.msg.author.avatarURL
+      },
+      title: "Error Information",
+      description: err.message,
+      fields: [
+        {
+          name: 'Command',
+          value: req.command,
+          inline: true
         },
-        title: "Error Information",
-        description: err.message,
-        fields: [
-          {
-            name: 'Command',
-            value: req.command,
-            inline: true
-          },
-          {
-            name: 'Text',
-            value: req.text || '*empty*',
-            inline: true
-          },
-          {
-            name: '@\'s',
-            value: req.ats.length > 0 ? req.ats.map(at => at.tag).join(' | ') : '*none*',
-            inline: true
-          },
-          {
-            name: 'Arguments',
-            value: mapObj(req.params, (val, name) => `${name}-${val}`).join(' | ') || '*none*',
-            inline: true
-          }
-        ],
-        timestamp: new Date()
-      }
+        {
+          name: 'Text',
+          value: req.text || '*empty*',
+          inline: true
+        },
+        {
+          name: '@\'s',
+          value: req.ats.length > 0 ? req.ats.map(at => at.tag).join(' | ') : '*none*',
+          inline: true
+        },
+        {
+          name: 'Arguments',
+          value: mapObj(req.params, (val, name) => `${name}-${val}`).join(' | ') || '*none*',
+          inline: true
+        }
+      ],
+      timestamp: new Date()
+    }
 
-      req.msg.channel.send(`Use help __${req.command}__ for more information about this command.`, { embed })
-    })
+    req.msg.channel.send(`Use help __${req.command}__ for more information about this command.`, { embed })
   }
 }

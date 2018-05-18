@@ -29,8 +29,8 @@ export default class Request {
   ) {
     const command = this.msg.content.toLowerCase().match(this._commandRegex)
 
-    this._getCommand(command)
-      .then(this._emit.bind(this))
+    const hasPrefix = this._getCommand(command)
+    this._emit(hasPrefix)
   }
 
   private _emit(hasPrefix: boolean) {
@@ -42,21 +42,20 @@ export default class Request {
   }
 
   private _getCommand(command: RegExpMatchArray | null) {
-    return new Promise((done: (prefix: boolean) => void) => {
-      if (command) {
-        this.command = command[1]
-        this.hasPrefix = true
-      }
-      else {
-        this.command = Commands.findEvent(this.msg.content)
-        this._commandRegex = new RegExp(`${this.command}`, 'g')
-      }
+    if (command) {
+      this.command = command[1]
+      this.hasPrefix = true
+    }
+    else {
+      this.command = Commands.findEvent(this.msg.content)
+      this.hasPrefix = false      
+      this._commandRegex = new RegExp(`${this.command}`, 'g')
+    }
 
-      if (this.msg.author.id === this.msg.client.user.id)
-        this.command = ''
+    if (this.msg.author.id === this.msg.client.user.id)
+      this.command = ''
 
-      done(this.hasPrefix)
-    })
+    return this.hasPrefix
   }
 
   private _filterArguments() {
