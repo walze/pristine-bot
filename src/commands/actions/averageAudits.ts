@@ -31,26 +31,29 @@ export default audits
 
 function calculateAverage(audit: GuildAuditLogs, at: at) {
 
-  if (audit.entries.size > 0) {
-    // getting audit creation time
-    const audit_times = audit.entries.array().map(el => el.createdTimestamp);
+  if (audit.entries.size < 1)
+    return 'No audits found'
 
-    // if any audits
-    const diffs = audit_times.map((current, i) => {
 
-      const next = audit_times[i + 1];
+  // getting audit creation time
+  const audit_times = audit.entries.array().map(el => el.createdTimestamp);
 
-      // next = older
-      // current = newer 
-      // return time difference between current and next audit
-      return date_diff(next, current)
+  // if any audits
+  const diffs = audit_times.map((current, i) => {
 
-      // remove last value 'undefined'
-    }).splice(0, audit_times.length - 1)
+    const next = audit_times[i + 1];
 
-    const average = diffs.reduce((prev, curr) => prev + curr) / diffs.length
+    // next = older
+    // current = newer 
+    // return time difference between current and next audit
+    return date_diff(next, current)
 
-    const text = `
+    // remove last value 'undefined'
+  }).splice(0, audit_times.length - 1)
+
+  const average = diffs.reduce((prev, curr) => prev + curr) / diffs.length
+
+  const text = `
     ${at.tag}'s average is
     
     ${(average).toFixed(2)} Seconds
@@ -59,9 +62,7 @@ function calculateAverage(audit: GuildAuditLogs, at: at) {
     ${(average / 60 / 60 / 24).toFixed(2)} Days
     `;
 
-    return text
-  } else return 'No audits found'
-
+  return text
 }
 
 function date_diff(oldD: number, newD: number) {

@@ -7,31 +7,30 @@ const requirements: Requirements = {}
 
 const description = 'Searches text on Urban Dictionary'
 
-const action: actionType = async (request) => {
+const action: actionType = async req => {
   return await Axios
-    .get(`http://urbanscraper.herokuapp.com/search/${request.text}`)
+    .get(`http://urbanscraper.herokuapp.com/search/${req.text}`)
     .then(async res => {
 
-      const response: urbanResponse[] = res.data.slice(0, request.params.amount || 1)
+      const response: urbanResponse[] = res.data.slice(0, req.params.amount || 1)
 
-      if (response) {
+      if (!response) return await req.msg.reply('404\'d')
 
-        const embed = {
-          embed: {
-            author: {
-              name: request.msg.author.username,
-              icon_url: request.msg.author.avatarURL
-            },
-            title: "Urban Definitions",
-            url: `https://www.urbandictionary.com/define.php?term=${request.text}`.replace(/\s/g, '%20'),
-            description: 'Some definitions are too long for Discord, click the link to see them complete.',
-            fields: fieldsSort(response),
-            timestamp: new Date()
-          }
+      const embed = {
+        embed: {
+          author: {
+            name: req.msg.author.username,
+            icon_url: req.msg.author.avatarURL
+          },
+          title: "Urban Definitions on " + req.text,
+          url: `https://www.urbandictionary.com/define.php?term=${req.text}`.replace(/\s/g, '%20'),
+          description: 'Some definitions are too long for Discord, click the link to see them complete.',
+          fields: fieldsSort(response),
+          timestamp: new Date()
         }
+      }
 
-        return await request.msg.channel.send(embed)
-      } else return await request.msg.reply('404\'d')
+      return await req.msg.channel.send(embed)
     })
 }
 

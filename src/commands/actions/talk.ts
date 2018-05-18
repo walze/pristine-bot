@@ -18,7 +18,7 @@ const requirements: Requirements = {
 const description = 'Talk with me :3'
 
 const action: actionType = async req => {
-  req.msg.channel.send('*typing...*').then(afterTyping => {
+  return await req.msg.channel.send('*typing...*').then(afterTyping => {
 
     bot.create((err: any, session: any) => {
 

@@ -1,4 +1,3 @@
-import log from '../../helpers/logger'
 import { Languages } from './helpers/langs'
 import * as translate from 'google-translate-api'
 import { actionType } from '../../types';
@@ -15,20 +14,14 @@ const requirements: Requirements = {
 
 const description = 'Translates given text to ~~almost~~ any language ~~precision not guaranteed~~'
 
-const action: actionType = request => {
-  return translate(request.text, {
+const action: actionType = async request => {
+  return await translate(request.text, {
     from: switchText(request.params.from) || 'auto',
-    to: switchText(request.params.to) || 'en'
+    to: switchText(request.params.to)
+  }).then((res: Response) => {
+    request.msg.channel.send(`${res.text}`)
+    return res
   })
-    .then((res: Response) => {
-      request.msg.channel.send(`${res.text}`)
-      return res
-    })
-    .catch((err: Response) => {
-      log(err)
-      request.msg.channel.send(`Error: ${JSON.stringify(err)}`)
-      return err
-    })
 }
 
 const translator = new Act(requirements, action, description)

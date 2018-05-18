@@ -30,8 +30,8 @@ const action: actionType = async req => {
 
       if (Boolean(multiplier))
         return await req.msg.channel.send(`\`\`${req.text} ${req.params.from} = ${val * multiplier} ${req.params.to}\`\``)
-      else
-        return await req.msg.channel.send(`\`\`1 ${req.params.from} = ${val} ${req.params.to}\`\``)
+
+      return await req.msg.channel.send(`\`\`1 ${req.params.from} = ${val} ${req.params.to}\`\``)
     })
 
 }

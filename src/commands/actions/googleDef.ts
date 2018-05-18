@@ -51,10 +51,9 @@ const action: actionType = async req => {
       }
 
 
-      if (all.length > 0)
-        return await req.msg.channel.send(embed)
-      else
-        throw new Error('Not Found 404\'d')
+      if (all.length < 1) throw new Error('Not Found 404\'d')
+
+      return await req.msg.channel.send(embed)
     })
 }
 
