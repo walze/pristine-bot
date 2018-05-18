@@ -32,11 +32,9 @@ export default class Command {
     return req
   }
 
-  /*
-    Error = has error
-    False = isn't command
-    Void = no errors
-  */
+  // Error = has error
+  // False = isn't command
+  // Void = no errors
   private _checkRequirements(req: Request): Error | false | void {
     let errorString = ''
 
@@ -51,8 +49,7 @@ export default class Command {
           errorString += `\nArgument "${prop}" is required for this command`
       })
 
-      if (errorString != '') return new Error(errorString)
-      else return
+      if (errorString !== '') return new Error(errorString)
     }
     else return false
   }
