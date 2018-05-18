@@ -8,7 +8,7 @@ export default class Act {
   constructor(
     reqment: Requirements,
     public readonly action: actionType,
-    public readonly description: string = 'None',
+    public readonly description: string = '*none*',
   ) {
     if (!this.description) throw new Error('Description property cannot be empty')
 
