@@ -4,6 +4,7 @@ import Commands from "./Commands";
 import { RichEmbedOptions } from 'discord.js';
 import Act from './Act';
 import { mapObj } from '../helpers/obj_array';
+import { Performances } from './Performances';
 
 export default class Command {
   constructor(
@@ -20,19 +21,26 @@ export default class Command {
   }
 
   private async _run(req: Request) {
-    log(`Ran command "${req.command}" @${req.msg.guild.name}`)
+    let returns = undefined
 
     try {
       const result = this.act.action(req)
 
       if (result instanceof Promise)
-        return await result.catch(err => this._errorHandler(req, err))
+        returns = await result.catch(err => this._errorHandler(req, err))
 
-      log('WARNING... Action returned non-promise: ', result)
+      log('warning action returned non-promise: '.toUpperCase(), req.command)
 
     } catch (err) {
-      return await this._errorHandler(req, err)
+      returns = await this._errorHandler(req, err)
     }
+
+    const cmdPerf = Performances.find('command')
+    log(`Ran command "${req.command}" @${req.msg.guild.name}`)
+
+    if (cmdPerf) cmdPerf.done()
+
+    return returns
   }
 
   // Error = has error

@@ -3,7 +3,7 @@ import { at } from "../types"
 import Commands from "./Commands"
 import { log } from 'console'
 import { indexObj } from '../helpers/obj_array';
-import { performance } from 'perf_hooks';
+import { Performances } from './Performances';
 
 export interface DefaultParams { [key: string]: string }
 
@@ -30,13 +30,12 @@ export default class Request {
   constructor(
     public readonly msg: Message,
   ) {
-    const t0 = performance.now()
+    Performances.test('request')
+    Performances.test('command')
 
     this._emit(
       this._getCommandName()
     )
-
-    console.log(performance.now() - t0)
   }
 
   private _emit(command: string | symbol) {
@@ -46,6 +45,9 @@ export default class Request {
     this.params = this._filterArguments()
     this.text = this._filterText()
     this.ats = this._filterAts()
+
+    const perf = Performances.find('request')
+    if (perf) perf.done()
 
     Commands.event.emit(this.command, this)
   }
@@ -64,7 +66,9 @@ export default class Request {
       this._commandRegex = new RegExp(`${commandName}`, 'g')
     }
 
-    this._shouldEmit = true
+    if (commandName != '')
+      this._shouldEmit = true
+
     return commandName
   }
 
