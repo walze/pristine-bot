@@ -3,6 +3,7 @@ import { at } from "../types"
 import Commands from "./Commands"
 import { log } from 'console'
 import { indexObj } from '../helpers/obj_array';
+import { performance } from 'perf_hooks';
 
 export interface DefaultParams { [key: string]: string }
 
@@ -29,10 +30,13 @@ export default class Request {
   constructor(
     public readonly msg: Message,
   ) {
+    const t0 = performance.now()
+
     this._emit(
-      this._getCommand()
+      this._getCommandName()
     )
 
+    console.log(performance.now() - t0)
   }
 
   private _emit(command: string | symbol) {
@@ -46,25 +50,31 @@ export default class Request {
     Commands.event.emit(this.command, this)
   }
 
-  private _getCommand() {
+  private _getCommandName() {
     if (this.msg.author.id === this.msg.client.user.id) return ''
 
     let match = this.msg.content.toLowerCase().match(this._commandRegex)
-    let command
+    let commandName = ''
 
     if (match) {
-      command = match[1]
+      commandName = match[1]
       this.hasPrefix = true
-    }
-    else {
-      command = Commands.findEvent(this.msg.content)
-      if (!command) return ''
-
-      this._commandRegex = new RegExp(`${command}`, 'g')
+    } else {
+      commandName = this._getNonPrefixCommand()
+      this._commandRegex = new RegExp(`${commandName}`, 'g')
     }
 
     this._shouldEmit = true
-    return command
+    return commandName
+  }
+
+  private _getNonPrefixCommand() {
+    const command = Commands.includesCommand(this.msg.content)
+    if (!command) return ''
+
+    if (command.act.required.prefix) return ''
+
+    return command.name
   }
 
   private _filterArguments() {

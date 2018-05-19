@@ -23,6 +23,14 @@ export default class Commands {
     else return ''
   }
 
+  static includesCommand(text: string) {
+    const found = this.declarations.find((cmd) => {
+      return text.includes(cmd.name)
+    })
+
+    return found
+  }
+
   static find(name: string) {
     const found = this.declarations.find(cmd => cmd.name === name)
     if (found) return found
