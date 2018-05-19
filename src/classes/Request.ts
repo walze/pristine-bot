@@ -2,6 +2,7 @@ import { Message } from "discord.js"
 import { at } from "../types"
 import Commands from "./Commands"
 import { log } from 'console'
+import { indexObj } from '../helpers/obj_array';
 
 export interface DefaultParams { [key: string]: string }
 
@@ -18,6 +19,7 @@ export default class Request {
   public ats: at[] = []
   public params: DefaultParams = {}
   public hasPrefix: boolean = false
+  private _shouldEmit: boolean = false
 
   private readonly _paramRegex = new RegExp(`\\w+${Commands.separator}\\w+`, 'g')
   private _commandRegex = new RegExp(`^${Commands.prefix}(\\w+)`)
@@ -27,47 +29,58 @@ export default class Request {
   constructor(
     public readonly msg: Message,
   ) {
-    const command = this.msg.content.toLowerCase().match(this._commandRegex)
+    this._emit(
+      this._getCommand()
+    )
 
-    const hasPrefix = this._getCommand(command)
-    this._emit(hasPrefix)
   }
 
-  private _emit(hasPrefix: boolean) {
-    this._filterArguments()
-    this._filterText()
-    this._filterAts()
+  private _emit(command: string | symbol) {
+    if (!this._shouldEmit) return
+
+    this.command = command
+    this.params = this._filterArguments()
+    this.text = this._filterText()
+    this.ats = this._filterAts()
 
     Commands.event.emit(this.command, this)
   }
 
-  private _getCommand(command: RegExpMatchArray | null) {
-    if (command) {
-      this.command = command[1]
+  private _getCommand() {
+    if (this.msg.author.id === this.msg.client.user.id) return ''
+
+    let match = this.msg.content.toLowerCase().match(this._commandRegex)
+    let command
+
+    if (match) {
+      command = match[1]
       this.hasPrefix = true
     }
     else {
-      this.command = Commands.findEvent(this.msg.content)
-      this.hasPrefix = false      
-      this._commandRegex = new RegExp(`${this.command}`, 'g')
+      command = Commands.findEvent(this.msg.content)
+      if (!command) return ''
+
+      this._commandRegex = new RegExp(`${command}`, 'g')
     }
 
-    if (this.msg.author.id === this.msg.client.user.id)
-      this.command = ''
-
-    return this.hasPrefix
+    this._shouldEmit = true
+    return command
   }
 
   private _filterArguments() {
     const paramsMatch = this.msg.content.toLowerCase().match(this._paramRegex)
+    const params: indexObj = {}
+
     if (paramsMatch)
       paramsMatch.map(el => {
         const split = el.split(Commands.separator)
         const prop = split[0]
         const value = split[1]
         if (split[0] !== Commands.prefix && split[0] !== Commands.prefix[0])
-          this.params[prop] = value
+          params[prop] = value
       })
+
+    return params
   }
 
   public log(logBool?: boolean, ...args: any[]): object {
@@ -91,7 +104,7 @@ export default class Request {
   }
 
   // Gets @'s
-  private _filterAts(): void {
+  private _filterAts() {
     const atsMatchеs = this.msg.content.match(this._atsRegex)
     const ats: at[] = []
 
@@ -103,12 +116,12 @@ export default class Request {
           ats.push({ tag, id: tag.replace(/<@!?/g, '').replace(/>/g, '') })
       })
 
-    this.ats = ats
+    return ats
   }
 
   // Removes params and gets text only
   private _filterText() {
-    this.text = this.msg.content
+    return this.msg.content
       .replace(this._textRegex, '')
       .replace(this._commandRegex, '')
       .replace(this._atsRegex, '')

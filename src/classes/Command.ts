@@ -19,17 +19,20 @@ export default class Command {
     })
   }
 
-  private _run(req: Request): Request {
-    const result = this.act.action(req)
-
-    if (result instanceof Promise)
-      result.catch(err => this._errorHandler(req, err))
-    else
-      log('WARNING... Action returned non-promise: ', result)
-
+  private async _run(req: Request) {
     log(`Ran command "${req.command}" @${req.msg.guild.name}`)
 
-    return req
+    try {
+      const result = this.act.action(req)
+
+      if (result instanceof Promise)
+        return await result.catch(err => this._errorHandler(req, err))
+
+      log('WARNING... Action returned non-promise: ', result)
+
+    } catch (err) {
+      return await this._errorHandler(req, err)
+    }
   }
 
   // Error = has error
@@ -89,6 +92,6 @@ export default class Command {
       timestamp: new Date()
     }
 
-    req.msg.channel.send(`Use help __${req.command}__ for more information about this command.`, { embed })
+    return req.msg.channel.send(`Use help __${req.command}__ for more information about this command.`, { embed })
   }
 }
