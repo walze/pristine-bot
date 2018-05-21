@@ -111,10 +111,10 @@ export default class Request {
   }
 
   public getAt(pos: number): at {
-    if (this.ats.length > 0)
-      return this.ats[pos]
-    else
-      return { id: '', tag: '' }
+    const at = this.ats[pos]
+    if (at) return at
+
+    throw new Error('At not found')
   }
 
   // Gets @'s
