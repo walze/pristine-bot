@@ -20,7 +20,6 @@ export default class Request {
   public ats: at[] = []
   public params: DefaultParams = {}
   public hasPrefix: boolean = false
-  private _shouldEmit: boolean = false
 
   private readonly _paramRegex = new RegExp(`\\w+${Commands.separator}\\w+`, 'g')
   private _commandRegex = new RegExp(`^${Commands.prefix}(\\w+)`)
@@ -30,48 +29,57 @@ export default class Request {
   constructor(
     public readonly msg: Message,
   ) {
-    Performances.test('request')
-    Performances.test('command')
+    Performances.start('request')
+    Performances.start('command')
 
-    // FIX LATER, this function has to run to set this.hasPrefix and shouldEmit
-    const command = this._getCommandName()
-
-    this._emit(command)
+    this._emit()
   }
 
-  private _emit(command: string | symbol) {
-    if (!this._shouldEmit) return
+  private _emit() {
+    const command = this._getCommandInfo()
 
-    this.command = command
-    this.params = this._filterArguments()
-    this.text = this._filterText()
-    this.ats = this._filterAts()
+    if (!command || command.name === '') return
+
+    this._setProperties(command)
 
     const perf = Performances.find('request')
-    if (perf) perf.done()
+    if (perf) perf.end()
 
     Commands.event.emit(this.command, this)
   }
 
+  private _setProperties(command: { name: string | symbol; hasPrefix: boolean; }) {
+    this.command = command.name
+    this.hasPrefix = command.hasPrefix
+    this.params = this._filterArguments()
+    this.text = this._filterText()
+    this.ats = this._filterAts()
+  }
+
   //should return only the command name but ???
-  private _getCommandName() {
-    if (this.msg.author.id === this.msg.client.user.id) return ''
+  private _getCommandInfo() {
+    if (this.msg.author.id === this.msg.client.user.id) return
+
+    const command: {
+      name: string | symbol,
+      hasPrefix: boolean,
+    } = {
+        name: this.command,
+        hasPrefix: this.hasPrefix,
+      }
+
 
     let match = this.msg.content.toLowerCase().match(this._commandRegex)
-    let commandName = ''
 
     if (match) {
-      commandName = match[1]
-      this.hasPrefix = true
+      command.name = match[1]
+      command.hasPrefix = true
     } else {
-      commandName = this._getNonPrefixCommand()
-      this._commandRegex = new RegExp(`${commandName}`, 'g')
+      command.name = this._getNonPrefixCommand()
+      this._commandRegex = new RegExp(`${command.name}`, 'g')
     }
 
-    if (commandName != '')
-      this._shouldEmit = true
-
-    return commandName
+    return command
   }
 
   private _getNonPrefixCommand() {

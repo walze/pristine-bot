@@ -10,7 +10,7 @@ export class Performance {
     this.t0 = performance.now()
   }
 
-  done() {
+  end() {
     const diff = Math.round((performance.now() - this.t0) * 1e2) / 1e2
     const string = `\n${this.name} was done in ${diff} ms\n`
 
@@ -23,7 +23,7 @@ export class Performance {
 export class Performances {
   static tests: Performance[] = []
 
-  static test(name: string) {
+  static start(name: string) {
     const found = this.find(name)
 
     if (!found) {
