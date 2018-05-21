@@ -36,26 +36,25 @@ export default class Request {
   }
 
   private _emit() {
-    const command = this._getCommandInfo()
+    const commandInfo = this._getCommandInfo()
 
-    if (!command || command.name === '') return
+    if (!commandInfo || commandInfo.name === '') return
 
-    this._setProperties(command)
+    this._setProperties(commandInfo)
 
     Performances.find('request').end()
 
     Commands.event.emit(this.command, this)
   }
 
-  private _setProperties(command: { name: string | symbol; hasPrefix: boolean; }) {
-    this.command = command.name
-    this.hasPrefix = command.hasPrefix
+  private _setProperties(commandInfo: { name: string | symbol; hasPrefix: boolean; }) {
+    this.command = commandInfo.name
+    this.hasPrefix = commandInfo.hasPrefix
     this.params = this._filterArguments()
     this.text = this._filterText()
     this.ats = this._filterAts()
   }
 
-  //should return only the command name but ???
   private _getCommandInfo() {
     if (this.msg.author.id === this.msg.client.user.id) return
 
