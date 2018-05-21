@@ -2,14 +2,14 @@ import Request from "./Request"
 import log from "../helpers/logger";
 import Commands from "./Commands";
 import { RichEmbedOptions } from 'discord.js';
-import Act from './Act';
+import Action from './Act';
 import { mapObj } from '../helpers/obj_array';
 import { Performances } from './Performances';
 
 export default class Command {
   constructor(
     public name: string,
-    public act: Act,
+    public action: Action,
   ) {
     Commands.event.on(this.name, (req: Request) => {
       const result = this._checkRequirements(req)
@@ -24,7 +24,7 @@ export default class Command {
     let returns = undefined
 
     try {
-      const result = this.act.action(req)
+      const result = this.action.run(req)
 
       if (result instanceof Promise)
         returns = await result.catch(err => this._errorHandler(req, err))
@@ -43,19 +43,19 @@ export default class Command {
     return returns
   }
 
-  // Error = has error
-  // False = isn't command
-  // Void = no errors
+  // instanceof Error = has error
+  // false = isn't command
+  // void = no errors
   private _checkRequirements(req: Request): Error | false | void {
     let errorString = ''
 
-    if (this.act.required.prefix === req.hasPrefix) {
-      if ((this.act.required.text !== (req.text !== '')) && this.act.required.text)
+    if (this.action.required.prefix === req.hasPrefix) {
+      if ((this.action.required.text !== (req.text !== '')) && this.action.required.text)
         errorString += '\nThis command requires some text'
-      if ((this.act.required.ats !== (req.ats.length > 0)) && this.act.required.ats)
+      if ((this.action.required.ats !== (req.ats.length > 0)) && this.action.required.ats)
         errorString += '\nThis command requires @someone'
 
-      mapObj(this.act.required.params, (required, prop) => {
+      mapObj(this.action.required.params, (required, prop) => {
         if (!req.params[prop] && required)
           errorString += `\nArgument "${prop}" is required for this command`
       })

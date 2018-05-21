@@ -2,7 +2,7 @@ import { Languages } from './helpers/langs'
 import * as translate from 'google-translate-api'
 import { actionType } from '../../types';
 import { Requirements } from '../../classes/Requirements';
-import Act from '../../classes/Act';
+import Action from '../../classes/Act';
 
 const requirements: Requirements = {
   text: true,
@@ -24,7 +24,7 @@ const action: actionType = async request => {
   })
 }
 
-const translator = new Act(requirements, action, description)
+const translator = new Action(requirements, action, description)
 export default translator
 
 function switchText(language: string = ''): string | void {

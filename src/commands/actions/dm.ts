@@ -1,6 +1,6 @@
-import Act from '../../classes/Act';
+import Action from '../../classes/Act';
 
-const dm = new Act(
+const dm = new Action(
   { ats: true },
   req => {
     req.msg.client.fetchUser(req.ats[0].id)

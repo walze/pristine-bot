@@ -1,6 +1,6 @@
 import Axios from "axios";
 import { urbanResponse, actionType } from "../../types";
-import Act from '../../classes/Act';
+import Action from '../../classes/Act';
 import { Requirements } from '../../classes/Requirements';
 
 const requirements: Requirements = {}
@@ -34,7 +34,7 @@ const action: actionType = async req => {
     })
 }
 
-const urban = new Act(requirements, action, description)
+const urban = new Action(requirements, action, description)
 export default urban
 
 function fieldsSort(response: urbanResponse[]) {

@@ -2,7 +2,7 @@ import { JSDOM } from 'jsdom';
 import Axios from 'axios';
 import { actionType } from '../../types';
 import { Requirements } from '../../classes/Requirements';
-import Act from '../../classes/Act';
+import Action from '../../classes/Act';
 
 const requirements: Requirements = {
   params: {
@@ -43,5 +43,5 @@ const action: actionType = async req => {
     })
 }
 
-const google = new Act(requirements, action, description)
+const google = new Action(requirements, action, description)
 export default google

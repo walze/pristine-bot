@@ -1,6 +1,6 @@
 import { actionType } from "../../types"
 import { Requirements } from '../../classes/Requirements'
-import Act from '../../classes/Act'
+import Action from '../../classes/Act'
 import Commands from '../../classes/Commands'
 import { mapObj } from '../../helpers/obj_array'
 
@@ -22,7 +22,7 @@ const action: actionType = async req => {
       fields: Commands.declarations.map(cmd => {
         return {
           name: cmd.name,
-          value: cmd.act.description
+          value: cmd.action.description
         }
       }),
       timestamp: new Date()
@@ -32,14 +32,14 @@ const action: actionType = async req => {
   if (req.text !== '') {
     const command = Commands.find(req.text)
 
-    const args = mapObj(command.act.required, (value, prop) => {
+    const args = mapObj(command.action.required, (value, prop) => {
       if (prop === 'params')
         return mapObj(value, (required, arg) =>
           `${arg} | ${required ? '*needed*' : '*optional*'}\n`
         ).join('')
     }).join('')
 
-    const requirements = mapObj(command.act.required, (value, prop) => {
+    const requirements = mapObj(command.action.required, (value, prop) => {
       if (value && prop !== 'params')
         return prop
 
@@ -52,7 +52,7 @@ const action: actionType = async req => {
     embed.embed.fields = [
       {
         name: 'Description',
-        value: command.act.description
+        value: command.action.description
       },
       {
         name: 'Required',
@@ -69,6 +69,6 @@ const action: actionType = async req => {
 }
 
 
-const help = new Act(requirements, action, description)
+const help = new Action(requirements, action, description)
 
 export default help

@@ -2,7 +2,7 @@
 import { definitionResponse, actionType } from "../../types";
 import * as wordnet from 'wordnet'
 import { Requirements } from '../../classes/Requirements';
-import Act from '../../classes/Act';
+import Action from '../../classes/Act';
 
 const requirements: Requirements = {
 }
@@ -36,5 +36,5 @@ const action: actionType = async req => {
   })
 }
 
-const def = new Act(requirements, action, description)
+const def = new Action(requirements, action, description)
 export default def

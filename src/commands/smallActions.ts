@@ -1,9 +1,9 @@
 import log from "../helpers/logger";
-import Act from '../classes/Act';
+import Action from '../classes/Act';
 
 export default class SmallActions {
 
-  public static debug: Act = new Act({},
+  public static debug: Action = new Action({},
     req => {
       log('\nMESSAGE:', req.msg.content, '\n')
 
@@ -14,7 +14,7 @@ export default class SmallActions {
     'debug for dev~~s~~'
   )
 
-  public static image: Act = new Act({},
+  public static image: Action = new Action({},
     async req => {
       req.msg.delete()
 
@@ -26,7 +26,7 @@ export default class SmallActions {
     'Posts an image from a link'
   )
 
-  public static say: Act = new Act({},
+  public static say: Action = new Action({},
     req => {
       req.msg.delete()
       req.msg.channel.send(`${req.getAt(0).tag} ${req.text}`)
@@ -34,7 +34,7 @@ export default class SmallActions {
     'Bot says whatever you type'
   )
 
-  public static thonkwot: Act = new Act({ text: false },
+  public static thonkwot: Action = new Action({ text: false },
     req => {
       req.msg.delete()
       req.msg.channel.send('', { file: 'https://cdn.discordapp.com/emojis/409528321685061634.png' })

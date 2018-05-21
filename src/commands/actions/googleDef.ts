@@ -1,6 +1,6 @@
 import { Requirements } from "../../classes/Requirements";
 import { actionType } from '../../types';
-import Act from '../../classes/Act';
+import Action from '../../classes/Act';
 import Axios from 'axios';
 import { JSDOM } from 'jsdom';
 
@@ -58,6 +58,6 @@ const action: actionType = async req => {
 }
 
 
-const gdef = new Act(requirements, action, description)
+const gdef = new Action(requirements, action, description)
 
 export default gdef

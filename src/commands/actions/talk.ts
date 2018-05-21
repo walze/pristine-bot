@@ -1,6 +1,6 @@
 import { Requirements } from "../../classes/Requirements";
 import { actionType } from '../../types';
-import Act from '../../classes/Act';
+import Action from '../../classes/Act';
 import { isArray } from 'util';
 
 
@@ -33,5 +33,5 @@ const action: actionType = async req => {
 }
 
 
-const talk = new Act(requirements, action, description)
+const talk = new Action(requirements, action, description)
 export default talk

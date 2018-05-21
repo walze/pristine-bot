@@ -2,7 +2,7 @@
 import Axios from "axios";
 import { actionType } from "../../types";
 import { Requirements } from '../../classes/Requirements';
-import Act from '../../classes/Act';
+import Action from '../../classes/Act';
 
 const requirements: Requirements = {
   text: false,
@@ -36,5 +36,5 @@ const action: actionType = async req => {
 
 }
 
-const currency = new Act(requirements, action, description)
+const currency = new Action(requirements, action, description)
 export default currency

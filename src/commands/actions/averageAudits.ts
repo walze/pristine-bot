@@ -1,7 +1,7 @@
 import { GuildAuditLogs } from "discord.js";
 import { actionType, at } from "../../types";
 import { Requirements } from '../../classes/Requirements';
-import Act from '../../classes/Act';
+import Action from '../../classes/Act';
 
 const requirements: Requirements = {
   ats: true,
@@ -25,7 +25,7 @@ const action: actionType = req => {
       )
 }
 
-const audits = new Act(requirements, action, description)
+const audits = new Action(requirements, action, description)
 export default audits
 
 

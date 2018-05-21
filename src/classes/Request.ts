@@ -33,9 +33,10 @@ export default class Request {
     Performances.test('request')
     Performances.test('command')
 
-    this._emit(
-      this._getCommandName()
-    )
+    // FIX LATER, this function has to run to set this.hasPrefix and shouldEmit
+    const command = this._getCommandName()
+
+    this._emit(command)
   }
 
   private _emit(command: string | symbol) {
@@ -52,6 +53,7 @@ export default class Request {
     Commands.event.emit(this.command, this)
   }
 
+  //should return only the command name but ???
   private _getCommandName() {
     if (this.msg.author.id === this.msg.client.user.id) return ''
 
@@ -76,7 +78,7 @@ export default class Request {
     const command = Commands.includesCommand(this.msg.content)
     if (!command) return ''
 
-    if (command.act.required.prefix) return ''
+    if (command.action.required.prefix) return ''
 
     return command.name
   }
