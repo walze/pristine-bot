@@ -36,9 +36,11 @@ export class Performances {
     return found
   }
 
-  static find(name: string): Performance | void {
+  static find(name: string): Performance {
     const test = this.tests.find(test => test.name == name)
 
-    if (test) return test
+    if (!test) throw new Error('Test not found')
+
+    return test
   }
 }

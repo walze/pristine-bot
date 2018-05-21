@@ -35,10 +35,9 @@ export default class Command {
       returns = await this._errorHandler(req, err)
     }
 
-    const cmdPerf = Performances.find('command')
     log(`Ran command "${req.command}" @${req.msg.guild.name}`)
+    Performances.find('command').end()
 
-    if (cmdPerf) cmdPerf.end()
 
     return returns
   }

@@ -42,8 +42,7 @@ export default class Request {
 
     this._setProperties(command)
 
-    const perf = Performances.find('request')
-    if (perf) perf.end()
+    Performances.find('request').end()
 
     Commands.event.emit(this.command, this)
   }
