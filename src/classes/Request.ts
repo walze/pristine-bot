@@ -15,7 +15,7 @@ export interface DefaultParams { [key: string]: string }
 
 export default class Request {
 
-  public command: string | symbol = ''
+  public command: string = ''
   public text: string = ''
   public ats: at[] = []
   public params: DefaultParams = {}
@@ -42,12 +42,12 @@ export default class Request {
 
     this._setProperties(commandInfo)
 
-    Performances.find('request').end()
+    Performances.findTest('request').end()
 
     Commands.event.emit(this.command, this)
   }
 
-  private _setProperties(commandInfo: { name: string | symbol; hasPrefix: boolean; }) {
+  private _setProperties(commandInfo: { name: string, hasPrefix: boolean }) {
     this.command = commandInfo.name
     this.hasPrefix = commandInfo.hasPrefix
     this.params = this._filterArguments()
@@ -59,7 +59,7 @@ export default class Request {
     if (this.msg.author.id === this.msg.client.user.id) return
 
     const command: {
-      name: string | symbol,
+      name: string,
       hasPrefix: boolean,
     } = {
         name: this.command,

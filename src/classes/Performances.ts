@@ -10,7 +10,7 @@ export class Performance {
     this.t0 = performance.now()
   }
 
-  async end() {
+  end() {
     const diff = Math.round((performance.now() - this.t0) * 1e2) / 1e2
     const string = `\n${this.name} was done in ${diff} ms\n`
 
@@ -23,12 +23,13 @@ export class Performance {
 export class Performances {
   static tests: Performance[] = []
 
-  static async start(name: string) {
-    const found = this.find(name)
+  static start(name: string) {
+    const found = this.tests.find(test => test.name === name)
 
     if (!found) {
       const newTest = new Performance(name, performance.now());
       this.tests.push(newTest)
+
       return newTest
     }
 
@@ -36,11 +37,12 @@ export class Performances {
     return found
   }
 
-  static find(name: string): Performance {
-    const test = this.tests.find(test => test.name == name)
+  static findTest(name: string): Performance {
+    const test = this.tests.find(test => test.name === name)
 
-    if (!test) throw new Error('Test not found')
+    if (test instanceof Performance)
+      return test
 
-    return test
+    throw new Error('Test not found')
   }
 }

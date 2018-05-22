@@ -12,11 +12,12 @@ export default class Command {
     public action: Action,
   ) {
     Commands.event.on(this.name, (req: Request) => {
-      const result = this._checkRequirements(req)
-
-      if (result === false) return
-      if (result instanceof Error) this._errorHandler(req, result)
-      else this._run(req)
+      try {
+        this._checkRequirements(req)
+        this._run(req)
+      } catch (e) {
+        this._errorHandler(req, e)
+      }
     })
   }
 
@@ -36,7 +37,7 @@ export default class Command {
     }
 
     log(`Ran command "${req.command}" @${req.msg.guild.name}`)
-    Performances.find('command').end()
+    Performances.findTest('command').end()
 
 
     return returns
@@ -45,7 +46,7 @@ export default class Command {
   // instanceof Error = has error
   // false = isn't command
   // void = no errors
-  private _checkRequirements(req: Request): Error | false | void {
+  private _checkRequirements(req: Request): void {
     let errorString = ''
 
     if (this.action.required.prefix === req.hasPrefix) {
@@ -59,9 +60,12 @@ export default class Command {
           errorString += `\nArgument "${prop}" is required for this command`
       })
 
-      if (errorString !== '') return new Error(errorString)
+      if (errorString === '') return
+
+      throw new Error(errorString)
     }
-    else return false
+
+    throw null
   }
 
   private _errorHandler(req: Request, err: Error) {
