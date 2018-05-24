@@ -24,7 +24,11 @@ const action: actionType = async req => {
   return await Axios.get(`https://free.currencyconverterapi.com/api/v5/convert?q=${fromTo}&compact=y`)
     .then(async res => {
       const resFromTo = res.data[fromTo]
-      if (!resFromTo) throw new Error('Your request could not be found or fulfilled')
+
+      if (!resFromTo) {
+        throw new Error('Your request could not be found, check if the Currency Codes are correct.')
+      }
+
       const val = resFromTo.val
       const multiplier = Number(req.text)
 

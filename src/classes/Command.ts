@@ -43,9 +43,6 @@ export default class Command {
     return returns
   }
 
-  // instanceof Error = has error
-  // false = isn't command
-  // void = no errors
   private _checkRequirements(req: Request): void {
     let errorString = ''
 
