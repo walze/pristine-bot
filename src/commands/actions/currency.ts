@@ -1,6 +1,6 @@
 //import log from "../../helpers/logger";
 import Axios from "axios";
-import { actionType } from "../../types";
+import { actionFunction } from "../../types";
 import { Requirements } from '../../classes/Requirements';
 import Action from '../../classes/Act';
 
@@ -14,7 +14,7 @@ const requirements: Requirements = {
 
 const description = 'Converts currencies, default "from" is USD\nhttps://www.xe.com/iso4217.php'
 
-const action: actionType = async req => {
+const action: actionFunction = async req => {
 
   req.params.from = req.params.from ? req.params.from.toUpperCase() : 'USD'
   req.params.to = req.params.to.toUpperCase()

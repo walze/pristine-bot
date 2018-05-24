@@ -1,5 +1,5 @@
 import Axios from "axios";
-import { urbanResponse, actionType } from "../../types";
+import { urbanResponse, actionFunction } from "../../types";
 import Action from '../../classes/Act';
 import { Requirements } from '../../classes/Requirements';
 
@@ -7,7 +7,7 @@ const requirements: Requirements = {}
 
 const description = 'Searches text on Urban Dictionary'
 
-const action: actionType = async req => {
+const action: actionFunction = async req => {
   return await Axios
     .get(`http://urbanscraper.herokuapp.com/search/${req.text}`)
     .then(async res => {

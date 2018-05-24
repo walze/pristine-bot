@@ -1,5 +1,5 @@
 import { GuildAuditLogs } from "discord.js";
-import { actionType, at } from "../../types";
+import { actionFunction, at } from "../../types";
 import { Requirements } from '../../classes/Requirements';
 import Action from '../../classes/Act';
 
@@ -10,7 +10,7 @@ const requirements: Requirements = {
 
 const description = 'Shows average time between audits from a user'
 
-const action: actionType = req => {
+const action: actionFunction = req => {
   const at = req.getAt(0)
 
   if (at.id)

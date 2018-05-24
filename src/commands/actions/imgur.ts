@@ -1,4 +1,4 @@
-import { actionType, imgurResponse } from '../../types';
+import { actionFunction, imgurResponse } from '../../types';
 import Axios from 'axios';
 import { RichEmbedOptions } from 'discord.js';
 import { Requirements } from '../../classes/Requirements';
@@ -16,7 +16,7 @@ const description = 'Searches images on Imgur'
 // yes, i know
 const config = { "client_id": "bebb4e6140bcb51" }
 
-const action: actionType = async req => {
+const action: actionFunction = async req => {
   return await Axios.get(`https://api.imgur.com/3/gallery/search/?q=${req.text}`, {
     headers: { Authorization: `Client-ID ${config.client_id}` }
   })

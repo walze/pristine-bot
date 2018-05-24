@@ -1,5 +1,5 @@
 import { Requirements } from "../../classes/Requirements";
-import { actionType } from '../../types';
+import { actionFunction } from '../../types';
 import Action from '../../classes/Act';
 import { isArray } from 'util';
 
@@ -17,7 +17,7 @@ const requirements: Requirements = {
 
 const description = 'Talk with me :3'
 
-const action: actionType = async req => {
+const action: actionFunction = async req => {
   return await req.msg.channel.send('*typing...*').then(afterTyping => {
 
     bot.create((err: any, session: any) => {

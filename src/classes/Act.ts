@@ -1,5 +1,5 @@
 import { Requirements } from './Requirements';
-import { actionType } from '../types';
+import { actionFunction } from '../types';
 
 
 export default class Action {
@@ -7,7 +7,7 @@ export default class Action {
 
   constructor(
     reqment: Requirements,
-    public readonly run: actionType,
+    public readonly run: actionFunction,
     public readonly description: string = '*none*',
   ) {
     if (!this.description) throw new Error('Description property cannot be empty')

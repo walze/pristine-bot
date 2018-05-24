@@ -1,4 +1,4 @@
-import { actionType } from "../../types"
+import { actionFunction } from "../../types"
 import { Requirements } from '../../classes/Requirements'
 import Action from '../../classes/Act'
 import Commands from '../../classes/Commands'
@@ -11,7 +11,7 @@ const requirements: Requirements = {
 
 const description = 'Shows all commands or details a specific command'
 
-const action: actionType = async req => {
+const action: actionFunction = async req => {
   let embed = {
     embed: {
       author: {
