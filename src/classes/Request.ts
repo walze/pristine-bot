@@ -32,19 +32,19 @@ export default class Request {
     Performances.start('request')
     Performances.start('command')
 
-    this._emit()
-  }
 
-  private _emit() {
     const commandInfo = this._getCommandInfo()
 
     if (!commandInfo || commandInfo.name === '') return
 
     this._setProperties(commandInfo)
+    this._emit()
+  }
 
-    Performances.findTest('request').end()
-
+  private _emit() {
     Commands.event.emit(this.command, this)
+
+    Performances.find('request').end()
   }
 
   private _setProperties(commandInfo: { name: string, hasPrefix: boolean }) {
@@ -62,9 +62,9 @@ export default class Request {
       name: string,
       hasPrefix: boolean,
     } = {
-        name: this.command,
-        hasPrefix: this.hasPrefix,
-      }
+      name: this.command,
+      hasPrefix: this.hasPrefix,
+    }
 
 
     let match = this.msg.content.toLowerCase().match(this._commandRegex)

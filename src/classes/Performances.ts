@@ -12,7 +12,7 @@ export class Performance {
 
   end() {
     const diff = Math.round((performance.now() - this.t0) * 1e2) / 1e2
-    const string = `\n${this.name} was done in ${diff} ms\n`
+    const string = `\n${this.name} ran in ${diff} ms\n`
 
     console.log(string)
 
@@ -37,7 +37,7 @@ export class Performances {
     return found
   }
 
-  static findTest(name: string): Performance {
+  static find(name: string): Performance {
     const test = this.tests.find(test => test.name === name)
 
     if (test instanceof Performance)

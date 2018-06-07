@@ -37,7 +37,7 @@ export default class Command {
     }
 
     log(`Ran command "${req.command}" @${req.msg.guild.name}`)
-    Performances.findTest('command').end()
+    Performances.find('command').end()
 
 
     return returns
