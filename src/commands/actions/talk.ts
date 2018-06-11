@@ -2,6 +2,7 @@ import { Requirements } from "../../classes/Requirements";
 import { actionFunction } from '../../types';
 import Action from '../../classes/Act';
 import { isArray } from 'util';
+import Commands from '../../classes/Commands';
 
 
 
@@ -33,5 +34,6 @@ const action: actionFunction = async req => {
 }
 
 
-const talk = new Action(requirements, action, description)
-export default talk
+export const talk = new Action(requirements, action, description)
+
+Commands.add('talk', talk)

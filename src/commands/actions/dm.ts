@@ -1,6 +1,7 @@
 import Action from '../../classes/Act';
+import Commands from '../../classes/Commands';
 
-const dm = new Action(
+export const dm = new Action(
   { ats: true },
   req => {
     req.msg.client.fetchUser(req.ats[0].id)
@@ -11,4 +12,4 @@ const dm = new Action(
   },
   'DMs someone')
 
-export default dm
+Commands.add('dm', dm)

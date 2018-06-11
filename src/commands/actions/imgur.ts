@@ -3,6 +3,7 @@ import Axios from 'axios';
 import { RichEmbedOptions } from 'discord.js';
 import { Requirements } from '../../classes/Requirements';
 import Action from '../../classes/Act';
+import Commands from '../../classes/Commands';
 
 const requirements: Requirements = {
   params: {
@@ -57,8 +58,8 @@ const action: actionFunction = async req => {
 
 }
 
-const imgur = new Action(requirements, action, description)
-export default imgur
+export const imgur = new Action(requirements, action, description)
+Commands.add('imgur', imgur)
 
 function filter(albums: imgurResponse[]) {
   return albums

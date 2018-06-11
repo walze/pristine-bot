@@ -1,12 +1,13 @@
 import * as Events from 'events'
 import { isString } from 'util';
 import Command from './Command';
+import Action from './Act';
 
 const event = new Events.EventEmitter()
 
 export default class Commands {
 
-  static declarations: Command[]
+  static declarations: Command[] = []
   static prefix = 's-'
   static separator = '-'
   static readonly event = event
@@ -29,6 +30,10 @@ export default class Commands {
     })
 
     return found
+  }
+
+  static add(name: string, action: Action) {
+    this.declarations.push(new Command(name, action))
   }
 
   static find(name: string) {
