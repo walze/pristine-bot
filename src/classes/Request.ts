@@ -3,7 +3,7 @@ import { at } from "../types"
 import Commands from "./Commands"
 import { log } from 'console'
 import { indexObj } from '../helpers/obj_array';
-import { Performances } from './Performances';
+//import { Performances } from './Performances';
 
 export interface DefaultParams { [key: string]: string }
 
@@ -29,8 +29,9 @@ export default class Request {
   constructor(
     public readonly msg: Message,
   ) {
-    Performances.start('request')
-    Performances.start('command')
+    this.fetch()
+    //Performances.start('request')
+    //Performances.start('command')
 
 
     const commandInfo = this._getCommandInfo()
@@ -41,10 +42,29 @@ export default class Request {
     this._emit()
   }
 
-  private _emit() {
-    Commands.event.emit(this.command, this)
+  fetch() {
+    console.log(Commands.prefix + Commands.separator)
+    const split = this.msg.content.split(' ')
+    const command = split[0].split(Commands.prefix + Commands.separator)[1]
 
-    Performances.find('request').end()
+    if (command) {
+      
+
+      const params = split.map(each => {
+        const param = each.split(Commands.separator)
+
+        return { name: param[0], value: param[1] }
+      })
+
+      console.log(command, params)
+
+    }
+  }
+
+  private _emit() {
+    //Commands.event.emit(this.command, this)
+
+    //Performances.find('request').end()
   }
 
   private _setProperties(commandInfo: { name: string, hasPrefix: boolean }) {
