@@ -4,7 +4,6 @@ import noPrefix from './noPrefix';
 import audits from './actions/averageAudits';
 import urban from './actions/urban';
 import def from './actions/define';
-import google from './actions/google';
 import imgur from './actions/imgur';
 import currency from './actions/currency';
 import translator from './actions/translator';
@@ -12,7 +11,6 @@ import help from './actions/help';
 import Commands from '../classes/Commands';
 import dm from './actions/dm';
 import talk from './actions/talk';
-import gdef from './actions/googleDef';
 
 
 Commands.declarations =
@@ -25,13 +23,11 @@ Commands.declarations =
     new Command('audits', audits),
     new Command('urban', urban),
     new Command('def', def),
-    new Command('google', google),
     new Command('imgur', imgur),
     new Command('curr', currency),
     new Command('tl', translator),
     new Command('help', help),
     new Command('dm', dm),
     new Command('talk', talk),
-    new Command('gdef', gdef)
   ]
 
