@@ -21,11 +21,11 @@ export default class Request {
   public params: DefaultParams = {}
   public hasPrefix: boolean = false
 
-  private readonly _paramRegex = new RegExp(`\\w+${Commands.separator}\\w+`, 'g')
+  //private readonly _paramRegex = new RegExp(`\\w+${Commands.separator}\\w+`, 'g')
   private _commandRegex = new RegExp(`^${Commands.prefix}(\\w+)`)
   private readonly _atsRegex = new RegExp(`<@!?(\\d+)>`, 'g')
   private readonly _rolesRegex = new RegExp(`<@&(\\d+)>`, 'g')
-  private readonly _textRegex = new RegExp(`\\w+${Commands.separator}\\w+\\s?`, 'g')
+  //private readonly _textRegex = new RegExp(`\\w+${Commands.separator}\\w+\\s?`, 'g')
 
   constructor(
     public readonly msg: Message,
@@ -52,13 +52,14 @@ export default class Request {
       //remove command
       splits.splice(0, 1)
 
-      console.log(splits)
-
       // get all stuff and remove it from split
       const params: indexObj = {}
       const ats: at[] = []
 
-      splits.map((split, i) => {
+      for (let i = 0; i < splits.length; i++) {
+        const split = splits[i].trim()
+
+        console.log(split, i)
 
         //params
         const param = split.split(Commands.separator)
@@ -66,14 +67,13 @@ export default class Request {
         if (param[1]) {
           params[param[0]] = param[1]
           splits.splice(i, 1)
+          i--
         }
 
         // ats
         // fix this 
         if (this._atsRegex.test(split)) {
           const match = split.match(/<@!(\d+)>/)
-            console.log('noice ats')
-            
 
           if (match)
             ats.push({
@@ -83,6 +83,7 @@ export default class Request {
             })
 
           splits.splice(i, 1)
+          i--
         }
 
         // roles
@@ -93,12 +94,14 @@ export default class Request {
             id: split.replace(/<@&!?/g, '').replace(/>/g, '')
           })
           splits.splice(i, 1)
+          i--
         }
 
 
-      })
+      }
 
-      console.log(command, params, ats)
+      console.log('\n\n', command, params, ats)
+      console.log(splits.join(' '))
     }
   }
 
