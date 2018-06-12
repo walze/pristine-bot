@@ -19,17 +19,22 @@ const requirements: Requirements = {
 const description = 'Talk with me :3'
 
 const action: actionFunction = async req => {
-  return await req.msg.channel.send('*typing...*').then(afterTyping => {
+  return await new Promise((res) => {
 
-    bot.create((err: any, session: any) => {
+    req.msg.channel.send('*typing...*').then(async afterTyping => {
+      bot.create(async (err: any, session: any) => {
+        bot.ask(req.text, async (err: any, response: any) => {
 
-      bot.ask(req.text, (err: any, response: any) => {
-        if (isArray(afterTyping)) afterTyping = afterTyping[0]
-        afterTyping.delete()
+          if (isArray(afterTyping)) afterTyping = afterTyping[0]
 
-        req.msg.reply(response)
-      });
-    });
+          afterTyping.delete().then(async () => {
+            res(req.msg.reply(response))
+          })
+
+        })
+      })
+    })
+
   })
 }
 

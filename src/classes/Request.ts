@@ -21,7 +21,7 @@ export interface commandInfoType {
 export default class Request {
 
   public command: string | null = null
-  public text: string | null = null
+  public text: string = ''
   public ats: at[] = []
   public params: DefaultParams = {}
   public hasPrefix: boolean = false
