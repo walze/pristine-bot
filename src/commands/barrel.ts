@@ -1,11 +1,13 @@
-export * from './smallActions'
-export * from './noPrefix';
-export * from './actions/averageAudits';
-export * from './actions/urban';
-export * from './actions/define';
-export * from './actions/imgur';
-export * from './actions/currency';
-export * from './actions/translator';
-export * from './actions/help';
-export * from './actions/dm';
-export * from './actions/talk';
+import './smallActions'
+import './noPrefix';
+import './actions/averageAudits';
+import './actions/urban';
+import './actions/define';
+import './actions/imgur';
+import './actions/currency';
+import './actions/translator';
+import './actions/help';
+import './actions/dm';
+import './actions/talk';
+import './actions/google';
+import './actions/gdef';

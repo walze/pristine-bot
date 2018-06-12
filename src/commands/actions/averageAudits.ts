@@ -26,7 +26,7 @@ const action: actionFunction = req => {
       )
 }
 
-export const audits = new Action(requirements, action, description)
+const audits = new Action(requirements, action, description)
 Commands.add('audits', audits)
 
 function calculateAverage(audit: GuildAuditLogs, at: at) {

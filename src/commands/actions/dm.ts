@@ -1,7 +1,7 @@
 import Action from '../../classes/Act';
 import Commands from '../../classes/Commands';
 
-export const dm = new Action(
+const dm = new Action(
   { ats: true },
   req => {
     req.msg.client.fetchUser(req.ats[0].id)

@@ -41,5 +41,5 @@ const action: actionFunction = async req => {
 
 }
 
-export const currency = new Action(requirements, action, description)
+const currency = new Action(requirements, action, description)
 Commands.add('curr', currency)

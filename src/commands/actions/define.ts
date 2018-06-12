@@ -37,5 +37,5 @@ const action: actionFunction = async req => {
   })
 }
 
-export const def = new Action(requirements, action, description)
+const def = new Action(requirements, action, description)
 Commands.add('define', def)

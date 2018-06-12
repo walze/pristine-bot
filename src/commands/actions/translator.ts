@@ -25,7 +25,7 @@ const action: actionFunction = async request => {
   })
 }
 
-export const translator = new Action(requirements, action, description)
+const translator = new Action(requirements, action, description)
 Commands.add('tl', translator)
 
 function switchText(language: string = ''): string | void {

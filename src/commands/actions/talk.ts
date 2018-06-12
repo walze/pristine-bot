@@ -39,6 +39,6 @@ const action: actionFunction = async req => {
 }
 
 
-export const talk = new Action(requirements, action, description)
+const talk = new Action(requirements, action, description)
 
 Commands.add('talk', talk)

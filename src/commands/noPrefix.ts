@@ -1,7 +1,7 @@
 import Action from '../classes/Act';
 import Commands from '../classes/Commands';
 
-export const momgay: Action = new Action({ prefix: false, text: false },
+const momgay: Action = new Action({ prefix: false, text: false },
   req => {
     req.msg.channel.send('no u')
   },

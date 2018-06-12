@@ -21,6 +21,7 @@
     "discord.js": "^11.3.2",
     "express": "^4.16.3",
     "google-translate-api": "^2.3.0",
+    "jsdom": "^11.11.0",
     "nodemon": "^1.17.5",
     "wordnet": "^0.1.2"
   },

@@ -69,6 +69,6 @@ const action: actionFunction = async req => {
 }
 
 
-export const help = new Action(requirements, action, description)
+const help = new Action(requirements, action, description)
 
 Commands.add('help', help)

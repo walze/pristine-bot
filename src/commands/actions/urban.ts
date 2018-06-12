@@ -36,7 +36,7 @@ const action: actionFunction = async req => {
     })
 }
 
-export const urban = new Action(requirements, action, description)
+const urban = new Action(requirements, action, description)
 
 Commands.declarations.push(new Command('urban', urban))
 

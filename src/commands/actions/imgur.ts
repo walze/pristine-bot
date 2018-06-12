@@ -58,7 +58,7 @@ const action: actionFunction = async req => {
 
 }
 
-export const imgur = new Action(requirements, action, description)
+const imgur = new Action(requirements, action, description)
 Commands.add('imgur', imgur)
 
 function filter(albums: imgurResponse[]) {
