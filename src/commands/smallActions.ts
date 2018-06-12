@@ -2,7 +2,7 @@ import log from "../helpers/logger";
 import Action from '../classes/Act';
 import Commands from '../classes/Commands';
 
-const debug: Action = new Action({},
+const debug = new Action({},
   req => {
     log('\nMESSAGE:', req.msg.content, '\n')
 
@@ -13,7 +13,7 @@ const debug: Action = new Action({},
   'debug for dev~~s~~'
 )
 
-const image: Action = new Action({},
+const image = new Action({},
   async req => {
     req.msg.delete()
 
@@ -25,7 +25,7 @@ const image: Action = new Action({},
   'Posts an image from a link'
 )
 
-const say: Action = new Action({},
+const say = new Action({},
   req => {
     req.msg.delete()
     req.msg.channel.send(`${req.text}`)
@@ -33,7 +33,7 @@ const say: Action = new Action({},
   'Bot says whatever you type'
 )
 
-const thonkwot: Action = new Action({ text: false },
+const thonkwot = new Action({ text: false },
   req => {
     req.msg.delete()
     req.msg.channel.send('', { file: 'https://cdn.discordapp.com/emojis/409528321685061634.png' })
