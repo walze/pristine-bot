@@ -24,6 +24,7 @@ export default class Request {
   private readonly _paramRegex = new RegExp(`\\w+${Commands.separator}\\w+`, 'g')
   private _commandRegex = new RegExp(`^${Commands.prefix}(\\w+)`)
   private readonly _atsRegex = new RegExp(`<@!?(\\d+)>`, 'g')
+  private readonly _rolesRegex = new RegExp(`<@&(\\d+)>`, 'g')
   private readonly _textRegex = new RegExp(`\\w+${Commands.separator}\\w+\\s?`, 'g')
 
   constructor(
@@ -43,21 +44,61 @@ export default class Request {
   }
 
   fetch() {
-    console.log(Commands.prefix + Commands.separator)
-    const split = this.msg.content.split(' ')
-    const command = split[0].split(Commands.prefix + Commands.separator)[1]
+    const splits = this.msg.content.split(' ')
+
+    const command: string | undefined = splits[0].split(Commands.prefix + Commands.separator)[1]
 
     if (command) {
-      
+      //remove command
+      splits.splice(0, 1)
 
-      const params = split.map(each => {
-        const param = each.split(Commands.separator)
+      console.log(splits)
 
-        return { name: param[0], value: param[1] }
+      // get all stuff and remove it from split
+      const params: indexObj = {}
+      const ats: at[] = []
+
+      splits.map((split, i) => {
+
+        //params
+        const param = split.split(Commands.separator)
+
+        if (param[1]) {
+          params[param[0]] = param[1]
+          splits.splice(i, 1)
+        }
+
+        // ats
+        // fix this 
+        if (this._atsRegex.test(split)) {
+          const match = split.match(/<@!(\d+)>/)
+            console.log('noice ats')
+            
+
+          if (match)
+            ats.push({
+              type: 'AT',
+              tag: split,
+              id: match[1]
+            })
+
+          splits.splice(i, 1)
+        }
+
+        // roles
+        if (this._rolesRegex.test(split)) {
+          ats.push({
+            type: 'ROLE',
+            tag: split,
+            id: split.replace(/<@&!?/g, '').replace(/>/g, '')
+          })
+          splits.splice(i, 1)
+        }
+
+
       })
 
-      console.log(command, params)
-
+      console.log(command, params, ats)
     }
   }
 
@@ -70,9 +111,9 @@ export default class Request {
   private _setProperties(commandInfo: { name: string, hasPrefix: boolean }) {
     this.command = commandInfo.name
     this.hasPrefix = commandInfo.hasPrefix
-    this.params = this._filterArguments()
-    this.text = this._filterText()
-    this.ats = this._filterAts()
+    // this.params = this._filterArguments()
+    // this.text = this._filterText()
+    // this.ats = this._filterAts()
   }
 
   private _getCommandInfo() {
@@ -109,21 +150,21 @@ export default class Request {
     return command.name
   }
 
-  private _filterArguments() {
-    const paramsMatch = this.msg.content.toLowerCase().match(this._paramRegex)
-    const params: indexObj = {}
+  // private _filterArguments() {
+  //   const paramsMatch = this.msg.content.toLowerCase().match(this._paramRegex)
+  //   const params: indexObj = {}
 
-    if (paramsMatch)
-      paramsMatch.map(el => {
-        const split = el.split(Commands.separator)
-        const prop = split[0]
-        const value = split[1]
-        if (split[0] !== Commands.prefix && split[0] !== Commands.prefix[0])
-          params[prop] = value
-      })
+  //   if (paramsMatch)
+  //     paramsMatch.map(el => {
+  //       const split = el.split(Commands.separator)
+  //       const prop = split[0]
+  //       const value = split[1]
+  //       if (split[0] !== Commands.prefix && split[0] !== Commands.prefix[0])
+  //         params[prop] = value
+  //     })
 
-    return params
-  }
+  //   return params
+  // }
 
   public log(logBool?: boolean, ...args: any[]): object {
     const filtered: any = {}
@@ -145,29 +186,29 @@ export default class Request {
     throw new Error('At not found')
   }
 
-  // Gets @'s
-  private _filterAts() {
-    const atsMatchеs = this.msg.content.match(this._atsRegex)
-    const ats: at[] = []
+  // // Gets @'s
+  // private _filterAts() {
+  //   const atsMatchеs = this.msg.content.match(this._atsRegex)
+  //   const ats: at[] = []
 
-    if (atsMatchеs)
-      atsMatchеs.map(tag => {
-        const found = ats.find(at => at.tag === tag)
+  //   if (atsMatchеs)
+  //     atsMatchеs.map(tag => {
+  //       const found = ats.find(at => at.tag === tag)
 
-        if (!found)
-          ats.push({ tag, id: tag.replace(/<@!?/g, '').replace(/>/g, '') })
-      })
+  //       if (!found)
+  //         ats.push({ tag, id: tag.replace(/<@!?/g, '').replace(/>/g, '') })
+  //     })
 
-    return ats
-  }
+  //   return ats
+  // }
 
-  // Removes params and gets text only
-  private _filterText() {
-    return this.msg.content
-      .replace(this._textRegex, '')
-      .replace(this._commandRegex, '')
-      .replace(this._atsRegex, '')
-      .trim()
-  }
+  // // Removes params and gets text only
+  // private _filterText() {
+  //   return this.msg.content
+  //     .replace(this._textRegex, '')
+  //     .replace(this._commandRegex, '')
+  //     .replace(this._atsRegex, '')
+  //     .trim()
+  // }
 
 }

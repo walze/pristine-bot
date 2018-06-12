@@ -83,6 +83,7 @@ export interface translator {
 }
 
 export interface at {
+  type: 'AT' | 'ROLE',
   id: string,
   tag: string
 }
