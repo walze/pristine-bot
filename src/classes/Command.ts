@@ -30,13 +30,13 @@ export default class Command {
       if (result instanceof Promise)
         returns = await result.catch(err => this._errorHandler(req, err))
 
-      log('warning action returned non-promise:'.toUpperCase(), req.command)
+      log('|| warning action returned non-promise:'.toUpperCase(), req.command)
 
     } catch (err) {
       returns = await this._errorHandler(req, err)
     }
 
-    log(`Ran command "${req.command}" @${req.msg.guild.name}`)
+    log(`|| command "${req.command}" ran @${req.msg.guild.name}`)
     Performances.find('command').end()
 
 

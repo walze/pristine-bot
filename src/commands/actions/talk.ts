@@ -27,7 +27,7 @@ const action: actionFunction = async req => {
         if (isArray(afterTyping)) afterTyping = afterTyping[0]
         afterTyping.delete()
 
-        req.msg.channel.send(response)
+        req.msg.reply(response)
       });
     });
   })

@@ -46,10 +46,10 @@ export default class Request {
   private _emit() {
     if (!isString(this.command)) return
 
-    Commands.event.emit(this.command, this)
-
-    console.log(`ending ${this.command}`)
+    console.log(`\n\n|| emiting "${this.command}" request...`)
     Performances.find('request').end()
+
+    Commands.event.emit(this.command, this)
   }
 
   private _fetch() {
