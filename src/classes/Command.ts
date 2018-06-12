@@ -12,6 +12,7 @@ export default class Command {
     public action: Action,
   ) {
     Commands.event.on(this.name, (req: Request) => {
+      log(`|| running command "${req.command}" at ${req.msg.guild.name}...`)
       try {
         this._checkRequirements(req)
         this._run(req)
@@ -36,7 +37,6 @@ export default class Command {
       returns = await this._errorHandler(req, err)
     }
 
-    log(`|| command "${req.command}" ran @${req.msg.guild.name}`)
     Performances.find('command').end()
 
 
