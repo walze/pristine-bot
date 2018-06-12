@@ -38,8 +38,11 @@ export default class Request {
     Performances.start('request')
     Performances.start('command')
 
-    this._fetch()
+    const props = this._filterProps()
 
+    if (!props) return
+
+    this._setProperties(props.command, props.params, props.text, props.ats)
     this._emit()
   }
 
@@ -52,7 +55,7 @@ export default class Request {
     Commands.event.emit(this.command, this)
   }
 
-  private _fetch() {
+  private _filterProps() {
     const splits = this.msg.content.split(' ')
 
     let commandRegex = splits[0].match(this._commandRegex)
@@ -83,8 +86,12 @@ export default class Request {
     // joins remaining splits
     const text = splits.join(' ')
 
-    // sets props
-    this._setProperties({ name: command.name, hasPrefix: command.hasPrefix }, params, text, ats)
+    return {
+      command,
+      params,
+      text,
+      ats
+    }
   }
 
   private _getProps(splits: string[], params: indexObj, ats: at[]) {
