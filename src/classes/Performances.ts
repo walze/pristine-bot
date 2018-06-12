@@ -12,7 +12,7 @@ export class Performance {
 
   end() {
     const diff = Math.round((performance.now() - this.t0) * 1e2) / 1e2
-    const string = `\n${this.name} ran in ${diff} ms\n`
+    const string = `\n\n${this.name} ran in ${diff} ms\n\n`
 
     console.log(string)
 

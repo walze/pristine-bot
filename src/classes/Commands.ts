@@ -8,7 +8,7 @@ const event = new Events.EventEmitter()
 export default class Commands {
 
   static declarations: Command[] = []
-  static prefix = 's'
+  static prefix = 's-'
   static separator = '-'
   static readonly event = event
 
