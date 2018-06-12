@@ -29,8 +29,8 @@ export default class Command {
 
       if (result instanceof Promise)
         returns = await result.catch(err => this._errorHandler(req, err))
-
-      log('|| warning action returned non-promise:'.toUpperCase(), req.command)
+      else
+        log('|| warning action returned non-promise:'.toUpperCase(), req.command)
 
     } catch (err) {
       returns = await this._errorHandler(req, err)
