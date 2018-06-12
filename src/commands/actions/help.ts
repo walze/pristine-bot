@@ -71,4 +71,4 @@ const action: actionFunction = async req => {
 
 const help = new Action(requirements, action, description)
 
-export default help
+Commands.add('help', help)

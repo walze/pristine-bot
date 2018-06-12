@@ -12,6 +12,7 @@ export default class Command {
     public action: Action,
   ) {
     Commands.event.on(this.name, (req: Request) => {
+      log(`|| running command "${req.command}" at ${req.msg.guild.name}...`)
       try {
         this._checkRequirements(req)
         this._run(req)
@@ -29,14 +30,13 @@ export default class Command {
 
       if (result instanceof Promise)
         returns = await result.catch(err => this._errorHandler(req, err))
-
-      log('warning action returned non-promise:'.toUpperCase(), req.command)
+      else
+        log('|| warning action returned non-promise:'.toUpperCase(), req.command)
 
     } catch (err) {
       returns = await this._errorHandler(req, err)
     }
 
-    log(`Ran command "${req.command}" @${req.msg.guild.name}`)
     Performances.find('command').end()
 
 

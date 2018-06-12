@@ -3,6 +3,7 @@ import { actionFunction } from '../../types';
 import Action from '../../classes/Act';
 import Axios from 'axios';
 import { JSDOM } from 'jsdom';
+import Commands from '../../classes/Commands';
 
 
 const requirements: Requirements = {
@@ -28,8 +29,8 @@ const action: actionFunction = async req => {
       const nouns: string[] = []
       const verbs: string[] = []
 
-      if (nounsLIs) nounsLIs.forEach(el => nouns.push(el.innerHTML))
-      if (verbsLIs) verbsLIs.forEach(el => verbs.push(el.innerHTML))
+      if (nounsLIs) nounsLIs.forEach((el: any) => nouns.push(el.innerHTML))
+      if (verbsLIs) verbsLIs.forEach((el: any) => verbs.push(el.innerHTML))
 
       const all = nouns.concat(verbs)
 
@@ -59,5 +60,4 @@ const action: actionFunction = async req => {
 
 
 const gdef = new Action(requirements, action, description)
-
-export default gdef
+Commands.add('gdef', gdef)

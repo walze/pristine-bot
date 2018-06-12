@@ -1,8 +1,9 @@
 import { JSDOM } from 'jsdom';
 import Axios from 'axios';
-import { actionFunction } from '../../types';
 import { Requirements } from '../../classes/Requirements';
+import { actionFunction } from '../../types';
 import Action from '../../classes/Act';
+import Commands from '../../classes/Commands';
 
 const requirements: Requirements = {
   params: {
@@ -20,7 +21,7 @@ const action: actionFunction = async req => {
         includeNodeLocations: true
       })
       const doc = dom.window.document
-      const linksOriginal = Array.from(doc.querySelectorAll('.g .r a')).map((el) => el.getAttribute('href') || '')
+      const linksOriginal = Array.from(doc.querySelectorAll('.g .r a')).map((el: any) => el.getAttribute('href') || '')
 
       // bypass codes
       let links = linksOriginal.map(lk =>
@@ -44,4 +45,4 @@ const action: actionFunction = async req => {
 }
 
 const google = new Action(requirements, action, description)
-export default google
+Commands.add('google', google)

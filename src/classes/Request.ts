@@ -2,8 +2,9 @@ import { Message } from "discord.js"
 import { at } from "../types"
 import Commands from "./Commands"
 import { log } from 'console'
-import { indexObj } from '../helpers/obj_array';
-import { Performances } from './Performances';
+import { indexObj } from '../helpers/obj_array'
+import { Performances } from './Performances'
+import { isString } from 'util';
 
 export interface DefaultParams { [key: string]: string }
 
@@ -12,97 +13,167 @@ export interface DefaultParams { [key: string]: string }
 // Eg. s-debug event-MEMBER_ADD_BAN amount-5 @wiva#9996
 // params.argument will equals to value
 
+export interface commandInfoType {
+  name: string | null,
+  hasPrefix: boolean
+}
 
 export default class Request {
 
-  public command: string = ''
+  public command: string | null = null
   public text: string = ''
   public ats: at[] = []
   public params: DefaultParams = {}
   public hasPrefix: boolean = false
 
-  private readonly _paramRegex = new RegExp(`\\w+${Commands.separator}\\w+`, 'g')
-  private _commandRegex = new RegExp(`^${Commands.prefix}(\\w+)`)
+  private readonly _commandRegex = new RegExp(`^${Commands.prefix}(\\w+)`)
   private readonly _atsRegex = new RegExp(`<@!?(\\d+)>`, 'g')
-  private readonly _textRegex = new RegExp(`\\w+${Commands.separator}\\w+\\s?`, 'g')
+  private readonly _rolesRegex = new RegExp(`<@&(\\d+)>`, 'g')
 
   constructor(
     public readonly msg: Message,
   ) {
+    if (this.msg.author.id === this.msg.client.user.id) return
+
     Performances.start('request')
     Performances.start('command')
 
+    this._fetch()
 
-    const commandInfo = this._getCommandInfo()
-
-    if (!commandInfo || commandInfo.name === '') return
-
-    this._setProperties(commandInfo)
     this._emit()
   }
 
   private _emit() {
-    Commands.event.emit(this.command, this)
+    if (!isString(this.command)) return
 
+    console.log(`\n\n|| emiting "${this.command}" request...`)
     Performances.find('request').end()
+
+    Commands.event.emit(this.command, this)
   }
 
-  private _setProperties(commandInfo: { name: string, hasPrefix: boolean }) {
-    this.command = commandInfo.name
-    this.hasPrefix = commandInfo.hasPrefix
-    this.params = this._filterArguments()
-    this.text = this._filterText()
-    this.ats = this._filterAts()
-  }
+  private _fetch() {
+    const splits = this.msg.content.split(' ')
 
-  private _getCommandInfo() {
-    if (this.msg.author.id === this.msg.client.user.id) return
+    let commandRegex = splits[0].match(this._commandRegex)
+    let command: commandInfoType = { name: null, hasPrefix: false }
 
-    const command: {
-      name: string,
-      hasPrefix: boolean,
-    } = {
-      name: this.command,
-      hasPrefix: this.hasPrefix,
-    }
-
-
-    let match = this.msg.content.toLowerCase().match(this._commandRegex)
-
-    if (match) {
-      command.name = match[1]
-      command.hasPrefix = true
-    } else {
+    if (!commandRegex) {
+      // if no regex, tries to find non-prefix command
       command.name = this._getNonPrefixCommand()
-      this._commandRegex = new RegExp(`${command.name}`, 'g')
+
+      // if no non-prefix command found, returns
+      if (!command.name) return
+    }
+    else {
+      command.name = commandRegex[1]
+      command.hasPrefix = true
     }
 
-    return command
+    // remove command from split
+    splits.splice(0, 1)
+
+    // starts props
+    const params: indexObj = {}
+    const ats: at[] = []
+
+    // gets props
+    this._getProps(splits, params, ats)
+
+    // joins remaining splits
+    const text = splits.join(' ')
+
+    // sets props
+    this._setProperties({ name: command.name, hasPrefix: command.hasPrefix }, params, text, ats)
+  }
+
+  private _getProps(splits: string[], params: indexObj, ats: at[]) {
+    // using array to pass reference so i won't have to do i = func()
+    let i = [0];
+
+    // get props and remove them from splits
+    while (i[0] < splits.length) {
+      const split = splits[i[0]];
+
+      this._getParams(split, params, splits, i);
+      this._getAts(split, ats, splits, i);
+      this._getRoleAts(split, ats, splits, i);
+
+      i[0]++;
+    }
   }
 
   private _getNonPrefixCommand() {
     const command = Commands.includesCommand(this.msg.content)
-    if (!command) return ''
 
-    if (command.action.required.prefix) return ''
+    if (!command) return null
+    if (command.action.required.prefix) return null
 
     return command.name
   }
 
-  private _filterArguments() {
-    const paramsMatch = this.msg.content.toLowerCase().match(this._paramRegex)
-    const params: indexObj = {}
+  private _setProperties(
+    commandInfo: commandInfoType,
+    params: DefaultParams,
+    text: string,
+    ats: at[]
+  ) {
+    this.command = commandInfo.name
+    this.hasPrefix = commandInfo.hasPrefix
+    this.params = params
+    this.text = text
+    this.ats = ats
+  }
 
-    if (paramsMatch)
-      paramsMatch.map(el => {
-        const split = el.split(Commands.separator)
-        const prop = split[0]
-        const value = split[1]
-        if (split[0] !== Commands.prefix && split[0] !== Commands.prefix[0])
-          params[prop] = value
-      })
+  public getAt(pos: number): at {
+    const at = this.ats[pos]
+    if (at) return at
 
-    return params
+    throw new Error('At not found')
+  }
+
+  private _getRoleAts(split: string, ats: at[], splits: string[], i: number[]) {
+    if (!this._rolesRegex.test(split)) return false
+
+    ats.push({
+      type: 'ROLE',
+      tag: split,
+      id: split.replace(/<@&!?/g, '').replace(/>/g, '')
+    })
+    splits.splice(i[0], 1)
+    i[0]--
+
+    return true
+  }
+
+  private _getAts(split: string, ats: at[], splits: string[], i: number[]) {
+    if (!this._atsRegex.test(split)) return false
+
+    const match = split.match(/<@!(\d+)>/)
+
+    if (!match) return false
+
+    ats.push({
+      type: 'AT',
+      tag: split,
+      id: match[1]
+    })
+    splits.splice(i[0], 1)
+    i[0]--
+
+    return true
+  }
+
+  private _getParams(split: string, params: indexObj, splits: string[], i: number[]) {
+    const param = split.split(Commands.separator)
+
+    if (!param[1]) return false
+
+    params[param[0]] = param[1]
+    splits.splice(i[0], 1)
+    i[0]--
+
+    return true
   }
 
   public log(logBool?: boolean, ...args: any[]): object {
@@ -117,37 +188,4 @@ export default class Request {
 
     return filtered
   }
-
-  public getAt(pos: number): at {
-    const at = this.ats[pos]
-    if (at) return at
-
-    throw new Error('At not found')
-  }
-
-  // Gets @'s
-  private _filterAts() {
-    const atsMatchеs = this.msg.content.match(this._atsRegex)
-    const ats: at[] = []
-
-    if (atsMatchеs)
-      atsMatchеs.map(tag => {
-        const found = ats.find(at => at.tag === tag)
-
-        if (!found)
-          ats.push({ tag, id: tag.replace(/<@!?/g, '').replace(/>/g, '') })
-      })
-
-    return ats
-  }
-
-  // Removes params and gets text only
-  private _filterText() {
-    return this.msg.content
-      .replace(this._textRegex, '')
-      .replace(this._commandRegex, '')
-      .replace(this._atsRegex, '')
-      .trim()
-  }
-
 }

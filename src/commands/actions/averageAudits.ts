@@ -2,6 +2,7 @@ import { GuildAuditLogs } from "discord.js";
 import { actionFunction, at } from "../../types";
 import { Requirements } from '../../classes/Requirements';
 import Action from '../../classes/Act';
+import Commands from '../../classes/Commands';
 
 const requirements: Requirements = {
   ats: true,
@@ -26,8 +27,7 @@ const action: actionFunction = req => {
 }
 
 const audits = new Action(requirements, action, description)
-export default audits
-
+Commands.add('audits', audits)
 
 function calculateAverage(audit: GuildAuditLogs, at: at) {
 

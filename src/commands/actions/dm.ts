@@ -1,4 +1,5 @@
 import Action from '../../classes/Act';
+import Commands from '../../classes/Commands';
 
 const dm = new Action(
   { ats: true },
@@ -11,4 +12,4 @@ const dm = new Action(
   },
   'DMs someone')
 
-export default dm
+Commands.add('dm', dm)
