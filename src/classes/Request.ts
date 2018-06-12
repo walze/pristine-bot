@@ -3,7 +3,7 @@ import { at } from "../types"
 import Commands from "./Commands"
 import { log } from 'console'
 import { indexObj } from '../helpers/obj_array';
-//import { Performances } from './Performances';
+import { Performances } from './Performances';
 
 export interface DefaultParams { [key: string]: string }
 
@@ -21,153 +21,68 @@ export default class Request {
   public params: DefaultParams = {}
   public hasPrefix: boolean = false
 
-  //private readonly _paramRegex = new RegExp(`\\w+${Commands.separator}\\w+`, 'g')
-  private _commandRegex = new RegExp(`^${Commands.prefix}(\\w+)`)
   private readonly _atsRegex = new RegExp(`<@!?(\\d+)>`, 'g')
   private readonly _rolesRegex = new RegExp(`<@&(\\d+)>`, 'g')
-  //private readonly _textRegex = new RegExp(`\\w+${Commands.separator}\\w+\\s?`, 'g')
 
   constructor(
     public readonly msg: Message,
   ) {
-    this.fetch()
-    //Performances.start('request')
-    //Performances.start('command')
+    this._fetch()
+    Performances.start('request')
+    Performances.start('command')
 
+    this.log(true)
 
-    const commandInfo = this._getCommandInfo()
-
-    if (!commandInfo || commandInfo.name === '') return
-
-    this._setProperties(commandInfo)
     this._emit()
   }
 
-  fetch() {
+  private _fetch() {
     const splits = this.msg.content.split(' ')
 
     const command: string | undefined = splits[0].split(Commands.prefix + Commands.separator)[1]
 
-    if (command) {
-      //remove command
-      splits.splice(0, 1)
+    if (!command) return
 
-      // get all stuff and remove it from split
-      const params: indexObj = {}
-      const ats: at[] = []
+    //remove command
+    splits.splice(0, 1)
 
-      for (let i = 0; i < splits.length; i++) {
-        const split = splits[i].trim()
+    const params: indexObj = {}
+    const ats: at[] = []
 
-        console.log(split, i)
+    // get props and remove them from split
+    for (let i = 0; i < splits.length; i++) {
+      const split = splits[i]
 
-        //params
-        const param = split.split(Commands.separator)
+      i = this._getParams(split, params, splits, i)
 
-        if (param[1]) {
-          params[param[0]] = param[1]
-          splits.splice(i, 1)
-          i--
-        }
+      i = this._getAts(split, ats, splits, i)
 
-        // ats
-        // fix this 
-        if (this._atsRegex.test(split)) {
-          const match = split.match(/<@!(\d+)>/)
-
-          if (match)
-            ats.push({
-              type: 'AT',
-              tag: split,
-              id: match[1]
-            })
-
-          splits.splice(i, 1)
-          i--
-        }
-
-        // roles
-        if (this._rolesRegex.test(split)) {
-          ats.push({
-            type: 'ROLE',
-            tag: split,
-            id: split.replace(/<@&!?/g, '').replace(/>/g, '')
-          })
-          splits.splice(i, 1)
-          i--
-        }
-
-
-      }
-
-      console.log('\n\n', command, params, ats)
-      console.log(splits.join(' '))
+      i = this._getRoleAts(split, ats, splits, i)
     }
+
+    const text = splits.join(' ')
+
+    this._setProperties({ name: command, hasPrefix: true }, params, text, ats)
   }
 
   private _emit() {
-    //Commands.event.emit(this.command, this)
+    Commands.event.emit(this.command, this)
 
-    //Performances.find('request').end()
+    Performances.find('request').end()
   }
 
-  private _setProperties(commandInfo: { name: string, hasPrefix: boolean }) {
+  private _setProperties(
+    commandInfo: { name: string, hasPrefix: boolean },
+    params: DefaultParams,
+    text: string,
+    ats: at[]
+  ) {
     this.command = commandInfo.name
     this.hasPrefix = commandInfo.hasPrefix
-    // this.params = this._filterArguments()
-    // this.text = this._filterText()
-    // this.ats = this._filterAts()
+    this.params = params
+    this.text = text
+    this.ats = ats
   }
-
-  private _getCommandInfo() {
-    if (this.msg.author.id === this.msg.client.user.id) return
-
-    const command: {
-      name: string,
-      hasPrefix: boolean,
-    } = {
-      name: this.command,
-      hasPrefix: this.hasPrefix,
-    }
-
-
-    let match = this.msg.content.toLowerCase().match(this._commandRegex)
-
-    if (match) {
-      command.name = match[1]
-      command.hasPrefix = true
-    } else {
-      command.name = this._getNonPrefixCommand()
-      this._commandRegex = new RegExp(`${command.name}`, 'g')
-    }
-
-    return command
-  }
-
-  private _getNonPrefixCommand() {
-    const command = Commands.includesCommand(this.msg.content)
-    if (!command) return ''
-
-    if (command.action.required.prefix) return ''
-
-    return command.name
-  }
-
-  // private _filterArguments() {
-  //   const paramsMatch = this.msg.content.toLowerCase().match(this._paramRegex)
-  //   const params: indexObj = {}
-
-  //   if (paramsMatch)
-  //     paramsMatch.map(el => {
-  //       const split = el.split(Commands.separator)
-  //       const prop = split[0]
-  //       const value = split[1]
-  //       if (split[0] !== Commands.prefix && split[0] !== Commands.prefix[0])
-  //         params[prop] = value
-  //     })
-
-  //   return params
-  // }
 
   public log(logBool?: boolean, ...args: any[]): object {
     const filtered: any = {}
@@ -189,29 +104,42 @@ export default class Request {
     throw new Error('At not found')
   }
 
-  // // Gets @'s
-  // private _filterAts() {
-  //   const atsMatchеs = this.msg.content.match(this._atsRegex)
-  //   const ats: at[] = []
+  private _getRoleAts(split: string, ats: at[], splits: string[], i: number) {
+    if (this._rolesRegex.test(split)) {
+      ats.push({
+        type: 'ROLE',
+        tag: split,
+        id: split.replace(/<@&!?/g, '').replace(/>/g, '')
+      });
+      splits.splice(i, 1);
+      i--;
+    }
+    return i;
+  }
 
-  //   if (atsMatchеs)
-  //     atsMatchеs.map(tag => {
-  //       const found = ats.find(at => at.tag === tag)
+  private _getAts(split: string, ats: at[], splits: string[], i: number) {
+    if (this._atsRegex.test(split)) {
+      const match = split.match(/<@!(\d+)>/);
+      if (match)
+        ats.push({
+          type: 'AT',
+          tag: split,
+          id: match[1]
+        });
+      splits.splice(i, 1);
+      i--;
+    }
+    return i;
+  }
 
-  //       if (!found)
-  //         ats.push({ tag, id: tag.replace(/<@!?/g, '').replace(/>/g, '') })
-  //     })
+  private _getParams(split: string, params: indexObj, splits: string[], i: number) {
+    const param = split.split(Commands.separator);
 
-  //   return ats
-  // }
-
-  // // Removes params and gets text only
-  // private _filterText() {
-  //   return this.msg.content
-  //     .replace(this._textRegex, '')
-  //     .replace(this._commandRegex, '')
-  //     .replace(this._atsRegex, '')
-  //     .trim()
-  // }
-
+    if (param[1]) {
+      params[param[0]] = param[1];
+      splits.splice(i, 1);
+      i--;
+    }
+    return i;
+  }
 }
