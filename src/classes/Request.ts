@@ -18,6 +18,14 @@ export interface commandInfoType {
   hasPrefix: boolean
 }
 
+export interface propsType {
+  [key: string]: any
+  command: commandInfoType;
+  params: indexObj;
+  text: string;
+  ats: at[];
+}
+
 export default class Request {
 
   public command: string | null = null
@@ -39,10 +47,11 @@ export default class Request {
     Performances.start('command')
 
     const props = this._filterProps()
-
     if (!props) return
 
-    this._setProperties(props.command, props.params, props.text, props.ats)
+    const { command, params, text, ats } = props
+
+    this._setProperties(command, params, text, ats)
     this._emit()
   }
 
@@ -55,7 +64,7 @@ export default class Request {
     Commands.event.emit(this.command, this)
   }
 
-  private _filterProps() {
+  private _filterProps(): propsType | void {
     const splits = this.msg.content.split(' ')
 
     let commandRegex = splits[0].match(this._commandRegex)
