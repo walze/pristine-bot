@@ -2,7 +2,7 @@ import Request from "./Request"
 import log from "../helpers/logger";
 import Commands from "./Commands";
 import { RichEmbedOptions } from 'discord.js';
-import Action from './Act';
+import Action from './Action';
 import { mapObj } from '../helpers/obj_array';
 import { Performances } from './Performances';
 

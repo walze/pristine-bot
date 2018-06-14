@@ -1,6 +1,6 @@
 import Axios from "axios";
 import { urbanResponse, actionFunction } from "../../types";
-import Action from '../../classes/Act';
+import Action from '../../classes/Action';
 import { Requirements } from '../../classes/Requirements';
 import Commands from '../../classes/Commands';
 import Command from '../../classes/Command';

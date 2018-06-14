@@ -1,7 +1,7 @@
 import * as Events from 'events'
 import { isString } from 'util';
 import Command from './Command';
-import Action from './Act';
+import Action from './Action';
 
 const event = new Events.EventEmitter()
 

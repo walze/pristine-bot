@@ -2,7 +2,7 @@
 import { definitionResponse, actionFunction } from "../../types";
 import * as wordnet from 'wordnet'
 import { Requirements } from '../../classes/Requirements';
-import Action from '../../classes/Act';
+import Action from '../../classes/Action';
 import Commands from '../../classes/Commands';
 
 const requirements: Requirements = {

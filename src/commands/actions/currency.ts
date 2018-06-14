@@ -2,7 +2,7 @@
 import Axios from "axios";
 import { actionFunction } from "../../types";
 import { Requirements } from '../../classes/Requirements';
-import Action from '../../classes/Act';
+import Action from '../../classes/Action';
 import Commands from '../../classes/Commands';
 
 const requirements: Requirements = {

@@ -1,5 +1,5 @@
 import log from "../helpers/logger";
-import Action from '../classes/Act';
+import Action from '../classes/Action';
 import Commands from '../classes/Commands';
 
 const debug = new Action({},
