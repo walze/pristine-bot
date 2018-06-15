@@ -4,7 +4,7 @@ import { mapObj } from '../helpers/obj_array';
 import { RichEmbedOptions } from 'discord.js';
 
 const debug = new Action({},
-  req => {
+  async req => {
     req.log(true)
 
     const embed: RichEmbedOptions = {
@@ -33,8 +33,7 @@ const debug = new Action({},
       ]
     }
 
-    return req.msg.channel.send(``, { embed })
-
+    return await req.msg.channel.send(``, { embed })
   },
   'debug for dev~~s~~'
 )
