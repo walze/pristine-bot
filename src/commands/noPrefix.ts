@@ -3,7 +3,7 @@ import Commands from '../classes/Commands';
 
 const momgay = new Action({ prefix: false, text: false },
   req => {
-    req.msg.channel.send('no u')
+    return req.msg.channel.send('no u')
   },
   'no u'
 )

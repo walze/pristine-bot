@@ -19,28 +19,19 @@ export default class Command {
       } catch (e) {
         this._errorHandler(req, e)
       }
+
+      Performances.find('command').end()
     })
   }
 
   private async _run(req: Request) {
-    let returns = undefined
-
     try {
-      const result = this.action.run(req)
+      const result = await this.action.run(req)
 
-      if (result instanceof Promise)
-        returns = await result.catch(err => this._errorHandler(req, err))
-      else
-        log('|| warning action returned non-promise:'.toUpperCase(), req.command)
-
+      return result
     } catch (err) {
-      returns = await this._errorHandler(req, err)
+      return this._errorHandler(req, err)
     }
-
-    Performances.find('command').end()
-
-
-    return returns
   }
 
   private _checkRequirements(req: Request): void {
@@ -66,13 +57,10 @@ export default class Command {
   }
 
   private _errorHandler(req: Request, err: Error) {
-    log('COMMAND CATCH LOG:', err, req.log())
+    log(err)
+    req.log(true)
 
     const embed: RichEmbedOptions = {
-      author: {
-        name: req.msg.author.username,
-        icon_url: req.msg.author.avatarURL
-      },
       title: "Error Information",
       description: err.message,
       fields: [
@@ -96,10 +84,9 @@ export default class Command {
           value: mapObj(req.params, (val, name) => `${name}-${val}`).join(' | ') || '*none*',
           inline: true
         }
-      ],
-      timestamp: new Date()
+      ]
     }
 
-    return req.msg.channel.send(`Use help __${req.command}__ for more information about this command.`, { embed })
+    return req.msg.reply(`sorry but I couldn't complete your request >///<\nBut you can try using *help* __${req.command}__ to know more about this command cx`, { embed })
   }
 }

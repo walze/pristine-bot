@@ -11,30 +11,34 @@ const requirements: Requirements = {
 const description = 'Shows the definition of a word ~~or not~~'
 
 const action: actionFunction = async req => {
-  return await wordnet.lookup(req.text, async (err: any, defs: definitionResponse[]) => {
 
-    if (err)
-      return await req.msg.channel.send('\`\`404\'d\`\`')
+  return await new Promise((resolve, rej) => {
 
-    const embed = {
-      embed: {
-        author: {
-          name: req.msg.author.username,
-          icon_url: req.msg.author.avatarURL
-        },
-        title: "Definitions of " + req.text,
-        fields: defs.map((def, i) => {
-          return {
-            name: `Definition #${i + 1}`,
-            value: def.glossary
-          }
-        }),
-        timestamp: new Date()
+    wordnet.lookup(req.text, async (err: any, defs: definitionResponse[]) => {
+
+      if (err) return rej(new Error('404\'d'))
+
+      const embed = {
+        embed: {
+          author: {
+            name: req.msg.author.username,
+            icon_url: req.msg.author.avatarURL
+          },
+          title: "Definitions of " + req.text,
+          fields: defs.map((def, i) => {
+            return {
+              name: `Definition #${i + 1}`,
+              value: def.glossary
+            }
+          }),
+          timestamp: new Date()
+        }
       }
-    }
 
-    return await req.msg.channel.send(embed)
+      resolve(await req.msg.channel.send(embed))
+    })
   })
+
 }
 
 const def = new Action(requirements, action, description)

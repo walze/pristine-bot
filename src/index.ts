@@ -27,7 +27,7 @@ client.on('message', msg => new Request(msg))
 
 // Error Handling
 process.on('unhandledRejection', (reason, promise) => {
-  console.log('Unhandled_Rejection'.toUpperCase())
+  console.error('Unhandled_Rejection'.toUpperCase())
 
-  promise.catch((...args: any[]) => console.log(...args))
+  promise.catch((...args: any[]) => console.trace('UNHANDLED >', ...args))
 });

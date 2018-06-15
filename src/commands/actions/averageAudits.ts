@@ -14,16 +14,17 @@ const description = 'Shows average time between audits from a user'
 const action: actionFunction = req => {
   const at = req.getAt(0)
 
-  if (at.id)
-    req.msg.guild.fetchAuditLogs({
-      user: at.id,
-      limit: Number(req.params.amount) || 100,
-    })
-      .then(audits =>
-        req.msg.channel.send(
-          calculateAverage(audits, at)
-        )
+  if (!at.id) throw new Error('Invalid ID')
+
+  return req.msg.guild.fetchAuditLogs({
+    user: at.id,
+    limit: Number(req.params.amount) || 100,
+  })
+    .then(audits =>
+      req.msg.channel.send(
+        calculateAverage(audits, at)
       )
+    )
 }
 
 const audits = new Action(requirements, action, description)

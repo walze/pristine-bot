@@ -1,14 +1,40 @@
-import log from "../helpers/logger";
 import Action from '../classes/Action';
 import Commands from '../classes/Commands';
+import { mapObj } from '../helpers/obj_array';
+import { RichEmbedOptions } from 'discord.js';
 
 const debug = new Action({},
   req => {
-    log('\nMESSAGE:', req.msg.content, '\n')
-
     req.log(true)
 
-    throw new Error('Debug message')
+    const embed: RichEmbedOptions = {
+      title: "Debug Message",
+      fields: [
+        {
+          name: 'Command',
+          value: req.command,
+          inline: true
+        },
+        {
+          name: 'Text',
+          value: req.text || '*empty*',
+          inline: true
+        },
+        {
+          name: '@\'s',
+          value: req.ats.length > 0 ? req.ats.map(at => at.tag).join(' | ') : '*none*',
+          inline: true
+        },
+        {
+          name: 'Arguments',
+          value: mapObj(req.params, (val, name) => `${name}-${val}`).join(' | ') || '*none*',
+          inline: true
+        }
+      ]
+    }
+
+    return req.msg.channel.send(``, { embed })
+
   },
   'debug for dev~~s~~'
 )
@@ -28,7 +54,7 @@ const image = new Action({},
 const say = new Action({},
   req => {
     req.msg.delete()
-    req.msg.channel.send(`${req.text}`)
+    return req.msg.channel.send(`${req.text}`)
   },
   'Bot says whatever you type'
 )
@@ -36,7 +62,7 @@ const say = new Action({},
 const thonkwot = new Action({ text: false },
   req => {
     req.msg.delete()
-    req.msg.channel.send('', { file: 'https://cdn.discordapp.com/emojis/409528321685061634.png' })
+    return req.msg.channel.send('', { file: 'https://cdn.discordapp.com/emojis/409528321685061634.png' })
   },
   ':thonkwot:'
 )

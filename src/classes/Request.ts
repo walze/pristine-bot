@@ -64,6 +64,19 @@ export default class Request {
     Commands.event.emit(this.command, this)
   }
 
+  private _setProperties(
+    commandInfo: commandInfoType,
+    params: DefaultParams,
+    text: string,
+    ats: at[]
+  ) {
+    this.command = commandInfo.name
+    this.hasPrefix = commandInfo.hasPrefix
+    this.params = params
+    this.text = text
+    this.ats = ats
+  }
+
   private _filterProps(): propsType | void {
     const splits = this.msg.content.split(' ')
 
@@ -85,12 +98,9 @@ export default class Request {
     // remove command from split
     splits.splice(0, 1)
 
-    // starts props
-    const params: indexObj = {}
-    const ats: at[] = []
 
     // gets props
-    this._getProps(splits, params, ats)
+    const { params, ats } = this._getProps(splits)
 
     // joins remaining splits
     const text = splits.join(' ')
@@ -103,7 +113,27 @@ export default class Request {
     }
   }
 
-  private _getProps(splits: string[], params: indexObj, ats: at[]) {
+  public getAt(pos: number): at {
+    const at = this.ats[pos]
+    if (at) return at
+
+    throw new Error('At not found')
+  }
+
+  private _getNonPrefixCommand() {
+    const command = Commands.includesCommand(this.msg.content)
+
+    if (!command) return null
+    if (command.action.required.prefix) return null
+
+    return command.name
+  }
+
+  private _getProps(splits: string[]) {
+    // starts props
+    const params: indexObj = {}
+    const ats: at[] = []
+
     // using array to pass reference so i won't have to do i = func()
     let i = [0];
 
@@ -117,35 +147,11 @@ export default class Request {
 
       i[0]++;
     }
-  }
 
-  private _getNonPrefixCommand() {
-    const command = Commands.includesCommand(this.msg.content)
-
-    if (!command) return null
-    if (command.action.required.prefix) return null
-
-    return command.name
-  }
-
-  private _setProperties(
-    commandInfo: commandInfoType,
-    params: DefaultParams,
-    text: string,
-    ats: at[]
-  ) {
-    this.command = commandInfo.name
-    this.hasPrefix = commandInfo.hasPrefix
-    this.params = params
-    this.text = text
-    this.ats = ats
-  }
-
-  public getAt(pos: number): at {
-    const at = this.ats[pos]
-    if (at) return at
-
-    throw new Error('At not found')
+    return {
+      params,
+      ats
+    }
   }
 
   private _getRoleAts(split: string, ats: at[], splits: string[], i: number[]) {
@@ -165,7 +171,7 @@ export default class Request {
   private _getAts(split: string, ats: at[], splits: string[], i: number[]) {
     if (!this._atsRegex.test(split)) return false
 
-    const match = split.match(/<@!(\d+)>/)
+    const match = split.match(this._atsRegex)
 
     if (!match) return false
 

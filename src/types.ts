@@ -1,6 +1,6 @@
 import Request from "./classes/Request";
 
-export type actionFunction = (request: Request) => Promise<any> | void
+export type actionFunction = (request: Request) => Promise<any>
 
 
 
