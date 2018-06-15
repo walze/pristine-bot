@@ -65,7 +65,8 @@ const action: actionFunction = async req => {
     ]
   }
 
-  return await req.msg.channel.send(embed)
+  await req.msg.channel.send(embed)
+  return await req.msg.channel.send('Example: ``s-COMMAND TEXT @AT ARGUMENT-VALUE ``')
 }
 
 
