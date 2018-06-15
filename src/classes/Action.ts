@@ -8,17 +8,17 @@ export default class Action {
 
   constructor(
     reqment: Requirements,
-    public readonly action: actionFunction,
+    private readonly _action: actionFunction,
     public readonly description: string = '*none*',
   ) {
     if (!this.description) throw new Error('Description property cannot be empty')
-    if (this.action! instanceof Promise) throw new Error('run is not promise')
+    if (this._action! instanceof Promise) throw new Error('run is not promise')
 
     this.required = new Requirements(reqment)
   }
 
   public run(req: Request) {
-    const ran = this.action(req)
+    const ran = this._action(req)
 
     if (!(ran instanceof Promise)) {
       console.error('Action returned', ran)

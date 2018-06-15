@@ -20,7 +20,6 @@ export default class Command {
         this._errorHandler(req, e)
       }
 
-      Performances.find('command').end()
     })
   }
 
@@ -28,6 +27,7 @@ export default class Command {
     try {
       const result = await this.action.run(req)
 
+      Performances.find('command').end()
       return result
     } catch (err) {
       return this._errorHandler(req, err)
