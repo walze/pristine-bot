@@ -12,7 +12,7 @@ export default class Action {
     public readonly description: string = '*none*',
   ) {
     if (!this.description) throw new Error('Description property cannot be empty')
-    if (this._action! instanceof Promise) throw new Error('run is not promise')
+    if (!(this._action instanceof Promise)) throw new Error('run is not promise')
 
     this.required = new Requirements(reqment)
   }
