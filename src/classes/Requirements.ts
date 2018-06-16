@@ -6,7 +6,7 @@ export class Requirements {
   public ats?: boolean = false
   public params?: { [key: string]: boolean } = {}
 
-  constructor(required?: { [key: string]: any }) {
+  constructor(required?: Requirements) {
     if (required)
       for (let prop in required)
         this[prop] = required[prop]

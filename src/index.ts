@@ -22,7 +22,9 @@ client.on('ready', () => {
 
 Commands.log()
 
-client.on('message', msg => new Request(msg))
+client.on('message', msg => {
+  new Request(msg)
+})
 
 
 // Error Handling

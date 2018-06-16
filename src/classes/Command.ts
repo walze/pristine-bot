@@ -12,7 +12,7 @@ export default class Command {
     public action: Action,
   ) {
     Commands.event.on(this.name, (req: Request) => {
-      log(`|| running command "${req.command}" at ${req.msg.guild.name}...`)
+      log(`|| running "${req.msg.author.username}'s" command "${req.command}" at "${req.msg.guild.name}"...`)
       try {
         this._checkRequirements(req)
         this._run(req)
