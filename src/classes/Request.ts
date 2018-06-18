@@ -35,8 +35,10 @@ export default class Request {
   public hasPrefix: boolean = false
 
   private readonly _commandRegex = new RegExp(`^${Commands.prefix}(\\w+)`)
-  private readonly _atsRegex = new RegExp(`<@!?(\\d+)>`, 'g')
-  private readonly _rolesRegex = new RegExp(`<@&(\\d+)>`, 'g')
+  private readonly _atsRegexGlobal = new RegExp(`<@!?(\\d+)>`, 'g')
+  private readonly _atsRegex = new RegExp(`<@!?(\\d+)>`)
+  private readonly _rolesRegexGlobal = new RegExp(`<@&(\\d+)>`, 'g')
+  //private readonly _rolesRegex = new RegExp(`<@&(\\d+)>`)
 
   constructor(
     public readonly msg: Message,
@@ -115,9 +117,9 @@ export default class Request {
 
   public getAt(pos: number): at {
     const at = this.ats[pos]
-    if (at) return at
+    if (!at) throw new Error('At not found')
 
-    throw new Error('At not found')
+    return at
   }
 
   private _getNonPrefixCommand() {
@@ -155,7 +157,7 @@ export default class Request {
   }
 
   private _getRoleAts(split: string, ats: at[], splits: string[], i: number[]) {
-    if (!this._rolesRegex.test(split)) return false
+    if (!this._rolesRegexGlobal.test(split)) return false
 
     ats.push({
       type: 'ROLE',
@@ -169,16 +171,17 @@ export default class Request {
   }
 
   private _getAts(split: string, ats: at[], splits: string[], i: number[]) {
-    if (!this._atsRegex.test(split)) return false
+    if (!this._atsRegexGlobal.test(split)) return false
 
-    const match = split.match(this._atsRegex)
+    const match = split.match(this._atsRegexGlobal)
+    const match2 = split.match(this._atsRegex)
 
-    if (!match) return false
+    if (!match || !match2) return false
 
     ats.push({
       type: 'AT',
       tag: split,
-      id: match[0]
+      id: match2[1]
     })
     splits.splice(i[0], 1)
     i[0]--

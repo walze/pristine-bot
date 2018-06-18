@@ -14,6 +14,8 @@ const description = 'Shows average time between audits from a user'
 const action: actionFunction = req => {
   const at = req.getAt(0)
 
+  console.log(at.id, 'noice')
+
   if (!at.id) throw new Error('Invalid ID')
 
   return req.msg.guild.fetchAuditLogs({
@@ -32,8 +34,8 @@ Commands.add('audits', audits)
 
 function calculateAverage(audit: GuildAuditLogs, at: at) {
 
-  if (audit.entries.size < 1)
-    return 'No audits found'
+  if (audit.entries.size <= 1)
+    return 'Couldn\'t complete. Less than 2 audits found.'
 
 
   // getting audit creation time
@@ -52,7 +54,7 @@ function calculateAverage(audit: GuildAuditLogs, at: at) {
     // remove last value 'undefined'
   }).splice(0, audit_times.length - 1)
 
-  const average = diffs.reduce((prev, curr) => prev + curr) / diffs.length
+  const average = diffs.reduce((prev, curr) => prev + curr, 0) / diffs.length
 
   const text = `
     ${at.tag}'s average is

@@ -83,10 +83,6 @@ export default class Command {
           name: 'Arguments',
           value: mapObj(req.params, (val, name) => `${name}-${val}`).join(' | ') || '*none*',
           inline: true
-        },
-        {
-          name: 'Request',
-          value: `\`\`\`json\n${JSON.stringify(req.log())}\`\`\``
         }
       ]
     }
