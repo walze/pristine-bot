@@ -93,8 +93,8 @@ export default class Request {
     const { params, ats } = this._getProps(splits)
 
     // joins remaining splits
-    const trimmedText = splits.map(split => split.trim())
-    const text = trimmedText.join(' ')
+    const filteredText = splits.filter(el => !!el).map(split => split.trim())
+    const text = filteredText.join(' ')
 
     return {
       command,
@@ -105,8 +105,15 @@ export default class Request {
   }
 
   public getAt(pos: number): at {
-    const at = this.ats[pos]
-    if (!at) throw new Error('At not found')
+    const at = this.ats.find((at, i) => i === pos && at.type === 'AT')
+    if (!at) throw new Error('@ not found')
+
+    return at
+  }
+
+  public getAtRole(pos: number): at {
+    const at = this.ats.find((at, i) => i === pos && at.type === 'ROLE')
+    if (!at) throw new Error('Role @ not found')
 
     return at
   }
