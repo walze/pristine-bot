@@ -7,10 +7,9 @@ import { mapObj } from '../helpers/obj_array';
 import { Performances } from './Performances';
 
 export default class Command {
-  constructor(
-    public name: string,
-    public action: Action,
-  ) {
+
+  constructor(public name: string, public action: Action) {
+
     Commands.event.on(this.name, (req: Request) => {
       log(`|| running "${req.msg.author.username}'s" command "${req.command}" at "${req.msg.guild.name}"...`)
       try {
@@ -21,6 +20,7 @@ export default class Command {
       }
 
     })
+
   }
 
   private async _run(req: Request) {
@@ -53,7 +53,7 @@ export default class Command {
       throw new Error(errorString)
     }
 
-    throw null
+    throw new Error('Prefix required and wasn\'t given')
   }
 
   private _errorHandler(req: Request, err: Error) {

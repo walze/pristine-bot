@@ -4,7 +4,6 @@ import Commands from "./Commands"
 import { log } from 'console'
 import { indexObj } from '../helpers/obj_array'
 import { Performances } from './Performances'
-import { isString } from 'util';
 
 export interface DefaultParams { [key: string]: string }
 
@@ -19,7 +18,6 @@ export interface commandInfoType {
 }
 
 export interface propsType {
-  [key: string]: any
   command: commandInfoType;
   params: indexObj;
   text: string;
@@ -49,34 +47,25 @@ export default class Request {
     Performances.start('command')
 
     const props = this._filterProps()
-    if (!props) return
+    if (!props || !props.command.name) return
 
-    const { command, params, text, ats } = props
-
-    this._setProperties(command, params, text, ats)
-    this._emit()
+    this._setProperties(props)
+    this._emit(props.command.name)
   }
 
-  private _emit() {
-    if (!isString(this.command)) return
-
-    console.log(`\n\n|| emiting "${this.command}" request...`)
+  private _emit(command: string) {
+    console.log(`\n\n|| emiting "${command}" request...`)
     Performances.find('request').end()
 
-    Commands.event.emit(this.command, this)
+    Commands.event.emit(command, this)
   }
 
-  private _setProperties(
-    commandInfo: commandInfoType,
-    params: DefaultParams,
-    text: string,
-    ats: at[]
-  ) {
-    this.command = commandInfo.name
-    this.hasPrefix = commandInfo.hasPrefix
-    this.params = params
-    this.text = text
-    this.ats = ats
+  private _setProperties(props: propsType) {
+    this.command = props.command.name
+    this.hasPrefix = props.command.hasPrefix
+    this.params = props.params
+    this.text = props.text
+    this.ats = props.ats
   }
 
   private _filterProps(): propsType | void {
@@ -85,27 +74,27 @@ export default class Request {
     let commandRegex = splits[0].match(this._commandRegex)
     let command: commandInfoType = { name: null, hasPrefix: false }
 
-    if (!commandRegex) {
+    if (commandRegex) {
+      command.name = commandRegex[1]
+      command.hasPrefix = true
+    }
+    else {
       // if no regex, tries to find non-prefix command
       command.name = this._getNonPrefixCommand()
 
       // if no non-prefix command found, returns
       if (!command.name) return
     }
-    else {
-      command.name = commandRegex[1]
-      command.hasPrefix = true
-    }
 
     // remove command from split
     splits.splice(0, 1)
-
 
     // gets props
     const { params, ats } = this._getProps(splits)
 
     // joins remaining splits
-    const text = splits.join(' ')
+    const trimmedText = splits.map(split => split.trim())
+    const text = trimmedText.join(' ')
 
     return {
       command,
