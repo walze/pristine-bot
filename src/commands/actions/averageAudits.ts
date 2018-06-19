@@ -14,8 +14,6 @@ const description = 'Shows average time between audits from a user'
 const action: actionFunction = req => {
   const at = req.getAt(0)
 
-  console.log(at.id, 'noice')
-
   if (!at.id) throw new Error('Invalid ID')
 
   return req.msg.guild.fetchAuditLogs({
