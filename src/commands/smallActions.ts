@@ -2,6 +2,7 @@ import Action from '../classes/Action';
 import Commands from '../classes/Commands';
 import { mapObj } from '../helpers/obj_array';
 import { RichEmbedOptions } from 'discord.js';
+import Axios from 'axios';
 
 const debug = new Action({},
   async req => {
@@ -66,7 +67,17 @@ const thonkwot = new Action({ text: false },
   ':thonkwot:'
 )
 
+const roast = new Action({ text: false },
+  req => {
+    return Axios.get('https://insult.mattbas.org/api/insult/')
+      .then(res => req.msg.reply(res.data))
+  },
+  ':roasts:'
+)
+
+
 Commands.add('debug', debug)
 Commands.add('image', image)
 Commands.add('say', say)
 Commands.add('thonkwot', thonkwot)
+Commands.add('roast', roast)
