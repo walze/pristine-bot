@@ -5,7 +5,7 @@ const momgay = new Action({ prefix: false, text: false },
   req => {
     return req.msg.channel.send('no u')
   },
-  'no u'
+  'no u',
 )
 
 Commands.add('mom gay', momgay)

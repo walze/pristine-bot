@@ -1,5 +1,5 @@
 import { GuildAuditLogs } from "discord.js";
-import { actionFunction, at } from "../../types";
+import { actionFunction, Iat } from "../../types";
 import { Requirements } from '../../classes/Requirements';
 import Action from '../../classes/Action';
 import Commands from '../../classes/Commands';
@@ -20,21 +20,20 @@ const action: actionFunction = req => {
     user: at.id,
     limit: Number(req.params.amount) || 100,
   })
-    .then(audits =>
+    .then(auditsResp =>
       req.msg.channel.send(
-        calculateAverage(audits, at)
-      )
-    )
+        calculateAverage(auditsResp, at),
+      ),
+  )
 }
 
 const audits = new Action(requirements, action, description)
 Commands.add('audits', audits)
 
-function calculateAverage(audit: GuildAuditLogs, at: at) {
+function calculateAverage(audit: GuildAuditLogs, at: Iat) {
 
   if (audit.entries.size <= 1)
     return 'Couldn\'t complete. Less than 2 audits found.'
-
 
   // getting audit creation time
   const audit_times = audit.entries.array().map(el => el.createdTimestamp);
@@ -45,7 +44,7 @@ function calculateAverage(audit: GuildAuditLogs, at: at) {
     const next = audit_times[i + 1];
 
     // next = older
-    // current = newer 
+    // current = newer
     // return time difference between current and next audit
     return date_diff(next, current)
 
@@ -55,8 +54,7 @@ function calculateAverage(audit: GuildAuditLogs, at: at) {
   const average = diffs.reduce((prev, curr) => prev + curr, 0) / diffs.length
 
   const text = `
-    ${at.tag}'s average is
-    
+    ${at.tag}'s average is \n
     ${(average).toFixed(2)} Seconds
     ${(average / 60).toFixed(2)} Minutes
     ${(average / 60 / 60).toFixed(2)} Hours
@@ -67,10 +65,10 @@ function calculateAverage(audit: GuildAuditLogs, at: at) {
 }
 
 function date_diff(oldD: number, newD: number) {
-  var old = new Date(oldD).getTime();
-  var recent = new Date(newD).getTime();
+  const old = new Date(oldD).getTime();
+  const recent = new Date(newD).getTime();
 
-  var seconds = Math.abs(recent - old) / 1000;
+  const seconds = Math.abs(recent - old) / 1000;
 
   return seconds
 }

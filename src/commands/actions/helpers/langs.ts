@@ -1,5 +1,4 @@
 
-
 export const Languages: { [key: string]: string } = {
   'auto': 'Automatic',
   'af': 'Afrikaans',
@@ -105,5 +104,5 @@ export const Languages: { [key: string]: string } = {
   'xh': 'Xhosa',
   'yi': 'Yiddish',
   'yo': 'Yoruba',
-  'zu': 'Zulu'
+  'zu': 'Zulu',
 }

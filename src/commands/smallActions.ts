@@ -14,29 +14,29 @@ const debug = new Action({},
         {
           name: 'Command',
           value: req.command,
-          inline: true
+          inline: true,
         },
         {
           name: 'Text',
           value: req.text || '*empty*',
-          inline: true
+          inline: true,
         },
         {
           name: '@\'s',
           value: req.ats.length > 0 ? req.ats.map(at => at.tag).join(' | ') : '*none*',
-          inline: true
+          inline: true,
         },
         {
           name: 'Arguments',
           value: mapObj(req.params, (val, name) => `${name}-${val}`).join(' | ') || '*none*',
-          inline: true
-        }
-      ]
+          inline: true,
+        },
+      ],
     }
 
     return await req.msg.channel.send(``, { embed })
   },
-  'debug for dev~~s~~'
+  'debug for dev~~s~~',
 )
 
 const image = new Action({},
@@ -48,7 +48,7 @@ const image = new Action({},
     else
       return req.msg.channel.send('Invalid request')
   },
-  'Posts an image from a link'
+  'Posts an image from a link',
 )
 
 const say = new Action({},
@@ -56,7 +56,7 @@ const say = new Action({},
     req.msg.delete()
     return req.msg.channel.send(`${req.text}`)
   },
-  'Bot says whatever you type'
+  'Bot says whatever you type',
 )
 
 const thonkwot = new Action({ text: false },
@@ -64,7 +64,7 @@ const thonkwot = new Action({ text: false },
     req.msg.delete()
     return req.msg.channel.send('', { file: 'https://cdn.discordapp.com/emojis/409528321685061634.png' })
   },
-  ':thonkwot:'
+  ':thonkwot:',
 )
 
 const roast = new Action({ text: false },
@@ -79,9 +79,8 @@ const roast = new Action({ text: false },
           return await req.msg.reply(res.data)
       })
   },
-  ':roasts:'
+  ':roasts:',
 )
-
 
 Commands.add('debug', debug)
 Commands.add('image', image)

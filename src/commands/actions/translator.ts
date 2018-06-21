@@ -9,8 +9,8 @@ const requirements: Requirements = {
   text: true,
   params: {
     from: false,
-    to: false
-  }
+    to: false,
+  },
 }
 
 const description = 'Translates given text to ~~almost~~ any language ~~precision not guaranteed~~'
@@ -18,7 +18,7 @@ const description = 'Translates given text to ~~almost~~ any language ~~precisio
 const action: actionFunction = async request => {
   return await translate(request.text, {
     from: switchText(request.params.from) || 'auto',
-    to: switchText(request.params.to)
+    to: switchText(request.params.to),
   }).then((res: Response) => {
     request.msg.channel.send(`${res.text}`)
     return res
@@ -31,7 +31,7 @@ Commands.add('tl', translator)
 function switchText(language: string = ''): string | void {
   language = language.replace(/\b\w/g, l => l.toUpperCase())
 
-  for (let lang in Languages)
+  for (const lang in Languages)
     if (Languages[lang] === language)
       return Languages[lang]
 }

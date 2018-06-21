@@ -2,9 +2,7 @@ import Request from "./classes/Request";
 
 export type actionFunction = (request: Request) => Promise<any>
 
-
-
-export interface imgurResponse {
+export interface IImgurResponse {
   id: string,
   title: string,
   description: any,
@@ -69,26 +67,26 @@ export interface imgurResponse {
     ups: any,
     downs: any,
     points: any,
-    score: any
+    score: any,
   }]
 }
 
-export interface translator {
+export interface ITranslator {
   text: '',
   from: {
     language: { didYouMean: boolean, iso: '' },
-    text: { autoCorrected: boolean, value: '', didYouMean: boolean }
+    text: { autoCorrected: boolean, value: '', didYouMean: boolean },
   },
   raw: ''
 }
 
-export interface at {
+export interface Iat {
   type: 'AT' | 'ROLE',
   id: string,
   tag: string
 }
 
-export interface urbanResponse {
+export interface IUrbanResponse {
   id: string
   term: string
   url: string
@@ -99,7 +97,7 @@ export interface urbanResponse {
   posted: string
 }
 
-export interface definitionResponse {
+export interface IDefinitionResponse {
   meta: {
     synsetOffset: number,
     lexFilenum: number,
@@ -107,7 +105,7 @@ export interface definitionResponse {
     wordCount: number,
     words: object[],
     pointerCount: number,
-    pointers: object[]
+    pointers: object[],
   },
   glossary: string
 }

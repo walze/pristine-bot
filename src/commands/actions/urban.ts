@@ -1,5 +1,5 @@
 import Axios from "axios";
-import { urbanResponse, actionFunction } from "../../types";
+import { IUrbanResponse, actionFunction } from "../../types";
 import Action from '../../classes/Action';
 import { Requirements } from '../../classes/Requirements';
 import Commands from '../../classes/Commands';
@@ -14,7 +14,7 @@ const action: actionFunction = async req => {
     .get(`http://urbanscraper.herokuapp.com/search/${req.text}`)
     .then(async res => {
 
-      const response: urbanResponse[] = res.data.slice(0, req.params.amount || 1)
+      const response: IUrbanResponse[] = res.data.slice(0, req.params.amount || 1)
 
       if (!response) return await req.msg.reply('404\'d')
 
@@ -22,14 +22,14 @@ const action: actionFunction = async req => {
         embed: {
           author: {
             name: req.msg.author.username,
-            icon_url: req.msg.author.avatarURL
+            icon_url: req.msg.author.avatarURL,
           },
           title: "Urban Definitions on " + req.text,
           url: `https://www.urbandictionary.com/define.php?term=${req.text}`.replace(/\s/g, '%20'),
           description: 'Some definitions are too long for Discord, click the link to see them complete.',
           fields: fieldsSort(response),
-          timestamp: new Date()
-        }
+          timestamp: new Date(),
+        },
       }
 
       return await req.msg.channel.send(embed)
@@ -40,7 +40,7 @@ const urban = new Action(requirements, action, description)
 
 Commands.declarations.push(new Command('urban', urban))
 
-function fieldsSort(response: urbanResponse[]) {
+function fieldsSort(response: IUrbanResponse[]) {
   const fields: object[] = []
 
   response.map((def, i) => {
@@ -48,14 +48,14 @@ function fieldsSort(response: urbanResponse[]) {
     fields.push({
       name: `Definition #${i + 1}`,
       value: def.definition.slice(0, 1023),
-      inline: true
+      inline: true,
     });
 
     fields.push({
       name: `*Example*`,
-      value: def.example.slice(0, 1023)
-    });
-  });
+      value: def.example.slice(0, 1023),
+    })
+  })
 
   return fields
 }

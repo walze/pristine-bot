@@ -7,8 +7,8 @@ import Commands from '../../classes/Commands';
 
 const requirements: Requirements = {
   params: {
-    amount: false
-  }
+    amount: false,
+  },
 }
 
 const description = 'Googles some text'
@@ -18,7 +18,7 @@ const action: actionFunction = async req => {
     .then(async res => {
       const dom = new JSDOM(res.data, {
         contentType: "text/html",
-        includeNodeLocations: true
+        includeNodeLocations: true,
       })
       const doc = dom.window.document
       const linksOriginal = Array.from(doc.querySelectorAll('.g .r a')).map((el: any) => el.getAttribute('href') || '')
@@ -29,7 +29,7 @@ const action: actionFunction = async req => {
           .replace(/&sa=.+/g, '')
           .replace(/%3D/g, '=')
           .replace(/%3F/g, '?')
-          .replace(/%26/g, '&')
+          .replace(/%26/g, '&'),
       )
 
       // remove images search

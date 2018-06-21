@@ -4,29 +4,28 @@ import Action from '../../classes/Action'
 import Commands from '../../classes/Commands'
 import { mapObj } from '../../helpers/obj_array'
 
-
 const requirements: Requirements = {
-  text: false
+  text: false,
 }
 
 const description = 'Shows all commands or details a specific command'
 
 const action: actionFunction = async req => {
-  let embed = {
+  const embed = {
     embed: {
       author: {
         name: req.msg.author.username,
-        icon_url: req.msg.author.avatarURL
+        icon_url: req.msg.author.avatarURL,
       },
       title: "Commands List",
       fields: Commands.declarations.map(cmd => {
         return {
           name: cmd.name,
-          value: cmd.action.description
+          value: cmd.action.description,
         }
       }),
-      timestamp: new Date()
-    }
+      timestamp: new Date(),
+    },
   }
 
   if (req.text !== '') {
@@ -35,11 +34,11 @@ const action: actionFunction = async req => {
     const args = mapObj(command.action.required, (value, prop) => {
       if (prop === 'params')
         return mapObj(value, (required, arg) =>
-          `${arg} | ${required ? '*needed*' : '*optional*'}\n`
+          `${arg} | ${required ? '*needed*' : '*optional*'}\n`,
         ).join('')
     }).join('')
 
-    const requirements = mapObj(command.action.required, (value, prop) => {
+    const mappedRequirements = mapObj(command.action.required, (value, prop) => {
       if (value && prop !== 'params')
         return prop
 
@@ -52,23 +51,22 @@ const action: actionFunction = async req => {
     embed.embed.fields = [
       {
         name: 'Description',
-        value: command.action.description
+        value: command.action.description,
       },
       {
         name: 'Required',
-        value: requirements || '*none*'
+        value: mappedRequirements || '*none*',
       },
       {
         name: 'Arguments',
-        value: args || '*none*'
-      }
+        value: args || '*none*',
+      },
     ]
   }
 
   await req.msg.channel.send(embed)
   return await req.msg.channel.send('Example: ``s-COMMAND TEXT @AT ARGUMENT-VALUE ``')
 }
-
 
 const help = new Action(requirements, action, description)
 

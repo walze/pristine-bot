@@ -1,6 +1,6 @@
 import { isObject } from 'util';
 
-export interface indexObj {
+export interface IIndexObj {
   [key: string]: any
 }
 
@@ -11,7 +11,7 @@ export function mapObj(obj: any, callback: mapObjCallback): any {
 
   const array = []
 
-  for (let prop in obj)
+  for (const prop in obj)
     array.push(callback(obj[prop], prop))
 
   return array

@@ -1,7 +1,7 @@
 import { log } from 'console'
 import { Message } from "discord.js"
-import { indexObj } from '../helpers/obj_array'
-import { at } from "../types"
+import { IIndexObj } from '../helpers/obj_array'
+import { Iat } from "../types"
 import Commands from "./Commands"
 import { Performances } from './Performances'
 
@@ -18,16 +18,16 @@ export interface ICommandInfoType {
 
 export interface IPropsType {
   command: ICommandInfoType;
-  params: indexObj;
+  params: IIndexObj;
   text: string;
-  ats: at[];
+  ats: Iat[];
 }
 
 export default class Request {
 
   public command: string | null = null
   public text: string = ''
-  public ats: at[] = []
+  public ats: Iat[] = []
   public params: IDefaultParams = {}
   public hasPrefix: boolean = false
 
@@ -50,14 +50,14 @@ export default class Request {
     this._emit(props.command.name)
   }
 
-  public getAt(pos: number): at {
+  public getAt(pos: number): Iat {
     const found = this.ats.find((item, i) => i === pos && item.type === 'AT')
     if (!found) throw new Error('@ not found')
 
     return found
   }
 
-  public getAtRole(pos: number): at {
+  public getAtRole(pos: number): Iat {
     const found = this.ats.find((item, i) => i === pos && item.type === 'ROLE')
     if (!found) throw new Error('Role @ not found')
 
@@ -138,8 +138,8 @@ export default class Request {
 
   private _getProps(splits: string[]) {
     // starts props
-    const params: indexObj = {}
-    const ats: at[] = []
+    const params: IIndexObj = {}
+    const ats: Iat[] = []
 
     // using array to pass reference so i won't have to do i = func()
     const i = [0];
@@ -161,7 +161,7 @@ export default class Request {
     }
   }
 
-  private _getRoleAts(split: string, ats: at[], splits: string[], i: number[]) {
+  private _getRoleAts(split: string, ats: Iat[], splits: string[], i: number[]) {
     if (!this._rolesRegexGlobal.test(split)) return false
 
     ats.push({
@@ -175,7 +175,7 @@ export default class Request {
     return true
   }
 
-  private _getAts(split: string, ats: at[], splits: string[], i: number[]) {
+  private _getAts(split: string, ats: Iat[], splits: string[], i: number[]) {
     if (!this._atsRegexGlobal.test(split)) return false
 
     const match = split.match(this._atsRegexGlobal)
@@ -194,7 +194,7 @@ export default class Request {
     return true
   }
 
-  private _getParams(split: string, params: indexObj, splits: string[], i: number[]) {
+  private _getParams(split: string, params: IIndexObj, splits: string[], i: number[]) {
     const param = split.split(Commands.separator)
 
     if (!param[1]) return false

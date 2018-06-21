@@ -7,11 +7,11 @@ import log from "../helpers/logger";
 export function test(target: any, key: string, descriptor: any) {
   const originalMethod = descriptor.value;
 
-  descriptor.value = function () {
+  descriptor.value = function() {
     // this = this from function running
 
     log(`${key} was called`, target, this);
-    var result = originalMethod.apply(this, arguments);
+    const result = originalMethod.apply(this, arguments);
     return result;
   };
 

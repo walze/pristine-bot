@@ -1,4 +1,4 @@
-import { actionFunction, imgurResponse } from '../../types';
+import { actionFunction, IImgurResponse } from '../../types';
 import Axios from 'axios';
 import { RichEmbedOptions } from 'discord.js';
 import { Requirements } from '../../classes/Requirements';
@@ -22,7 +22,7 @@ const action: actionFunction = async req => {
     headers: { Authorization: `Client-ID ${config.client_id}` }
   })
     .then(async res => {
-      const albums: imgurResponse[] = res.data.data
+      const albums: IImgurResponse[] = res.data.data
 
       if (albums.length < 1) throw new Error(`Nothing found on "${req.text}"`)
 
@@ -61,7 +61,7 @@ const action: actionFunction = async req => {
 const imgur = new Action(requirements, action, description)
 Commands.add('imgur', imgur)
 
-function filter(albums: imgurResponse[]) {
+function filter(albums: IImgurResponse[]) {
   return albums
     .filter(album => album.images_count >= 1)
     .map(album => {

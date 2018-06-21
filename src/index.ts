@@ -12,6 +12,8 @@ import './commands/barrel'
 // app.get('/', (req, res) => res.send(`Bot's up`))
 
 const client = new Client()
+
+// tslint:disable-next-line:no-var-requires
 const config = require('../config.json')
 
 client.login(config.token)
@@ -23,9 +25,9 @@ client.on('ready', () => {
 Commands.log()
 
 client.on('message', msg => {
+  // tslint:disable-next-line:no-unused-expression
   new Request(msg)
 })
-
 
 // Error Handling
 process.on('unhandledRejection', (reason, promise) => {

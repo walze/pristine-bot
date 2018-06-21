@@ -4,13 +4,11 @@ import Action from '../../classes/Action';
 import { isArray } from 'util';
 import Commands from '../../classes/Commands';
 
-
-
+// tslint:disable-next-line:no-var-requires
 const cleverbot = require('cleverbot.io')
-var bot = new cleverbot('Vo42zXO1zvSwkeis', 'f0QvprQvbAhrOFE4SdJPT3UAVhkXg6bJ')
+
+const bot = new cleverbot('Vo42zXO1zvSwkeis', 'f0QvprQvbAhrOFE4SdJPT3UAVhkXg6bJ')
 bot.setNick('Blyad');
-
-
 
 const requirements: Requirements = {
 
@@ -23,6 +21,7 @@ const action: actionFunction = async req => {
 
     req.msg.channel.send('*typing...*').then(async afterTyping => {
       bot.create(async (err: any, session: any) => {
+        // tslint:disable-next-line:no-shadowed-variable
         bot.ask(req.text, async (err: any, response: any) => {
 
           if (isArray(afterTyping)) afterTyping = afterTyping[0]
@@ -37,7 +36,6 @@ const action: actionFunction = async req => {
 
   })
 }
-
 
 const talk = new Action(requirements, action, description)
 

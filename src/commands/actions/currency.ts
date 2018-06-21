@@ -1,4 +1,4 @@
-//import log from "../../helpers/logger";
+// import log from "../../helpers/logger";
 import Axios from "axios";
 import { actionFunction } from "../../types";
 import { Requirements } from '../../classes/Requirements';
@@ -9,8 +9,8 @@ const requirements: Requirements = {
   text: false,
   params: {
     from: false,
-    to: true
-  }
+    to: true,
+  },
 }
 
 const description = 'Converts currencies, default "from" is USD\nhttps://www.xe.com/iso4217.php'

@@ -1,5 +1,5 @@
 //import log from "../../helpers/logger";
-import { definitionResponse, actionFunction } from "../../types";
+import { IDefinitionResponse, actionFunction } from "../../types";
 import * as wordnet from 'wordnet'
 import { Requirements } from '../../classes/Requirements';
 import Action from '../../classes/Action';
@@ -14,7 +14,7 @@ const action: actionFunction = async req => {
 
   return await new Promise((resolve, rej) => {
 
-    wordnet.lookup(req.text, async (err: any, defs: definitionResponse[]) => {
+    wordnet.lookup(req.text, async (err: any, defs: IDefinitionResponse[]) => {
 
       if (err) return rej(new Error('404\'d'))
 
