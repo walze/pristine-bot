@@ -1,24 +1,23 @@
+import { log } from 'console'
 import { Message } from "discord.js"
+import { indexObj } from '../helpers/obj_array'
 import { at } from "../types"
 import Commands from "./Commands"
-import { log } from 'console'
-import { indexObj } from '../helpers/obj_array'
 import { Performances } from './Performances'
 
-export interface DefaultParams { [key: string]: string }
-
+export interface IDefaultParams { [key: string]: string }
 
 // s-debug argument-value
 // Eg. s-debug event-MEMBER_ADD_BAN amount-5 @wiva#9996
 // params.argument will equals to value
 
-export interface commandInfoType {
+export interface ICommandInfoType {
   name: string | null,
   hasPrefix: boolean
 }
 
-export interface propsType {
-  command: commandInfoType;
+export interface IPropsType {
+  command: ICommandInfoType;
   params: indexObj;
   text: string;
   ats: at[];
@@ -29,14 +28,14 @@ export default class Request {
   public command: string | null = null
   public text: string = ''
   public ats: at[] = []
-  public params: DefaultParams = {}
+  public params: IDefaultParams = {}
   public hasPrefix: boolean = false
 
   private readonly _commandRegex = new RegExp(`^${Commands.prefix}(\\w+)`)
   private readonly _atsRegexGlobal = new RegExp(`<@!?(\\d+)>`, 'g')
   private readonly _atsRegex = new RegExp(`<@!?(\\d+)>`)
   private readonly _rolesRegexGlobal = new RegExp(`<@&(\\d+)>`, 'g')
-  //private readonly _rolesRegex = new RegExp(`<@&(\\d+)>`)
+  // private readonly _rolesRegex = new RegExp(`<@&(\\d+)>`)
 
   constructor(public readonly msg: Message) {
     if (this.msg.author.id === this.msg.client.user.id) return
@@ -51,6 +50,33 @@ export default class Request {
     this._emit(props.command.name)
   }
 
+  public getAt(pos: number): at {
+    const found = this.ats.find((item, i) => i === pos && item.type === 'AT')
+    if (!found) throw new Error('@ not found')
+
+    return found
+  }
+
+  public getAtRole(pos: number): at {
+    const found = this.ats.find((item, i) => i === pos && item.type === 'ROLE')
+    if (!found) throw new Error('Role @ not found')
+
+    return found
+  }
+
+  public log(logBool?: boolean, ...args: any[]): object {
+    const filtered: any = {}
+
+    for (const prop in this)
+      if (prop[0] !== '_' && prop !== 'msg')
+        filtered[prop] = this[prop]
+
+    if (logBool)
+      log(filtered, ...args)
+
+    return filtered
+  }
+
   private _emit(command: string) {
     console.log(`\n\n|| emiting "${command}" request...`)
     Performances.find('request').end()
@@ -58,7 +84,7 @@ export default class Request {
     Commands.event.emit(command, this)
   }
 
-  private _setProperties(props: propsType) {
+  private _setProperties(props: IPropsType) {
     this.command = props.command.name
     this.hasPrefix = props.command.hasPrefix
     this.params = props.params
@@ -66,17 +92,16 @@ export default class Request {
     this.ats = props.ats
   }
 
-  private _filterProps(): propsType | void {
+  private _filterProps(): IPropsType | void {
     const splits = this.msg.content.split(' ')
 
-    let commandRegex = splits[0].match(this._commandRegex)
-    let command: commandInfoType = { name: null, hasPrefix: false }
+    const commandRegex = splits[0].match(this._commandRegex)
+    const command: ICommandInfoType = { name: null, hasPrefix: false }
 
     if (commandRegex) {
       command.name = commandRegex[1]
       command.hasPrefix = true
-    }
-    else {
+    } else {
       // if no regex, tries to find non-prefix command
       command.name = this._getNonPrefixCommand()
 
@@ -95,25 +120,11 @@ export default class Request {
     const text = filteredText.join(' ')
 
     return {
+      ats,
       command,
       params,
       text,
-      ats
     }
-  }
-
-  public getAt(pos: number): at {
-    const at = this.ats.find((at, i) => i === pos && at.type === 'AT')
-    if (!at) throw new Error('@ not found')
-
-    return at
-  }
-
-  public getAtRole(pos: number): at {
-    const at = this.ats.find((at, i) => i === pos && at.type === 'ROLE')
-    if (!at) throw new Error('Role @ not found')
-
-    return at
   }
 
   private _getNonPrefixCommand() {
@@ -131,7 +142,7 @@ export default class Request {
     const ats: at[] = []
 
     // using array to pass reference so i won't have to do i = func()
-    let i = [0];
+    const i = [0];
 
     // get props and remove them from splits
     while (i[0] < splits.length) {
@@ -145,8 +156,8 @@ export default class Request {
     }
 
     return {
+      ats,
       params,
-      ats
     }
   }
 
@@ -154,9 +165,9 @@ export default class Request {
     if (!this._rolesRegexGlobal.test(split)) return false
 
     ats.push({
-      type: 'ROLE',
+      id: split.replace(/<@&!?/g, '').replace(/>/g, ''),
       tag: split,
-      id: split.replace(/<@&!?/g, '').replace(/>/g, '')
+      type: 'ROLE',
     })
     splits.splice(i[0], 1)
     i[0]--
@@ -173,9 +184,9 @@ export default class Request {
     if (!match || !match2) return false
 
     ats.push({
-      type: 'AT',
+      id: match2[1],
       tag: split,
-      id: match2[1]
+      type: 'AT',
     })
     splits.splice(i[0], 1)
     i[0]--
@@ -193,18 +204,5 @@ export default class Request {
     i[0]--
 
     return true
-  }
-
-  public log(logBool?: boolean, ...args: any[]): object {
-    const filtered: any = {}
-
-    for (let prop in this)
-      if (prop[0] != '_' && prop != 'msg')
-        filtered[prop] = this[prop]
-
-    if (logBool)
-      log(filtered, ...args)
-
-    return filtered
   }
 }

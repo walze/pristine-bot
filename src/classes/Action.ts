@@ -1,7 +1,6 @@
-import { Requirements } from './Requirements';
 import { actionFunction } from '../types';
 import Request from './Request';
-
+import { Requirements } from './Requirements';
 
 export default class Action {
   public readonly required: Requirements
@@ -23,7 +22,6 @@ export default class Action {
     if (!(ran instanceof Promise)) {
       console.error('Action returned', ran)
       throw new Error(`Action returned ${ran} instead of Promise`)
-    }
-    else return ran
+    } else return ran
   }
 }

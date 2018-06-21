@@ -7,14 +7,13 @@ const event = new Events.EventEmitter()
 
 export default class Commands {
 
-  static declarations: Command[] = []
-  static prefix = 's-'
-  static separator = '-'
-  static readonly event = event
+  public static declarations: Command[] = []
+  public static prefix = 's-'
+  public static readonly events = event.eventNames()
+  public static separator = '-'
+  public static readonly event = event
 
-  static readonly events = event.eventNames()
-
-  static findEvent(name: string) {
+  public static findEvent(name: string) {
     const found = this.event.eventNames().find((e) => {
       if (isString(e)) return name.includes(e)
       else return false
@@ -24,7 +23,7 @@ export default class Commands {
     else return ''
   }
 
-  static includesCommand(text: string) {
+  public static includesCommand(text: string) {
     const found = this.declarations.find((cmd) => {
       return text.includes(cmd.name)
     })
@@ -32,18 +31,18 @@ export default class Commands {
     return found
   }
 
-  static add(name: string, action: Action) {
+  public static add(name: string, action: Action) {
     this.declarations.push(new Command(name, action))
   }
 
-  static find(name: string) {
+  public static find(name: string) {
     const found = this.declarations.find(cmd => cmd.name === name)
     if (found) return found
 
     throw new Error(`Command "${name}" not found`)
   }
 
-  static log() {
+  public static log() {
     const text = `\nListening to Commands:\n${this.declarations.map(cmd => cmd.name).join('\n')}`
     console.log(text)
   }

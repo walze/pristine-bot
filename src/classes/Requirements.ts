@@ -8,7 +8,7 @@ export class Requirements {
 
   constructor(required?: Requirements) {
     if (required)
-      for (let prop in required)
+      for (const prop in required)
         this[prop] = required[prop]
   }
 }
