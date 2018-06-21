@@ -69,8 +69,15 @@ const thonkwot = new Action({ text: false },
 
 const roast = new Action({ text: false },
   req => {
+    const at = req.ats[0]
+
     return Axios.get('https://insult.mattbas.org/api/insult/')
-      .then(res => req.msg.reply(res.data))
+      .then(async res => {
+        if (at)
+          return await req.msg.channel.send(`${at.tag}, ${res.data}`)
+        else
+          return await req.msg.reply(res.data)
+      })
   },
   ':roasts:'
 )

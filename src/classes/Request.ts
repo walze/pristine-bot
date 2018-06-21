@@ -38,9 +38,7 @@ export default class Request {
   private readonly _rolesRegexGlobal = new RegExp(`<@&(\\d+)>`, 'g')
   //private readonly _rolesRegex = new RegExp(`<@&(\\d+)>`)
 
-  constructor(
-    public readonly msg: Message,
-  ) {
+  constructor(public readonly msg: Message) {
     if (this.msg.author.id === this.msg.client.user.id) return
 
     Performances.start('request')
