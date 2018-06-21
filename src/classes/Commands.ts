@@ -43,7 +43,14 @@ export default class Commands {
   }
 
   public static log() {
-    const text = `\nListening to Commands:\n${this.declarations.map(cmd => cmd.name).join('\n')}`
-    console.log(text)
+    console.log(`Listening to ${this.declarations.length} Commands`)
+
+    this.declarations.map((cmd, i) => {
+      if (i % 2 === 0 && i + 1 < this.declarations.length)
+        console.log(`| ${cmd.name} || ${this.declarations[i + 1].name} |`)
+      else if (i + 1 === this.declarations.length)
+        console.log(`| ${cmd.name} |`)
+
+    })
   }
 }
