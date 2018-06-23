@@ -1,4 +1,4 @@
-//import log from "../../helpers/logger";
+// import log from "../../helpers/logger";
 import { IDefinitionResponse, actionFunction } from "../../types";
 import * as wordnet from 'wordnet'
 import { Requirements } from '../../classes/Requirements';
@@ -22,17 +22,17 @@ const action: actionFunction = async req => {
         embed: {
           author: {
             name: req.msg.author.username,
-            icon_url: req.msg.author.avatarURL
+            icon_url: req.msg.author.avatarURL,
           },
           title: "Definitions of " + req.text,
-          fields: defs.map((def, i) => {
+          fields: defs.map((item, i) => {
             return {
               name: `Definition #${i + 1}`,
-              value: def.glossary
+              value: item.glossary,
             }
           }),
-          timestamp: new Date()
-        }
+          timestamp: new Date(),
+        },
       }
 
       resolve(await req.msg.channel.send(embed))
