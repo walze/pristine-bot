@@ -5,6 +5,7 @@ import Request from "./Request";
 import log from "../helpers/logger";
 import { RichEmbedOptions } from 'discord.js';
 import { mapObj } from '../helpers/obj_array';
+import { isArray } from 'util';
 
 export default class Command {
 
@@ -24,14 +25,20 @@ export default class Command {
   }
 
   private async _run(req: Request) {
-    try {
-      const result = await this.action.run(req)
+    return await req.msg.channel.send('*loading your request... >//<*')
+      .then(async loading => {
+        try {
+          const result = await this.action.run(req)
 
-      Performances.find('command').end()
-      return result
-    } catch (err) {
-      return this._errorHandler(req, err)
-    }
+          if (isArray(loading)) loading[0].delete()
+          else loading.delete()
+
+          Performances.find('command').end()
+          return result
+        } catch (err) {
+          return this._errorHandler(req, err)
+        }
+      })
   }
 
   private _checkRequirements(req: Request): void {
