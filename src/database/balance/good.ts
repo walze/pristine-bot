@@ -1,4 +1,4 @@
-[
+export const Good = [
   "ABUNDANT",
   "ADAPTABLE",
   "ADORABLE",
@@ -102,8 +102,6 @@
   "FORCEFUL",
   "FORGIVING",
   "FORTUITOUS",
-  "FRANK",
-  "FREE",
   "FRIENDLY",
   "FULFILLED",
   "FUN",
@@ -161,7 +159,6 @@
   "JOYOUS",
   "JUBILANT",
   "JUICY",
-  "JUST",
   "JUVENESCENT",
   "KALON",
   "KIND",
@@ -303,5 +300,5 @@
   "YUMMY",
   "ZAPPY",
   "ZESTFUL",
-  "ZING"
+  "ZING",
 ]

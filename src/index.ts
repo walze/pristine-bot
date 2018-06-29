@@ -5,11 +5,7 @@ import log from './bot/helpers/logger'
 // import Request from './bot/classes/Request'
 import Commands from './bot/classes/Commands'
 import './commands/barrel'
-
-// import * as Express from 'express'
-// const app = Express()
-// app.listen(process.env.PORT || 3000, () => log('\nExpress Ready'))
-// app.get('/', (req, res) => res.send(`Bot's up`))
+import { GoodOrBad } from './database/classes/Balance';
 
 const client = new Client()
 
@@ -27,9 +23,17 @@ Commands.log()
 client.on('message', onMessage)
 
 function onMessage(msg: Message) {
-  // const request = new Request(msg)
+  if (msg.author.id === msg.client.user.id) return
+
+  // const req = new Request(msg)
   // request.emit()
 
+  const goodbad = new GoodOrBad(msg.content)
+
+  console.log(goodbad)
+
+  if (goodbad.shouldEmit)
+    msg.reply(goodbad.text)
 }
 
 // Error Handling

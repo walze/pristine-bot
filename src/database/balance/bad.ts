@@ -1,4 +1,4 @@
-[
+export const Bad = [
   "aggressive",
   "aloof",
   "arrogant",
@@ -468,5 +468,5 @@
   "XXX Watcher",
   "Yak",
   "Yeti",
-  "Zit face"
+  "Zit face",
 ]
