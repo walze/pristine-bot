@@ -13,7 +13,7 @@ export class GoodOrBad {
   constructor(text: string) {
     if (!text) return
 
-    this.result = this.find(text)
+    this.result = this._find(text)
 
     if (this.result.good)
       this.text += `+50$ for the good word ${this.result.good}! c:\n`
@@ -25,7 +25,7 @@ export class GoodOrBad {
       this.shouldEmit = true
   }
 
-  public find(text: string) {
+  private _find(text: string) {
     const words = text.split(' ')
 
     const foundGood = words.find(word =>
