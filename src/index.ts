@@ -1,9 +1,9 @@
 process.setMaxListeners(0)
 
-import { Client } from 'discord.js'
-import log from './helpers/logger'
-import Request from './classes/Request'
-import Commands from './classes/Commands'
+import { Client, Message } from 'discord.js'
+import log from './bot/helpers/logger'
+// import Request from './bot/classes/Request'
+import Commands from './bot/classes/Commands'
 import './commands/barrel'
 
 // import * as Express from 'express'
@@ -24,13 +24,13 @@ client.on('ready', () => {
 
 Commands.log()
 
-client.on('message', msg => {
+client.on('message', onMessage)
 
-  const request = new Request(msg)
-  console.log(`\n\n|| emiting "${request.command}" request...`)
-  request.emit();
+function onMessage(msg: Message) {
+  // const request = new Request(msg)
+  // request.emit()
 
-})
+}
 
 // Error Handling
 process.on('unhandledRejection', (reason, promise) => {

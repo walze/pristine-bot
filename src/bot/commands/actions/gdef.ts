@@ -1,5 +1,5 @@
 import { Requirements } from "../../classes/Requirements";
-import { actionFunction } from '../../types';
+import { actionFunction } from '../../../types';
 import Action from '../../classes/Action';
 import Axios from 'axios';
 import { JSDOM } from 'jsdom';

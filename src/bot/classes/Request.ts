@@ -1,7 +1,7 @@
 import { log } from 'console'
 import { Message } from "discord.js"
 import { IIndexObj } from '../helpers/obj_array'
-import { Iat } from "../types"
+import { Iat } from "../../types"
 import Commands from "./Commands"
 import { Performances } from './Performances'
 

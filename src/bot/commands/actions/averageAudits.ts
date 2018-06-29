@@ -1,5 +1,5 @@
 import { GuildAuditLogs } from "discord.js";
-import { actionFunction, Iat } from "../../types";
+import { actionFunction, Iat } from "../../../types";
 import { Requirements } from '../../classes/Requirements';
 import Action from '../../classes/Action';
 import Commands from '../../classes/Commands';

@@ -1,5 +1,5 @@
 import Axios from "axios";
-import { IUrbanResponse, actionFunction } from "../../types";
+import { IUrbanResponse, actionFunction } from "../../../types";
 import Action from '../../classes/Action';
 import { Requirements } from '../../classes/Requirements';
 import Commands from '../../classes/Commands';
