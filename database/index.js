@@ -7,20 +7,27 @@ const sql = new Sequelize('testes', 'root', 'password', {
 
 const Iquery = sql.getQueryInterface()
 
-//  Iquery.dropAllTables()
-
-const User = sql.define('user', {
-  id: Sequelize.STRING,
-  username: Sequelize.STRING,
-  discriminator: Sequelize.STRING,
-});
+Iquery.dropAllTables().then(() => {
 
 
-sql.sync()
-  .then(() => {
+  const User = sql.define('user', {
+    id: {
+      primaryKey: true,
+      type: Sequelize.STRING
+    },
+    username: Sequelize.STRING,
+    discriminator: Sequelize.STRING,
+    balance: Sequelize.BIGINT
+  });
 
-    sql
-      .query('SHOW COLUMNS FROM users;')
-      .then(console.log);
 
-  })
+  sql.sync()
+    .then(() => {
+
+      sql
+        .query('SHOW tables;')
+        .then(console.log);
+
+    })
+
+})

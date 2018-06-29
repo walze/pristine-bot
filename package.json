@@ -7,6 +7,7 @@
     "start": "npm run tsc && concurrently --no-color \"npm run tscw\" \"npm run nodemon\"",
     "boot": "npm run tsc && node dist/index",
     "nodemon": "nodemon --inspect --trace-warnings --config nodemon.json",
+    "db": "nodemon database/index.js --inspect --trace-warnings --config nodemon.json",
     "tsc": "tsc",
     "tscw": "tsc -w"
   },
@@ -22,7 +23,9 @@
     "express": "^4.16.3",
     "google-translate-api": "^2.3.0",
     "jsdom": "^11.11.0",
+    "mysql2": "^1.5.3",
     "nodemon": "^1.17.5",
+    "sequelize": "^4.38.0",
     "wordnet": "^0.1.2"
   },
   "devDependencies": {
