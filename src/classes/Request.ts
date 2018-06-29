@@ -47,7 +47,6 @@ export default class Request {
     if (!props || !props.command.name) return
 
     this._setProperties(props)
-    this._emit(props.command.name)
   }
 
   public getAt(pos: number): Iat {
@@ -77,11 +76,13 @@ export default class Request {
     return filtered
   }
 
-  private _emit(command: string) {
-    console.log(`\n\n|| emiting "${command}" request...`)
+  public emit() {
+    if (!this.command) return
+
+    console.log(`\n\n|| emiting "${this.command}" request...`)
     Performances.find('request').end()
 
-    Commands.event.emit(command, this)
+    Commands.event.emit(this.command, this)
   }
 
   private _setProperties(props: IPropsType) {

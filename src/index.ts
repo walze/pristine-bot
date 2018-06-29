@@ -25,8 +25,11 @@ client.on('ready', () => {
 Commands.log()
 
 client.on('message', msg => {
-  // tslint:disable-next-line:no-unused-expression
-  new Request(msg)
+
+  const request = new Request(msg)
+  console.log(`\n\n|| emiting "${request.command}" request...`)
+  request.emit();
+
 })
 
 // Error Handling
