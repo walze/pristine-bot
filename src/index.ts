@@ -4,7 +4,7 @@ import { Client, Message } from 'discord.js'
 import log from './bot/helpers/logger'
 // import Request from './bot/classes/Request'
 import Commands from './bot/classes/Commands'
-import './commands/barrel'
+import './bot/commands/barrel'
 import { GoodOrBad } from './database/classes/Balance';
 
 const client = new Client()
