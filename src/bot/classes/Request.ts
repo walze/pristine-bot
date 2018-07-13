@@ -1,7 +1,7 @@
 import { log } from 'console'
 import { Message } from "discord.js"
 import { IIndexObj } from '../helpers/obj_array'
-import { Iat } from "../types"
+import { Iat } from "../../types"
 import Commands from "./Commands"
 import { Performances } from './Performances'
 
@@ -38,8 +38,6 @@ export default class Request {
   // private readonly _rolesRegex = new RegExp(`<@&(\\d+)>`)
 
   constructor(public readonly msg: Message) {
-    if (this.msg.author.id === this.msg.client.user.id) return
-
     Performances.start('request')
     Performances.start('command')
 
@@ -47,7 +45,6 @@ export default class Request {
     if (!props || !props.command.name) return
 
     this._setProperties(props)
-    this._emit(props.command.name)
   }
 
   public getAt(pos: number): Iat {
@@ -77,11 +74,13 @@ export default class Request {
     return filtered
   }
 
-  private _emit(command: string) {
-    console.log(`\n\n|| emiting "${command}" request...`)
+  public emit() {
+    if (!this.command) return
+
+    console.log(`\n\n|| emiting "${this.command}" request...`)
     Performances.find('request').end()
 
-    Commands.event.emit(command, this)
+    Commands.event.emit(this.command, this)
   }
 
   private _setProperties(props: IPropsType) {

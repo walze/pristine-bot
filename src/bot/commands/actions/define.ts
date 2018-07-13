@@ -1,5 +1,5 @@
 // import log from "../../helpers/logger";
-import { IDefinitionResponse, actionFunction } from "../../types";
+import { IDefinitionResponse, actionFunction } from "../../../types";
 import * as wordnet from 'wordnet'
 import { Requirements } from '../../classes/Requirements';
 import Action from '../../classes/Action';

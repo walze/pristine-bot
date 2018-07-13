@@ -1,15 +1,10 @@
 process.setMaxListeners(0)
 
 import { Client } from 'discord.js'
-import log from './helpers/logger'
-import Request from './classes/Request'
-import Commands from './classes/Commands'
+import log from './bot/helpers/logger'
+import Request from './bot/classes/Request'
+import Commands from './bot/classes/Commands'
 import './commands/barrel'
-
-// import * as Express from 'express'
-// const app = Express()
-// app.listen(process.env.PORT || 3000, () => log('\nExpress Ready'))
-// app.get('/', (req, res) => res.send(`Bot's up`))
 
 const client = new Client()
 
@@ -24,9 +19,11 @@ client.on('ready', () => {
 
 Commands.log()
 
-client.on('message', msg => {
-  // tslint:disable-next-line:no-unused-expression
-  new Request(msg)
+client.on('message', (msg) => {
+  if (msg.author.id === msg.client.user.id) return
+
+  const req = new Request(msg)
+  req.emit()
 })
 
 // Error Handling

@@ -1,7 +1,7 @@
 import { JSDOM } from 'jsdom';
 import Axios from 'axios';
 import { Requirements } from '../../classes/Requirements';
-import { actionFunction } from '../../types';
+import { actionFunction } from '../../../types';
 import Action from '../../classes/Action';
 import Commands from '../../classes/Commands';
 

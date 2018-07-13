@@ -1,4 +1,4 @@
-import Request from "./classes/Request";
+import Request from "./bot/classes/Request";
 
 export type actionFunction = (request: Request) => Promise<any>
 

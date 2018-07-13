@@ -1,4 +1,4 @@
-import { actionFunction } from '../types';
+import { actionFunction } from '../../types';
 import Request from './Request';
 import { Requirements } from './Requirements';
 
