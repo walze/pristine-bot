@@ -10,7 +10,7 @@ export default class Commands {
   public static declarations: Command[] = []
 
   public static prefix = 's-'
-  public static separator = '-'
+  public static separator = '='
 
   public static readonly events = event.eventNames()
   public static readonly event = event

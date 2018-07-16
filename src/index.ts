@@ -5,6 +5,7 @@ import log from './bot/helpers/logger'
 import Request from './bot/classes/Request'
 import Commands from './bot/classes/Commands'
 import './bot/commands/barrel'
+import { GoodOrBad } from './database/classes/Balance';
 
 const client = new Client()
 
@@ -23,7 +24,14 @@ client.on('message', (msg) => {
   if (msg.author.id === msg.client.user.id) return
 
   const req = new Request(msg)
+  req.log(true)
   req.emit()
+
+  const goodbad = new GoodOrBad(msg.content)
+  // console.log(goodbad)
+
+  if (!req.command)
+    goodbad.emit(msg)
 })
 
 // Error Handling

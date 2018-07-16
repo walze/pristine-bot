@@ -26,7 +26,7 @@ export interface IPropsType {
 export default class Request {
 
   public command: string | null = null
-  public text: string = ''
+  public text: string | null = null
   public ats: Iat[] = []
   public params: IDefaultParams = {}
   public hasPrefix: boolean = false

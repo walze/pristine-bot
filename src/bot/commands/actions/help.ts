@@ -29,7 +29,7 @@ const action: actionFunction = async req => {
   }
 
   if (req.text !== '') {
-    const command = Commands.find(req.text)
+    const command = Commands.find(req.text!)
 
     const args = mapObj(command.action.required, (value, prop) => {
       if (prop === 'params')
