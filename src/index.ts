@@ -1,6 +1,6 @@
 process.setMaxListeners(0)
 
-import { Client, Message } from 'discord.js'
+import { Client } from 'discord.js'
 import log from './bot/helpers/logger'
 import Request from './bot/classes/Request'
 import Commands from './bot/classes/Commands'
@@ -20,9 +20,7 @@ client.on('ready', () => {
 
 Commands.log()
 
-client.on('message', onMessage)
-
-function onMessage(msg: Message) {
+client.on('message', (msg) => {
   if (msg.author.id === msg.client.user.id) return
 
   const req = new Request(msg)
@@ -34,7 +32,8 @@ function onMessage(msg: Message) {
 
   if (!req.command)
     goodbad.emit(msg)
-}
+})
+
 // Error Handling
 process.on('unhandledRejection', (reason, promise) => {
   console.error('Unhandled_Rejection'.toUpperCase())

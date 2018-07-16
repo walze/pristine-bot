@@ -20,7 +20,7 @@ export const User = sql.define('user', {
   username: Sequelize.STRING,
   discriminator: Sequelize.STRING,
   balance: Sequelize.BIGINT,
-});
+})
 
 Iquery.dropAllTables()
   .then(() => sql.sync())
