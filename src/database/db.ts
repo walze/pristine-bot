@@ -22,6 +22,5 @@ export const User = sql.define('user', {
   balance: Sequelize.BIGINT,
 });
 
-Iquery.dropAllTables().then(() => {
-  sql.sync()
-})
+Iquery.dropAllTables()
+  .then(() => sql.sync())

@@ -167,6 +167,7 @@ export const Good = [
   "KNOWLEDGEABLE",
   "LIVELY",
   "LOVABLE",
+  "LOVE",
   "LOVED",
   "LOVELY",
   "LOVING",
