@@ -1,4 +1,3 @@
-import { performance } from "perf_hooks";
 
 export class Performance {
   constructor(

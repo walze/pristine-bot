@@ -8,8 +8,8 @@
     "boot": "npm run tsc && node dist/index",
     "nodemon": "nodemon --inspect --trace-warnings --config nodemon.json",
     "db": "nodemon database/index.js --inspect --trace-warnings --config nodemon.json",
-    "tsc": "tsc",
-    "tscw": "tsc -w"
+    "parcel": "parcel src/index.ts --log-level 3 --target=node",
+    "tsc": "tsc -w"
   },
   "author": "Wallace Fares",
   "license": "ISC",
@@ -30,6 +30,7 @@
     "wordnet": "^0.1.2"
   },
   "devDependencies": {
+    "parcel-bundler": "^1.9.7",
     "tslib": "^1.9.2",
     "typescript": "^2.9.1"
   }
