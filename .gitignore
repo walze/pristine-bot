@@ -1,4 +1,6 @@
 .cache/
 dist/
+bot/
+db/
 node_modules/
 config.json

@@ -6,6 +6,7 @@ const options: Options = {
   password: 'password',
   host: '192.168.13.36',
   port: 3306,
+  dialect: 'mysql',
 }
 
 export const sql = new Sequelize(options)
@@ -22,5 +23,7 @@ export const User = sql.define('user', {
   balance: Sequelize.BIGINT,
 })
 
-Iquery.dropAllTables()
-  .then(() => sql.sync())
+sql.query('show tables;').then(console.log)
+
+// Iquery.dropAllTables()
+//   .then(() => sql.sync())
