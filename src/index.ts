@@ -28,10 +28,9 @@ client.on('message', (msg) => {
   req.emit()
 
   const goodbad = new GoodOrBad(msg.content)
-  // console.log(goodbad)
+  console.log(goodbad)
 
-  if (!req.command)
-    goodbad.emit(msg)
+  if (!req.command) goodbad.emit(msg)
 })
 
 // Error Handling

@@ -5,11 +5,11 @@ import { Iat } from "../../types"
 import Commands from "./Commands"
 import { Performances } from './Performances'
 
-export interface IDefaultParams { [key: string]: string }
-
 // s-debug argument-value
 // Eg. s-debug event-MEMBER_ADD_BAN amount-5 @wiva#9996
 // params.argument will equals to value
+
+export interface IDefaultParams { [key: string]: string }
 
 export interface ICommandInfoType {
   name: string | null,
@@ -45,6 +45,7 @@ export default class Request {
     if (!props || !props.command.name) return
 
     this._setProperties(props)
+    Performances.find('request').end()
   }
 
   public getAt(pos: number): Iat {
@@ -78,7 +79,6 @@ export default class Request {
     if (!this.command) return
 
     console.log(`\n\n|| emiting "${this.command}" request...`)
-    Performances.find('request').end()
 
     Commands.event.emit(this.command, this)
   }
