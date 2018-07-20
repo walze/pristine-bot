@@ -3,9 +3,9 @@ import Commands from "./Commands";
 import { Performances } from './Performances';
 import Request from "./Request";
 import log from "../helpers/logger";
-import { RichEmbedOptions } from 'discord.js';
 import { mapObj } from '../helpers/obj_array';
 import { isArray } from 'util';
+import ErrorHandler from '../helpers/ErrorHandler';
 
 export default class Command {
 
@@ -17,7 +17,7 @@ export default class Command {
         this._checkRequirements(req)
         this._run(req)
       } catch (e) {
-        this._errorHandler(req, e)
+        ErrorHandler(req, e)
       }
 
     })
@@ -36,7 +36,7 @@ export default class Command {
           Performances.find('command').end()
           return result
         } catch (err) {
-          return this._errorHandler(req, err)
+          return ErrorHandler(req, err)
         }
       })
   }
@@ -61,39 +61,5 @@ export default class Command {
     }
 
     throw new Error('Prefix required and wasn\'t given')
-  }
-
-  private _errorHandler(req: Request, err: Error) {
-    log(err)
-    req.log(true)
-
-    const embed: RichEmbedOptions = {
-      title: "Error Information",
-      description: err.message,
-      fields: [
-        {
-          name: 'Command',
-          value: req.command,
-          inline: true,
-        },
-        {
-          name: 'Text',
-          value: req.text || '*empty*',
-          inline: true,
-        },
-        {
-          name: '@\'s',
-          value: req.ats.length > 0 ? req.ats.map(at => at.tag).join(' | ') : '*none*',
-          inline: true,
-        },
-        {
-          name: 'Arguments',
-          value: mapObj(req.params, (val, name) => `${name}-${val}`).join(' | ') || '*none*',
-          inline: true,
-        },
-      ],
-    }
-
-    return req.msg.reply(`sorry but I couldn't complete your request >///<\nBut you can try using *help* __${req.command}__ to know more about this command cx`, { embed })
   }
 }

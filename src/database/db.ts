@@ -1,12 +1,13 @@
 import Sequelize, { Options } from 'sequelize';
 
 const options: Options = {
-  database: 'testes',
+  database: 'test',
   username: 'root',
-  password: 'password',
-  host: '192.168.13.36',
+  password: '',
+  host: 'localhost',
   port: 3306,
   dialect: 'mysql',
+  logging: false,
 }
 
 export const sql = new Sequelize(options)
@@ -15,15 +16,19 @@ export const Iquery = sql.getQueryInterface()
 
 export const User = sql.define('user', {
   id: {
+    type: Sequelize.INTEGER,
+    autoIncrement: true,
     primaryKey: true,
-    type: Sequelize.STRING,
   },
+  goods: Sequelize.BIGINT,
+  bads: Sequelize.BIGINT,
   username: Sequelize.STRING,
   discriminator: Sequelize.STRING,
   balance: Sequelize.BIGINT,
 })
 
-sql.query('show tables;').then(console.log)
+Iquery.dropAllTables().then(() => {
 
-// Iquery.dropAllTables()
-//   .then(() => sql.sync())
+  sql.sync().then(() => console.log(`\nDB synced`))
+
+})
