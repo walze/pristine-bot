@@ -39,15 +39,20 @@ export default class Commands {
     return found
   }
 
-  public static log() {
+  public static log(everyX: number = 3) {
     console.log(`Listening to ${this.declarations.length} Commands`)
 
+    let string = ''
+
     this.declarations.map((cmd, i) => {
-      if (i % 2 === 0 && i + 1 < this.declarations.length)
-        console.log(`| ${cmd.name} || ${this.declarations[i + 1].name} |`)
-      else if (i + 1 === this.declarations.length)
-        console.log(`| ${cmd.name} |`)
+      if (i % everyX === 0 && i !== 0)
+        string += `| ${cmd.name} |\n`
+      else
+        string += `| ${cmd.name} | `
     })
 
+    console.log(string)
+
+    return string
   }
 }
