@@ -8,6 +8,15 @@ import ErrorHandler from '../../bot/helpers/ErrorHandler';
 
 export class GoodOrBad {
 
+  public static getWallet(username: string, discriminator: string): Promise<any> {
+    return User.find({
+      where: {
+        username,
+        discriminator,
+      },
+    }) as any
+  }
+
   public readonly text: string = ''
   public readonly result: {
     good: string | undefined,
