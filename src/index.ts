@@ -4,9 +4,9 @@ import './bot/commands/barrel'
 import './database/commands/barrel'
 
 import Request from './bot/classes/Request'
-import { GoodOrBad } from './database/classes/Balance'
+import GoodOrBad from './database/classes/Balance'
 import client from './client'
-import { Performances } from './bot/classes/Performances'
+import Performances from './bot/classes/Performances'
 
 client.on('message', (msg) => {
   Performances.start('all')
@@ -17,17 +17,19 @@ client.on('message', (msg) => {
   Performances.start('command')
 
   const req = new Request(msg)
-  if (!req.command) return
 
-  Performances.find('request').end()
+  if (req.command) {
+    Performances.find('request').end()
 
-  console.log(`|| emiting "${req.command}" request...`)
-  req.emit()
+    console.log(`|| emiting "${req.command}" request...`)
+    req.emit()
 
-  Performances.find('command').end()
+    Performances.find('command').end()
+  }
 
   const goodbad = new GoodOrBad(req)
   goodbad.emit()
 
-  Performances.find('all').end(2)
+  if (req.command)
+    Performances.find('all').end(2)
 })

@@ -8,8 +8,6 @@ import Commands from "./Commands"
 // Eg. s-debug event-MEMBER_ADD_BAN amount-5 @wiva#9996
 // params.argument will equals to value
 
-export interface IDefaultParams { [key: string]: string }
-
 export interface ICommandInfoType {
   name: string | null,
   hasPrefix: boolean
@@ -27,7 +25,7 @@ export default class Request {
   public command: string | null = null
   public text: string | null = null
   public ats: Iat[] = []
-  public params: IDefaultParams = {}
+  public params: IIndexObj = {}
   public hasPrefix: boolean = false
 
   private readonly _commandRegex = new RegExp(`^${Commands.prefix}(\\w+)`)

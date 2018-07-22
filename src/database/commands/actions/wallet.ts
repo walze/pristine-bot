@@ -1,6 +1,6 @@
 import Action from "../../../bot/classes/Action";
 import Commands from '../../../bot/classes/Commands';
-import { GoodOrBad } from '../../classes/Balance';
+import GoodOrBad from '../../classes/Balance';
 
 const wallet = new Action(
   { text: false },

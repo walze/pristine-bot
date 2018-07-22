@@ -22,7 +22,7 @@ export class Performance {
   }
 }
 
-export class Performances {
+export default class Performances {
   public static tests: Performance[] = []
 
   public static start(name: string) {
