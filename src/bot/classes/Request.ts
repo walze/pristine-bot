@@ -3,7 +3,6 @@ import { Message } from "discord.js"
 import { IIndexObj } from '../helpers/obj_array'
 import { Iat } from "../../types"
 import Commands from "./Commands"
-import { Performances } from './Performances'
 
 // s-debug argument-value
 // Eg. s-debug event-MEMBER_ADD_BAN amount-5 @wiva#9996
@@ -38,14 +37,10 @@ export default class Request {
   // private readonly _rolesRegex = new RegExp(`<@&(\\d+)>`)
 
   constructor(public readonly msg: Message) {
-    Performances.start('request')
-    Performances.start('command')
-
     const props = this._filterProps()
     if (!props || !props.command.name) return
 
     this._setProperties(props)
-    Performances.find('request').end()
   }
 
   public getAt(pos: number): Iat {
@@ -76,11 +71,7 @@ export default class Request {
   }
 
   public emit() {
-    if (!this.command) return
-
-    console.log(`\n\n|| emiting "${this.command}" request...`)
-
-    Commands.event.emit(this.command, this)
+    Commands.event.emit(this.command!, this)
   }
 
   private _setProperties(props: IPropsType) {

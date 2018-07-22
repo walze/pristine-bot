@@ -10,9 +10,11 @@ export class Performance {
     this.t0 = performance.now()
   }
 
-  public end() {
+  public end(breaks: number = 0) {
     const diff = Math.round((performance.now() - this.t0) * 1e2) / 1e2
-    const string = `|| ${this.name} ran in ${diff} ms`
+    let string = `|| ${this.name} ran in ${diff} ms`;
+
+    [...Array(breaks)].map(() => string += '\n')
 
     console.log(string)
 

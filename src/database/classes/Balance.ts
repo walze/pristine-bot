@@ -4,7 +4,7 @@ import { Message } from 'discord.js'
 import { isArray } from 'util'
 import { User } from '../db'
 import Request from '../../bot/classes/Request';
-import ErrorHandler from '../../bot/helpers/ErrorHandler';
+import ReplyError from '../../bot/helpers/ReplyError';
 
 export class GoodOrBad {
 
@@ -55,7 +55,7 @@ export class GoodOrBad {
       this._reply()
       this._saveDB()
     } catch (err) {
-      ErrorHandler(this.request(), err)
+      ReplyError(this.request(), err)
     }
   }
 

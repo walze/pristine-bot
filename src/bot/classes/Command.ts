@@ -1,11 +1,10 @@
-import Action from './Action';
-import Commands from "./Commands";
-import { Performances } from './Performances';
-import Request from "./Request";
-import log from "../helpers/logger";
-import { mapObj } from '../helpers/obj_array';
-import { isArray } from 'util';
-import ErrorHandler from '../helpers/ErrorHandler';
+import Action from './Action'
+import Commands from "./Commands"
+import Request from "./Request"
+import log from "../helpers/logger"
+import { mapObj } from '../helpers/obj_array'
+import { isArray } from 'util'
+import ReplyError from '../helpers/ReplyError'
 
 export default class Command {
 
@@ -17,7 +16,7 @@ export default class Command {
         this._checkRequirements(req)
         this._run(req)
       } catch (e) {
-        ErrorHandler(req, e)
+        ReplyError(req, e)
       }
 
     })
@@ -33,10 +32,9 @@ export default class Command {
           if (isArray(loading)) loading[0].delete()
           else loading.delete()
 
-          Performances.find('command').end()
           return result
         } catch (err) {
-          return ErrorHandler(req, err)
+          return ReplyError(req, err)
         }
       })
   }

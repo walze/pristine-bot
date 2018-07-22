@@ -1,6 +1,4 @@
 .cache/
-dist/
-bot/
-db/
+builds/
 node_modules/
 config.json
