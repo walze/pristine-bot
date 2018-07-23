@@ -50,7 +50,7 @@ export default class CommandRequest {
    *
    * @param {number} pos
    * @returns {Iat}
-   * @memberof Request
+   * @memberof CommandRequest
    */
   public getAt(pos: number): Iat {
     const found = this.ats.find((item, i) => i === pos && item.type === 'AT')
@@ -64,7 +64,7 @@ export default class CommandRequest {
    *
    * @param {number} pos
    * @returns {Iat}
-   * @memberof Request
+   * @memberof CommandRequest
    */
   public getAtRole(pos: number): Iat {
     const found = this.ats.find((item, i) => i === pos && item.type === 'ROLE')
@@ -79,7 +79,7 @@ export default class CommandRequest {
    * @param {boolean} [logBool] Logs to console if true
    * @param {...any[]} args Additional logs
    * @returns {object} Copy of Request
-   * @memberof Request
+   * @memberof CommandRequest
    */
   public log(logBool?: boolean, ...args: any[]): object {
     const filtered: any = {}
@@ -106,7 +106,7 @@ export default class CommandRequest {
    *
    * @private
    * @param {IPropsType} props
-   * @memberof Request
+   * @memberof CommandRequest
    */
   private _setProperties(props: IPropsType) {
     this.command = props.command.name
@@ -121,7 +121,7 @@ export default class CommandRequest {
    *
    * @private
    * @returns {(IPropsType | void)}
-   * @memberof Request
+   * @memberof CommandRequest
    */
   private _filterProps(): IPropsType | void {
     const splits = this.msg.content.split(' ')
@@ -163,7 +163,7 @@ export default class CommandRequest {
    *
    * @private
    * @returns
-   * @memberof Request
+   * @memberof CommandRequest
    */
   private _getNonPrefixCommand() {
     const command = Commands.includesCommand(this.msg.content)
@@ -179,7 +179,7 @@ export default class CommandRequest {
    * @private
    * @param {string[]} splits
    * @returns
-   * @memberof Request
+   * @memberof CommandRequest
    */
   private _getAtsParams(splits: string[]) {
     // starts props
@@ -215,7 +215,7 @@ export default class CommandRequest {
    * @param {string[]} splits
    * @param {number[]} i
    * @returns
-   * @memberof Request
+   * @memberof CommandRequest
    */
   private _getRoleAts(split: string, ats: Iat[], splits: string[], i: number[]) {
     if (!this._rolesRegexGlobal.test(split)) return false
@@ -240,7 +240,7 @@ export default class CommandRequest {
    * @param {string[]} splits
    * @param {number[]} i
    * @returns
-   * @memberof Request
+   * @memberof CommandRequest
    */
   private _getAts(split: string, ats: Iat[], splits: string[], i: number[]) {
     if (!this._atsRegexGlobal.test(split)) return false
@@ -270,7 +270,7 @@ export default class CommandRequest {
    * @param {string[]} splits
    * @param {number[]} i
    * @returns
-   * @memberof Request
+   * @memberof CommandRequest
    */
   private _getParams(split: string, params: IIndexObj, splits: string[], i: number[]) {
     const param = split.split(Commands.separator)
