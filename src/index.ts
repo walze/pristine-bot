@@ -1,11 +1,10 @@
 process.setMaxListeners(0)
 
 import './bot/commands/barrel'
-import './database/commands/barrel'
 
 import Request from './bot/classes/Request'
 import WordsMod from './database/classes/Balance'
-import client from './client'
+import client from './setup'
 import Performances from './bot/classes/Performances'
 
 client.on('message', (msg) => {
