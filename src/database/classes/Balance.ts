@@ -3,11 +3,26 @@ import { Bad as BadWords } from '../balance/bad'
 import { Message } from 'discord.js'
 import { isArray } from 'util'
 import { User } from '../db'
-import Request from '../../bot/classes/Request';
+import CommandRequest from '../../bot/classes/Request';
 import ReplyError from '../../bot/helpers/ReplyError';
 
+/**
+ * Checks good and bad words on a string, user gets money of it's good and loses if it's bad
+ *
+ * @export
+ * @class WordsMod
+ */
 export default class WordsMod {
 
+  /**
+   * Gets wallet
+   *
+   * @static
+   * @param {string} username
+   * @param {string} discriminator
+   * @returns {PromiseLike<any>} User Model
+   * @memberof WordsMod
+   */
   public static getWallet(username: string, discriminator: string): PromiseLike<any> {
     return User.find({
       where: {
@@ -25,9 +40,15 @@ export default class WordsMod {
   public readonly shouldEmit: boolean = false
   public money = 0
   public interval = 2000
-  private request: () => Request
+  private request: () => CommandRequest
 
-  constructor(request: Request) {
+  /**
+   * Creates an instance of WordsMod.
+   * @param {CommandRequest} request
+   * @memberof WordsMod
+   */
+  constructor(request: CommandRequest) {
+    // Did it this way so i won't have the 1k lines property on console
     this.request = () => request
 
     const text = this.request().msg.content
@@ -48,6 +69,11 @@ export default class WordsMod {
       this.shouldEmit = true
   }
 
+  /**
+   * Replies and saves to DB
+   *
+   * @memberof WordsMod
+   */
   public emit() {
     if (!this.shouldEmit) return
 
@@ -59,6 +85,12 @@ export default class WordsMod {
     }
   }
 
+  /**
+   * Replies to author of they said a good or bad word
+   *
+   * @private
+   * @memberof WordsMod
+   */
   private _reply() {
     this.request().msg.channel.send(this.text).then(message => {
       let singleMessage = message as Message
@@ -70,6 +102,13 @@ export default class WordsMod {
     })
   }
 
+  /**
+   * creates or updates User on DB
+   *
+   * @private
+   * @returns
+   * @memberof WordsMod
+   */
   private async _saveDB() {
     const username = this.request().msg.author.username
     const discriminator = this.request().msg.author.discriminator
@@ -91,6 +130,15 @@ export default class WordsMod {
     ).then(() => console.log(`Updated User: ${username}#${discriminator}`))
   }
 
+  /**
+   * creates new entry on DB
+   *
+   * @private
+   * @param {string} username
+   * @param {string} discriminator
+   * @returns
+   * @memberof WordsMod
+   */
   private async _newEntry(username: string, discriminator: string) {
 
     console.log(`Creating User: ${username}#${discriminator}`)
@@ -104,6 +152,14 @@ export default class WordsMod {
     })
   }
 
+  /**
+   * Finds good and bad words
+   *
+   * @private
+   * @param {string} text
+   * @returns
+   * @memberof WordsMod
+   */
   private _find(text: string) {
     const words = text.split(' ')
 

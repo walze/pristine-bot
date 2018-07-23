@@ -1,6 +1,6 @@
-import Request from "./bot/classes/Request";
+import CommandRequest from "./bot/classes/Request";
 
-export type actionFunction = (request: Request) => Promise<any>
+export type actionFunction = (request: CommandRequest) => Promise<any>
 
 export interface IImgurResponse {
   id: string,

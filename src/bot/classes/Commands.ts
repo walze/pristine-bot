@@ -5,6 +5,12 @@ import Action from './Action';
 
 const event = new Events.EventEmitter()
 
+/**
+ * Handles all bot's commands
+ *
+ * @export
+ * @class Commands
+ */
 export default class Commands {
 
   public static declarations: Command[] = []
@@ -15,20 +21,52 @@ export default class Commands {
   public static readonly events = event.eventNames()
   public static readonly event = event
 
+  /**
+   *
+   *
+   * @static
+   * @param {string} name
+   * @returns
+   * @memberof Commands
+   */
   public static findEvent(name: string) {
     return this.events
       .find(e => isString(e) ? name.includes(e) : false)
       || ''
   }
 
+  /**
+   * Checks if text contains any commands
+   *
+   * @static
+   * @param {string} text
+   * @returns
+   * @memberof Commands
+   */
   public static includesCommand(text: string) {
     return this.declarations.find((cmd) => text.includes(cmd.name))
   }
 
+  /**
+   * Adds command to bot
+   *
+   * @static
+   * @param {string} name
+   * @param {Action} action
+   * @memberof Commands
+   */
   public static add(name: string, action: Action) {
     this.declarations.push(new Command(name, action))
   }
 
+  /**
+   * Throws if not found
+   *
+   * @static
+   * @param {string} name
+   * @returns
+   * @memberof Commands
+   */
   public static find(name: string) {
     const found = this.declarations.find(cmd => cmd.name === name)
 
@@ -37,6 +75,14 @@ export default class Commands {
     return found
   }
 
+  /**
+   * Logs all commands
+   *
+   * @static
+   * @param {number} [everyX=3] Breaks line after logging X commands
+   * @returns
+   * @memberof Commands
+   */
   public static log(everyX: number = 3) {
     console.log(`Loaded ${this.declarations.length} Commands`)
 

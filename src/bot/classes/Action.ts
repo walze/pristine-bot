@@ -1,5 +1,5 @@
 import { actionFunction } from '../../types';
-import Request from './Request';
+import CommandRequest from './Request';
 import { Requirements } from './Requirements';
 
 export default class Action {
@@ -16,7 +16,7 @@ export default class Action {
     this.required = new Requirements(reqment)
   }
 
-  public run(req: Request) {
+  public run(req: CommandRequest) {
     const ran = this._action(req)
 
     if (!(ran instanceof Promise)) {

@@ -1,9 +1,17 @@
 import { log } from 'console';
 import { RichEmbedOptions } from 'discord.js';
-import Request from '../classes/Request';
+import CommandRequest from '../classes/Request';
 import { mapObj } from './obj_array';
 
-export default function ReplyError(req: Request, err: Error) {
+/**
+ * If any Errors occur during a request, it replies to request author
+ *
+ * @export
+ * @param {CommandRequest} req
+ * @param {Error} err
+ * @returns
+ */
+export default function ReplyError(req: CommandRequest, err: Error) {
   log(err)
   req.log(true)
 

@@ -1,17 +1,31 @@
 import Action from './Action'
 import Commands from "./Commands"
-import Request from "./Request"
+import CommandRequest from "./Request"
 import log from "../helpers/logger"
 import { mapObj } from '../helpers/obj_array'
 import { isArray } from 'util'
 import ReplyError from '../helpers/ReplyError'
 
+/**
+ *
+ *
+ * @export
+ * @class Command
+ */
 export default class Command {
 
+  /**
+   * Creates an instance of Command.
+   * @param {string} name What the user will have to type to trigger
+   * @param {Action} action What command will do
+   * @memberof Command
+   */
   constructor(public name: string, public action: Action) {
 
-    Commands.event.on(this.name, (req: Request) => {
+    Commands.event.on(this.name, (req: CommandRequest) => {
+
       log(`|| running "${req.msg.author.username}'s" command "${req.command}" at "${req.msg.guild.name}"...`)
+
       try {
         this._checkRequirements(req)
         this._run(req)
@@ -23,10 +37,20 @@ export default class Command {
 
   }
 
-  private async _run(req: Request) {
-    return await req.msg.channel.send('*loading your request... >//<*')
+  /**
+   * Runs action
+   *
+   * @private
+   * @param {CommandRequest} req
+   * @returns
+   * @memberof Command
+   */
+  private async _run(req: CommandRequest) {
+    // Sends loading message, it's deleted after run
+    return await req.msg.channel.send('*processing... >//<*')
       .then(async loading => {
         try {
+          // waits from action to run
           const result = await this.action.run(req)
 
           if (isArray(loading)) loading[0].delete()
@@ -39,7 +63,14 @@ export default class Command {
       })
   }
 
-  private _checkRequirements(req: Request): void {
+  /**
+   * Checks action requirements. Throws error if misses any requirements
+   *
+   * @private
+   * @param {CommandRequest} req
+   * @memberof Command
+   */
+  private _checkRequirements(req: CommandRequest): void {
     let errorString = ''
 
     if (this.action.required.prefix === req.hasPrefix) {

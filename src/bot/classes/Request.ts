@@ -5,7 +5,7 @@ import { Iat } from "../../types"
 import Commands from "./Commands"
 
 // s-debug argument-value
-// Eg. s-debug event-MEMBER_ADD_BAN amount-5 @wiva#9996
+// Eg. s-debug event=MEMBER_ADD_BAN amount=5 @wiva#9996
 // params.argument will equals to value
 
 export interface ICommandInfoType {
@@ -20,7 +20,11 @@ export interface IPropsType {
   ats: Iat[];
 }
 
-export default class Request {
+/**
+ * Creates a command request
+ *
+ */
+export default class CommandRequest {
 
   public command: string | null = null
   public text: string | null = null
@@ -41,6 +45,13 @@ export default class Request {
     this._setProperties(props)
   }
 
+  /**
+   * Throws if not found
+   *
+   * @param {number} pos
+   * @returns {Iat}
+   * @memberof Request
+   */
   public getAt(pos: number): Iat {
     const found = this.ats.find((item, i) => i === pos && item.type === 'AT')
     if (!found) throw new Error('@ not found')
@@ -48,6 +59,13 @@ export default class Request {
     return found
   }
 
+  /**
+   * Throws if not found
+   *
+   * @param {number} pos
+   * @returns {Iat}
+   * @memberof Request
+   */
   public getAtRole(pos: number): Iat {
     const found = this.ats.find((item, i) => i === pos && item.type === 'ROLE')
     if (!found) throw new Error('Role @ not found')
@@ -55,6 +73,14 @@ export default class Request {
     return found
   }
 
+  /**
+   * Logs Request instance
+   *
+   * @param {boolean} [logBool] Logs to console if true
+   * @param {...any[]} args Additional logs
+   * @returns {object} Copy of Request
+   * @memberof Request
+   */
   public log(logBool?: boolean, ...args: any[]): object {
     const filtered: any = {}
 
@@ -68,10 +94,20 @@ export default class Request {
     return filtered
   }
 
+  /**
+   * Emits command request
+   */
   public emit() {
     Commands.event.emit(this.command!, this)
   }
 
+  /**
+   * Sets all props of this
+   *
+   * @private
+   * @param {IPropsType} props
+   * @memberof Request
+   */
   private _setProperties(props: IPropsType) {
     this.command = props.command.name
     this.hasPrefix = props.command.hasPrefix
@@ -80,6 +116,13 @@ export default class Request {
     this.ats = props.ats
   }
 
+  /**
+   * Gets props
+   *
+   * @private
+   * @returns {(IPropsType | void)}
+   * @memberof Request
+   */
   private _filterProps(): IPropsType | void {
     const splits = this.msg.content.split(' ')
 
@@ -101,7 +144,7 @@ export default class Request {
     splits.splice(0, 1)
 
     // gets props
-    const { params, ats } = this._getProps(splits)
+    const { params, ats } = this._getAtsParams(splits)
 
     // joins remaining splits
     const filteredText = splits.filter(el => !!el).map(split => split.trim())
@@ -115,6 +158,13 @@ export default class Request {
     }
   }
 
+  /**
+   * Searches on commands if the text contains any commands that doesn't require prefix
+   *
+   * @private
+   * @returns
+   * @memberof Request
+   */
   private _getNonPrefixCommand() {
     const command = Commands.includesCommand(this.msg.content)
 
@@ -124,7 +174,14 @@ export default class Request {
     return command.name
   }
 
-  private _getProps(splits: string[]) {
+  /**
+   *
+   * @private
+   * @param {string[]} splits
+   * @returns
+   * @memberof Request
+   */
+  private _getAtsParams(splits: string[]) {
     // starts props
     const params: IIndexObj = {}
     const ats: Iat[] = []
@@ -149,6 +206,17 @@ export default class Request {
     }
   }
 
+  /**
+   *
+   *
+   * @private
+   * @param {string} split
+   * @param {Iat[]} ats
+   * @param {string[]} splits
+   * @param {number[]} i
+   * @returns
+   * @memberof Request
+   */
   private _getRoleAts(split: string, ats: Iat[], splits: string[], i: number[]) {
     if (!this._rolesRegexGlobal.test(split)) return false
 
@@ -163,6 +231,17 @@ export default class Request {
     return true
   }
 
+  /**
+   *
+   *
+   * @private
+   * @param {string} split
+   * @param {Iat[]} ats
+   * @param {string[]} splits
+   * @param {number[]} i
+   * @returns
+   * @memberof Request
+   */
   private _getAts(split: string, ats: Iat[], splits: string[], i: number[]) {
     if (!this._atsRegexGlobal.test(split)) return false
 
@@ -182,6 +261,17 @@ export default class Request {
     return true
   }
 
+  /**
+   *
+   *
+   * @private
+   * @param {string} split
+   * @param {IIndexObj} params
+   * @param {string[]} splits
+   * @param {number[]} i
+   * @returns
+   * @memberof Request
+   */
   private _getParams(split: string, params: IIndexObj, splits: string[], i: number[]) {
     const param = split.split(Commands.separator)
 

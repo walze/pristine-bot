@@ -22,9 +22,23 @@ export class Performance {
   }
 }
 
+/**
+ * Used to make Performance Tests
+ *
+ * @export
+ * @class Performances
+ */
 export default class Performances {
   public static tests: Performance[] = []
 
+  /**
+   * Starts a performance test
+   *
+   * @static
+   * @param {string} name
+   * @returns
+   * @memberof Performances
+   */
   public static start(name: string) {
     const found = this.tests.find(test => test.name === name)
 
@@ -39,6 +53,14 @@ export default class Performances {
     return found
   }
 
+  /**
+   * Finds a perf test, errors if not found
+   *
+   * @static
+   * @param {string} name
+   * @returns {Performance}
+   * @memberof Performances
+   */
   public static find(name: string): Performance {
     const test = this.tests.find(item => item.name === name)
 
