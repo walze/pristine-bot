@@ -84,7 +84,7 @@ export default class Commands {
    * @memberof Commands
    */
   public static log(everyX: number = 3) {
-    console.log(`Loaded ${this.declarations.length} Commands`)
+    console.log(`\nLoaded ${this.declarations.length} Commands`)
 
     let string = ''
 

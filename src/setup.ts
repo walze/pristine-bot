@@ -12,7 +12,7 @@ client.on('ready', () => {
 
   Commands.log()
 
-  log('\nBot Ready\n')
+  log('Bot Ready\n')
 })
 
 // Error Handling
