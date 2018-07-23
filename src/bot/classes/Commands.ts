@@ -16,11 +16,9 @@ export default class Commands {
   public static readonly event = event
 
   public static findEvent(name: string) {
-    const found = this.event.eventNames().find((e) => {
-      return isString(e) ? name.includes(e) : false
-    })
-
-    return found ? found : ''
+    return this.events
+      .find(e => isString(e) ? name.includes(e) : false)
+      || ''
   }
 
   public static includesCommand(text: string) {
@@ -40,7 +38,7 @@ export default class Commands {
   }
 
   public static log(everyX: number = 3) {
-    console.log(`Listening to ${this.declarations.length} Commands`)
+    console.log(`Loaded ${this.declarations.length} Commands`)
 
     let string = ''
 
