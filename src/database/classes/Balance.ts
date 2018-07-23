@@ -8,13 +8,13 @@ import ReplyError from '../../bot/helpers/ReplyError';
 
 export default class GoodOrBad {
 
-  public static getWallet(username: string, discriminator: string): Promise<any> {
+  public static getWallet(username: string, discriminator: string): PromiseLike<any> {
     return User.find({
       where: {
         username,
         discriminator,
       },
-    }) as any
+    })
   }
 
   public readonly text: string = ''
