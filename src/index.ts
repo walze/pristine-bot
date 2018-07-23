@@ -1,11 +1,11 @@
 process.setMaxListeners(0)
 
-import './bot/commands/barrel'
-
 import CommandRequest from './bot/classes/Request'
 import WordsMod from './database/classes/Balance'
 import client from './setup'
 import Performances from './bot/classes/Performances'
+
+import './bot/commands/barrel'
 
 client.on('message', (msg) => {
   // starts performance test for everything
