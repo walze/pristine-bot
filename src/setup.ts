@@ -9,10 +9,11 @@ import config from '../config.json'
 client.login(config.token)
 client.on('ready', () => {
   client.user.setActivity('s-help')
+
+  Commands.log()
+
   log('\nBot Ready\n')
 })
-
-Commands.log()
 
 // Error Handling
 process.on('unhandledRejection', (reason, promise) => {

@@ -14,10 +14,10 @@ export interface ICommandInfoType {
 }
 
 export interface IPropsType {
-  command: ICommandInfoType;
-  params: IIndexObj;
-  text: string;
-  ats: Iat[];
+  command: ICommandInfoType
+  params: IIndexObj
+  text: string
+  ats: Iat[]
 }
 
 /**
@@ -38,6 +38,11 @@ export default class CommandRequest {
   private readonly _rolesRegexGlobal = new RegExp(`<@&(\\d+)>`, 'g')
   // private readonly _rolesRegex = new RegExp(`<@&(\\d+)>`)
 
+  /**
+   * Gets and sets props
+   * @param {Message} msg
+   * @memberof CommandRequest
+   */
   constructor(public readonly msg: Message) {
     const props = this._filterProps()
     if (!props || !props.command.name) return
@@ -150,12 +155,7 @@ export default class CommandRequest {
     const filteredText = splits.filter(el => !!el).map(split => split.trim())
     const text = filteredText.join(' ')
 
-    return {
-      ats,
-      command,
-      params,
-      text,
-    }
+    return { ats, command, params, text }
   }
 
   /**
@@ -186,101 +186,82 @@ export default class CommandRequest {
     const params: IIndexObj = {}
     const ats: Iat[] = []
 
-    // using array to pass reference so i won't have to do i = func()
-    const i = [0];
+    // using object to pass reference so i won't have to do i = func()
+    const indexRef = { index: 0 }
 
     // get props and remove them from splits
-    while (i[0] < splits.length) {
-      const split = splits[i[0]];
+    while (indexRef.index < splits.length) {
+      const split = splits[indexRef.index]
 
-      this._getParams(split, params, splits, i);
-      this._getAts(split, ats, splits, i);
-      this._getRoleAts(split, ats, splits, i);
+      this._getParams(split, params, splits, indexRef)
+      this._getAts(split, ats, splits, indexRef)
 
-      i[0]++;
+      indexRef.index++
     }
 
-    return {
-      ats,
-      params,
-    }
+    return { ats, params }
   }
 
   /**
-   *
+   * Gets Ats, decrement from index and splice from splits
    *
    * @private
    * @param {string} split
    * @param {Iat[]} ats
    * @param {string[]} splits
-   * @param {number[]} i
+   * @param {{ index: number }} indexRef
    * @returns
    * @memberof CommandRequest
    */
-  private _getRoleAts(split: string, ats: Iat[], splits: string[], i: number[]) {
-    if (!this._rolesRegexGlobal.test(split)) return false
+  private _getAts(split: string, ats: Iat[], splits: string[], indexRef: { index: number }) {
+    if (this._rolesRegexGlobal.test(split)) {
 
-    ats.push({
-      id: split.replace(/<@&!?/g, '').replace(/>/g, ''),
-      tag: split,
-      type: 'ROLE',
-    })
-    splits.splice(i[0], 1)
-    i[0]--
+      ats.push({
+        id: split.replace(/<@&!?/g, '').replace(/>/g, ''),
+        tag: split,
+        type: 'ROLE',
+      })
 
-    return true
+      splits.splice(indexRef.index, 1)
+      indexRef.index--
+
+    } else if (this._atsRegexGlobal.test(split)) {
+
+      // const match = split.match(this._atsRegexGlobal)
+      const match2 = split.match(this._atsRegex)
+
+      if (!match2) return false
+
+      ats.push({
+        id: match2[1],
+        tag: split,
+        type: 'AT',
+      })
+
+      splits.splice(indexRef.index, 1)
+      indexRef.index--
+    }
   }
 
   /**
-   *
-   *
-   * @private
-   * @param {string} split
-   * @param {Iat[]} ats
-   * @param {string[]} splits
-   * @param {number[]} i
-   * @returns
-   * @memberof CommandRequest
-   */
-  private _getAts(split: string, ats: Iat[], splits: string[], i: number[]) {
-    if (!this._atsRegexGlobal.test(split)) return false
-
-    const match = split.match(this._atsRegexGlobal)
-    const match2 = split.match(this._atsRegex)
-
-    if (!match || !match2) return false
-
-    ats.push({
-      id: match2[1],
-      tag: split,
-      type: 'AT',
-    })
-    splits.splice(i[0], 1)
-    i[0]--
-
-    return true
-  }
-
-  /**
-   *
+   * Gets params/arguments
    *
    * @private
    * @param {string} split
    * @param {IIndexObj} params
    * @param {string[]} splits
-   * @param {number[]} i
+   * @param {number[]} indexRef
    * @returns
    * @memberof CommandRequest
    */
-  private _getParams(split: string, params: IIndexObj, splits: string[], i: number[]) {
+  private _getParams(split: string, params: IIndexObj, splits: string[], indexRef: { index: number }) {
     const param = split.split(Commands.separator)
 
-    if (!param[1]) return false
+    if (!param[1]) return
 
     params[param[0]] = param[1]
-    splits.splice(i[0], 1)
-    i[0]--
+    splits.splice(indexRef.index, 1)
+    indexRef.index--
 
-    return true
   }
 }

@@ -10,6 +10,13 @@ export class Performance {
     this.t0 = performance.now()
   }
 
+  /**
+   *
+   *
+   * @param {number} [breaks=0]
+   * @returns
+   * @memberof Performance
+   */
   public end(breaks: number = 0) {
     const diff = Math.round((performance.now() - this.t0) * 1e2) / 1e2
     let string = `|| ${this.name} ran in ${diff} ms`;
