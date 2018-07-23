@@ -1,12 +1,12 @@
 import Action from "../../../bot/classes/Action";
 import Commands from '../../../bot/classes/Commands';
-import GoodOrBad from '../../../database/classes/Balance';
+import WordsMod from '../../../database/classes/Balance';
 
 const wallet = new Action(
   { text: false },
 
   async req => {
-    const user = await GoodOrBad.getWallet(req.msg.author.username, req.msg.author.discriminator)
+    const user = await WordsMod.getWallet(req.msg.author.username, req.msg.author.discriminator)
 
     if (!user) return req.msg.reply('you have no wallet yet. Try saying something nice so I can make you one.')
 

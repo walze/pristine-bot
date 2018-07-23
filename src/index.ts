@@ -4,7 +4,7 @@ import './bot/commands/barrel'
 import './database/commands/barrel'
 
 import Request from './bot/classes/Request'
-import GoodOrBad from './database/classes/Balance'
+import WordsMod from './database/classes/Balance'
 import client from './client'
 import Performances from './bot/classes/Performances'
 
@@ -27,8 +27,8 @@ client.on('message', (msg) => {
     Performances.find('command').end()
   }
 
-  const goodbad = new GoodOrBad(req)
-  goodbad.emit()
+  const mod = new WordsMod(req)
+  mod.emit()
 
   if (req.command)
     Performances.find('all').end(2)

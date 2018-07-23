@@ -6,7 +6,7 @@ import { User } from '../db'
 import Request from '../../bot/classes/Request';
 import ReplyError from '../../bot/helpers/ReplyError';
 
-export default class GoodOrBad {
+export default class WordsMod {
 
   public static getWallet(username: string, discriminator: string): PromiseLike<any> {
     return User.find({
