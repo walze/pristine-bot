@@ -16,5 +16,10 @@
         "max-line-length": false,
         "max-classes-per-file": false
     },
-    "rulesDirectory": []
+    "rulesDirectory": [],
+    "linterOptions": {
+        "exclude": [
+            "./config.json"
+        ]
+    }
 }

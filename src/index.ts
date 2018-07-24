@@ -6,16 +6,12 @@ import client from './setup'
 import Performances from './bot/classes/Performances'
 
 import './bot/commands/barrel'
-import ReplyError from './bot/helpers/ReplyError';
+import TryReply from './bot/helpers/ReplyError';
 import { Message } from 'discord.js';
 
 client.on('message', msg => {
   // Handles Internal Errors
-  try {
-    onMessage(msg)
-  } catch (err) {
-    ReplyError(msg, err)
-  }
+  TryReply(msg, () => onMessage(msg))
 })
 
 function onMessage(msg: Message) {
@@ -33,7 +29,7 @@ function onMessage(msg: Message) {
   const req = new CommandRequest(msg)
 
   // Handles Request Errors
-  try {
+  TryReply(req, () => {
 
     // if there is a command
     if (req.command) {
@@ -57,7 +53,5 @@ function onMessage(msg: Message) {
     if (req.command)
       Performances.find('all').end(2)
 
-  } catch (err) {
-    ReplyError(req, err)
-  }
+  })
 }
