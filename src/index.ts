@@ -11,6 +11,7 @@ import { Message } from 'discord.js'
 import Commands from './bot/classes/Commands';
 
 client.on('message', async msg => {
+
   // Handles Internal Errors
   try {
     // starts performance test for everything
@@ -23,7 +24,7 @@ client.on('message', async msg => {
     // ends p-test of all but gets time only
     const t3 = Performances.find('all').end(false)
 
-    console.log('|| everything ran on', times + t3, 'ms \n')
+    console.log('|| everything ran in', times + t3, 'ms \n')
   } catch (err) {
     ReplyError(msg, err)
   }
@@ -49,10 +50,10 @@ async function onMessage(msg: Message) {
 
     // if there is a command
     if (req.command) {
+      console.log('\n')
+
       // ends request p-test
       t1 = Performances.find('request').end()
-
-      console.log(`|| emiting "${req.command}" request...`)
 
       // Executes command
       await Commands.execute(req)
@@ -61,11 +62,17 @@ async function onMessage(msg: Message) {
       t2 = Performances.find('command').end()
     }
 
+    Performances.start('wordsmod')
+
     // creates wordsmod and emits it
     const mod = new WordsMod(req)
     mod.emit()
 
-    return [t1, t2].reduce((prev, curr) => prev + curr)
+    let t3 = 0
+    if (req.command)
+      t3 = Performances.find('wordsmod').end()
+
+    return [t1, t2, t3].reduce((prev, curr) => prev + curr)
   } catch (err) {
     ReplyError(req, err)
   }
