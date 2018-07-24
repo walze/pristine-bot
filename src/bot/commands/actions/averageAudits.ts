@@ -1,5 +1,5 @@
 import { GuildAuditLogs } from "discord.js";
-import { actionFunction, Iat } from "../../../types";
+import { actionBehaviour, Iat } from "../../../types";
 import { Requirements } from '../../classes/Requirements';
 import Action from '../../classes/Action';
 import Commands from '../../classes/Commands';
@@ -11,7 +11,7 @@ const requirements: Requirements = {
 
 const description = 'Shows average time between audits from a user'
 
-const action: actionFunction = req => {
+const action: actionBehaviour = req => {
   const at = req.getAt(0)
 
   if (!at.id) throw new Error('Invalid ID')

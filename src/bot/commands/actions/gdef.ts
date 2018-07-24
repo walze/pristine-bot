@@ -1,5 +1,5 @@
 import { Requirements } from "../../classes/Requirements";
-import { actionFunction } from '../../../types';
+import { actionBehaviour } from '../../../types';
 import Action from '../../classes/Action';
 import Axios from 'axios';
 import { JSDOM } from 'jsdom';
@@ -13,7 +13,7 @@ const requirements: Requirements = {
 
 const description = 'Give you the google definition of a word'
 
-const action: actionFunction = async req => {
+const action: actionBehaviour = async req => {
   return await Axios.get(`https://www.google.com.br/search?q=${req.text}+meaning`)
     .then(async res => {
       const dom = new JSDOM(res.data, {

@@ -169,7 +169,7 @@ export default class CommandRequest {
     const command = Commands.includesCommand(this.msg.content)
 
     if (!command) return null
-    if (command.action.required.prefix) return null
+    if (command.required.prefix) return null
 
     return command.name
   }

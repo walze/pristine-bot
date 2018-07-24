@@ -1,4 +1,4 @@
-import { actionFunction } from "../../../types"
+import { actionBehaviour } from "../../../types"
 import { Requirements } from '../../classes/Requirements'
 import Action from '../../classes/Action'
 import Commands from '../../classes/Commands'
@@ -10,7 +10,7 @@ const requirements: Requirements = {
 
 const description = 'Shows all commands or details a specific command'
 
-const action: actionFunction = async req => {
+const action: actionBehaviour = async req => {
   const embed = {
     embed: {
       author: {
@@ -21,7 +21,7 @@ const action: actionFunction = async req => {
       fields: Commands.declarations.map(cmd => {
         return {
           name: cmd.name,
-          value: cmd.action.description,
+          value: cmd.description,
         }
       }),
       timestamp: new Date(),
@@ -31,14 +31,14 @@ const action: actionFunction = async req => {
   if (req.text !== '') {
     const command = Commands.find(req.text!)
 
-    const args = mapObj(command.action.required, (value, prop) => {
+    const args = mapObj(command.required, (value, prop) => {
       if (prop === 'params')
         return mapObj(value, (required, arg) =>
           `${arg} | ${required ? '*needed*' : '*optional*'}\n`,
         ).join('')
     }).join('')
 
-    const mappedRequirements = mapObj(command.action.required, (value, prop) => {
+    const mappedRequirements = mapObj(command.required, (value, prop) => {
       if (value && prop !== 'params')
         return prop
 
@@ -51,7 +51,7 @@ const action: actionFunction = async req => {
     embed.embed.fields = [
       {
         name: 'Description',
-        value: command.action.description,
+        value: command.description,
       },
       {
         name: 'Required',

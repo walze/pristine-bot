@@ -1,5 +1,5 @@
 import { Requirements } from "../../classes/Requirements";
-import { actionFunction } from '../../../types';
+import { actionBehaviour } from '../../../types';
 import Action from '../../classes/Action';
 import { isArray } from 'util';
 import Commands from '../../classes/Commands';
@@ -16,7 +16,7 @@ const requirements: Requirements = {
 
 const description = 'Talk with me :3'
 
-const action: actionFunction = async req => {
+const action: actionBehaviour = async req => {
   return await new Promise((res) => {
 
     req.msg.channel.send('*typing...*').then(async afterTyping => {

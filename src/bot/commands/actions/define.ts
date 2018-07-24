@@ -1,5 +1,5 @@
 // import log from "../../helpers/logger";
-import { IDefinitionResponse, actionFunction } from "../../../types";
+import { IDefinitionResponse, actionBehaviour } from "../../../types";
 import * as wordnet from 'wordnet'
 import { Requirements } from '../../classes/Requirements';
 import Action from '../../classes/Action';
@@ -10,7 +10,7 @@ const requirements: Requirements = {
 
 const description = 'Shows the definition of a word ~~or not~~'
 
-const action: actionFunction = async req => {
+const action: actionBehaviour = async req => {
 
   return await new Promise((resolve, rej) => {
 

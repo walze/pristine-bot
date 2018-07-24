@@ -11,7 +11,7 @@ import { isArray } from 'util'
  * @export
  * @class Command
  */
-export default class Command {
+export default class Command extends Action {
 
   /**
    * Creates an instance of Command.
@@ -19,14 +19,15 @@ export default class Command {
    * @param {Action} action What command will do and some information about it
    * @memberof Command
    */
-  constructor(public name: string, public action: Action) {
+  constructor(public name: string, action: Action) {
+    super(action.required, action.behaviour, action.description)
 
     Commands.event.on(this.name, (req: CommandRequest) => {
 
       log(`|| running "${req.msg.author.username}'s" command "${req.command}" at "${req.msg.guild.name}"...`)
 
       this._checkRequirements(req)
-      this._run(req)
+      this._loadingThenRun(req)
     })
   }
 
@@ -38,12 +39,12 @@ export default class Command {
    * @returns
    * @memberof Command
    */
-  private async _run(req: CommandRequest) {
+  private async _loadingThenRun(req: CommandRequest) {
     // Sends loading message, it's deleted after run
     return await req.msg.channel.send('*processing... >//<*')
       .then(async loading => {
         // waits from action to run
-        const result = await this.action.run(req)
+        const result = await this.run(req)
 
         if (isArray(loading)) loading[0].delete()
         else loading.delete()
@@ -62,13 +63,13 @@ export default class Command {
   private _checkRequirements(req: CommandRequest) {
     let errorString = ''
 
-    if (this.action.required.prefix === req.hasPrefix) {
-      if ((this.action.required.text !== (req.text !== '')) && this.action.required.text)
+    if (this.required.prefix === req.hasPrefix) {
+      if ((this.required.text !== (req.text !== '')) && this.required.text)
         errorString += '\nThis command requires some text'
-      if ((this.action.required.ats !== (req.ats.length > 0)) && this.action.required.ats)
+      if ((this.required.ats !== (req.ats.length > 0)) && this.required.ats)
         errorString += '\nThis command requires @someone'
 
-      mapObj(this.action.required.params, (required, prop) => {
+      mapObj(this.required.params, (required, prop) => {
         if (!req.params[prop] && required)
           errorString += `\nArgument "${prop}" is required for this command`
       })
