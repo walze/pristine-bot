@@ -100,13 +100,6 @@ export default class CommandRequest {
   }
 
   /**
-   * Emits command request
-   */
-  public emit() {
-    return Commands.exec(this)
-  }
-
-  /**
    * Sets all props of this
    *
    * @private

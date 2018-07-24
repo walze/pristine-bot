@@ -8,6 +8,7 @@ import Performances from './bot/classes/Performances'
 import './bot/commands/barrel'
 import ReplyError from './bot/helpers/ReplyError'
 import { Message } from 'discord.js'
+import Commands from './bot/classes/Commands';
 
 client.on('message', async msg => {
   // Handles Internal Errors
@@ -53,8 +54,8 @@ async function onMessage(msg: Message) {
 
       console.log(`|| emiting "${req.command}" request...`)
 
-      // emits request and runs command
-      await req.emit()
+      // Executes command
+      await Commands.execute(req)
 
       // ends command p-test after run
       t2 = Performances.find('command').end()

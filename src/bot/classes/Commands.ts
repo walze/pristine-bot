@@ -15,10 +15,8 @@ export default class Commands {
   public static prefix = 's-'
   public static separator = '='
 
-  public static exec(req: CommandRequest) {
-    return this.declarations
-      .find(cmd => cmd.name === req.command)!
-      .run(req)
+  public static execute(req: CommandRequest) {
+    return this.find(req.command!).run(req)
   }
 
   /**
