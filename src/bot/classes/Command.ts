@@ -16,7 +16,7 @@ export default class Command {
   /**
    * Creates an instance of Command.
    * @param {string} name What the user will have to type to trigger
-   * @param {Action} action What command will do
+   * @param {Action} action What command will do and some information about it
    * @memberof Command
    */
   constructor(public name: string, public action: Action) {
@@ -59,7 +59,7 @@ export default class Command {
    * @param {CommandRequest} req
    * @memberof Command
    */
-  private _checkRequirements(req: CommandRequest): void {
+  private _checkRequirements(req: CommandRequest) {
     let errorString = ''
 
     if (this.action.required.prefix === req.hasPrefix) {
