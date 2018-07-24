@@ -6,17 +6,29 @@ import client from './setup'
 import Performances from './bot/classes/Performances'
 
 import './bot/commands/barrel'
-import TryReply from './bot/helpers/ReplyError';
-import { Message } from 'discord.js';
+import ReplyError from './bot/helpers/ReplyError'
+import { Message } from 'discord.js'
 
-client.on('message', msg => {
+client.on('message', async msg => {
   // Handles Internal Errors
-  TryReply(msg, () => onMessage(msg))
+  try {
+    // starts performance test for everything
+    Performances.start('all')
+
+    const times = await onMessage(msg)
+
+    if (!times || times < 1) return
+
+    // ends p-test of all but gets time only
+    const t3 = Performances.find('all').end(false)
+
+    console.log('|| everything ran on', times + t3, 'ms \n')
+  } catch (err) {
+    ReplyError(msg, err)
+  }
 })
 
-function onMessage(msg: Message) {
-  // starts performance test for everything
-  Performances.start('all')
+async function onMessage(msg: Message) {
 
   // returns if msg is from bot
   if (msg.author.id === msg.client.user.id) return
@@ -29,29 +41,31 @@ function onMessage(msg: Message) {
   const req = new CommandRequest(msg)
 
   // Handles Request Errors
-  TryReply(req, () => {
+  try {
+
+    let t1 = 0
+    let t2 = 0
 
     // if there is a command
     if (req.command) {
       // ends request p-test
-      Performances.find('request').end()
+      t1 = Performances.find('request').end()
 
       console.log(`|| emiting "${req.command}" request...`)
 
       // emits request and runs command
-      req.emit()
+      await req.emit()
 
       // ends command p-test after run
-      Performances.find('command').end()
+      t2 = Performances.find('command').end()
     }
 
     // creates wordsmod and emits it
     const mod = new WordsMod(req)
     mod.emit()
 
-    // ends p-test of all
-    if (req.command)
-      Performances.find('all').end(2)
-
-  })
+    return [t1, t2].reduce((prev, curr) => prev + curr)
+  } catch (err) {
+    ReplyError(req, err)
+  }
 }

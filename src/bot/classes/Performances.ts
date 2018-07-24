@@ -17,15 +17,16 @@ export class Performance {
    * @returns
    * @memberof Performance
    */
-  public end(breaks: number = 0) {
+  public end(breaks: number | false = 0) {
     const diff = Math.round((performance.now() - this.t0) * 1e2) / 1e2
     let string = `|| ${this.name} ran in ${diff} ms`;
 
     [...Array(breaks)].map(() => string += '\n')
 
-    console.log(string)
+    if (breaks !== false)
+      console.log(string)
 
-    return string
+    return diff
   }
 }
 

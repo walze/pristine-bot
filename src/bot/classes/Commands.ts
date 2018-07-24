@@ -1,9 +1,6 @@
-import * as Events from 'events'
-import { isString } from 'util';
-import Command from './Command';
-import Action from './Action';
-
-const event = new Events.EventEmitter()
+import Command from './Command'
+import Action from './Action'
+import CommandRequest from './Request'
 
 /**
  * Handles all bot's commands
@@ -18,21 +15,10 @@ export default class Commands {
   public static prefix = 's-'
   public static separator = '='
 
-  public static readonly events = event.eventNames()
-  public static readonly event = event
-
-  /**
-   *
-   *
-   * @static
-   * @param {string} name
-   * @returns
-   * @memberof Commands
-   */
-  public static findEvent(name: string) {
-    return this.events
-      .find(e => isString(e) ? name.includes(e) : false)
-      || ''
+  public static exec(req: CommandRequest) {
+    return this.declarations
+      .find(cmd => cmd.name === req.command)!
+      .run(req)
   }
 
   /**

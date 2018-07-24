@@ -1,5 +1,4 @@
 import Action from './Action'
-import Commands from "./Commands"
 import CommandRequest from "./Request"
 import log from "../helpers/logger"
 import { mapObj } from '../helpers/obj_array'
@@ -21,14 +20,20 @@ export default class Command extends Action {
    */
   constructor(public name: string, action: Action) {
     super(action.required, action.behaviour, action.description)
+  }
 
-    Commands.event.on(this.name, (req: CommandRequest) => {
+  /**
+   * Runs Command
+   *
+   * @param {CommandRequest} req
+   * @returns
+   * @memberof Command
+   */
+  public run(req: CommandRequest) {
+    log(`|| running "${req.msg.author.username}'s" command "${req.command}" at "${req.msg.guild.name}"...`)
 
-      log(`|| running "${req.msg.author.username}'s" command "${req.command}" at "${req.msg.guild.name}"...`)
-
-      this._checkRequirements(req)
-      this._loadingThenRun(req)
-    })
+    this._checkRequirements(req)
+    return this._loadingThenRun(req)
   }
 
   /**
@@ -39,12 +44,12 @@ export default class Command extends Action {
    * @returns
    * @memberof Command
    */
-  private async _loadingThenRun(req: CommandRequest) {
+  private _loadingThenRun(req: CommandRequest) {
     // Sends loading message, it's deleted after run
-    return await req.msg.channel.send('*processing... >//<*')
+    return req.msg.channel.send('*processing... >//<*')
       .then(async loading => {
         // waits from action to run
-        const result = await this.run(req)
+        const result = await this.runAction(req)
 
         if (isArray(loading)) loading[0].delete()
         else loading.delete()

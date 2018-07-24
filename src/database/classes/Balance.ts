@@ -39,7 +39,7 @@ export default class WordsMod {
   } | null = null
   public readonly shouldEmit: boolean = false
   public money = 0
-  public interval = 2000
+  public interval = 20000
   private request: () => CommandRequest
 
   /**

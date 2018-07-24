@@ -5,21 +5,6 @@ import { mapObj } from './obj_array';
 import Commands from '../classes/Commands';
 
 /**
- * Helper for Try/Catch. Runs ReplyError on catch.
- *
- * @export
- * @param {(CommandRequest | Message)} req
- * @param {() => void} cb
- */
-export default function TryReply(req: CommandRequest | Message, cb: () => void) {
-  try {
-    cb()
-  } catch (err) {
-    ReplyError(req, err)
-  }
-}
-
-/**
  * If any Errors occur, it replies to channel
  *
  * @export
@@ -27,7 +12,7 @@ export default function TryReply(req: CommandRequest | Message, cb: () => void) 
  * @param {Error} err
  * @returns
  */
-export function ReplyError(req: CommandRequest | Message, err: Error) {
+export default function ReplyError(req: CommandRequest | Message, err: Error) {
   trace(err)
 
   if (req instanceof Message) {

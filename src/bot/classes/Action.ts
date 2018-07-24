@@ -42,7 +42,7 @@ export default class Action {
    * @returns
    * @memberof Action
    */
-  protected run(req: CommandRequest) {
+  protected runAction(req: CommandRequest) {
     const ran = this.behaviour(req)
 
     if (!(ran instanceof Promise)) {

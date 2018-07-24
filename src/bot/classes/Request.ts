@@ -103,7 +103,7 @@ export default class CommandRequest {
    * Emits command request
    */
   public emit() {
-    Commands.event.emit(this.command!, this)
+    return Commands.exec(this)
   }
 
   /**
