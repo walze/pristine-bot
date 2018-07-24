@@ -70,17 +70,18 @@ export default class Commands {
   public static log(everyX: number = 3) {
     console.log(`\nLoaded ${this.declarations.length} Commands`)
 
-    let string = ''
+    const copy = [...this.declarations]
 
-    this.declarations.map((cmd, i) => {
-      if (i % everyX === 0 && i !== 0)
-        string += `| ${cmd.name} |\n`
-      else
-        string += `| ${cmd.name} | `
-    })
+    for (let i = 0; i < copy.length; i += everyX) {
 
-    console.log(string)
+      const sliced = copy
+        .slice(i, i + everyX)
+        .map(cmd => `[${cmd.name}]  `)
+        .join('')
 
-    return string
+      console.log(sliced)
+    }
+
+    console.log('\n')
   }
 }
