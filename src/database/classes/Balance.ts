@@ -1,10 +1,10 @@
-import { Good as GoodWords } from '../balance/good'
-import { Bad as BadWords } from '../balance/bad'
 import { Message } from 'discord.js'
 import { isArray } from 'util'
+
 import { User } from '../db'
-import CommandRequest from '../../bot/classes/Request';
-import ReplyError from '../../bot/helpers/ReplyError';
+import { Good as GoodWords } from '../balance/good'
+import { Bad as BadWords } from '../balance/bad'
+import CommandRequest from '../../bot/classes/Request'
 
 /**
  * Checks good and bad words on a string, user gets money of it's good and loses if it's bad
@@ -77,12 +77,8 @@ export default class WordsMod {
   public emit() {
     if (!this.shouldEmit) return
 
-    try {
-      this._reply()
-      this._saveDB()
-    } catch (err) {
-      ReplyError(this.request(), err)
-    }
+    this._reply()
+    this._saveDB()
   }
 
   /**

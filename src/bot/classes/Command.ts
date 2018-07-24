@@ -4,7 +4,6 @@ import CommandRequest from "./Request"
 import log from "../helpers/logger"
 import { mapObj } from '../helpers/obj_array'
 import { isArray } from 'util'
-import ReplyError from '../helpers/ReplyError'
 
 /**
  *
@@ -26,15 +25,9 @@ export default class Command {
 
       log(`|| running "${req.msg.author.username}'s" command "${req.command}" at "${req.msg.guild.name}"...`)
 
-      try {
-        this._checkRequirements(req)
-        this._run(req)
-      } catch (e) {
-        ReplyError(req, e)
-      }
-
+      this._checkRequirements(req)
+      this._run(req)
     })
-
   }
 
   /**
@@ -49,17 +42,13 @@ export default class Command {
     // Sends loading message, it's deleted after run
     return await req.msg.channel.send('*processing... >//<*')
       .then(async loading => {
-        try {
-          // waits from action to run
-          const result = await this.action.run(req)
+        // waits from action to run
+        const result = await this.action.run(req)
 
-          if (isArray(loading)) loading[0].delete()
-          else loading.delete()
+        if (isArray(loading)) loading[0].delete()
+        else loading.delete()
 
-          return result
-        } catch (err) {
-          return ReplyError(req, err)
-        }
+        return result
       })
   }
 

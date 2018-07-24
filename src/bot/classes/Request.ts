@@ -257,6 +257,8 @@ export default class CommandRequest {
   private _getParams(split: string, params: IIndexObj, splits: string[], indexRef: { index: number }) {
     const param = split.split(Commands.separator)
 
+    if (param.length > 2) throw new Error('Wrong argument syntax')
+
     if (!param[1]) return
 
     params[param[0]] = param[1]
