@@ -8,6 +8,7 @@ const options: Options = {
   port: 3306,
   dialect: 'mysql',
   logging: false,
+  operatorsAliases: false,
 }
 
 export const sql = new Sequelize(options)
