@@ -65,7 +65,7 @@ const action: actionFunction = async req => {
   }
 
   await req.msg.channel.send(embed)
-  return await req.msg.channel.send('Example: ``s-COMMAND TEXT @AT ARGUMENT-VALUE ``')
+  return await req.msg.channel.send(`Example: \`\`${Commands.prefix}COMMAND TEXT @someone ARGUMENT${Commands.separator}VALUE \`\``)
 }
 
 const help = new Action(requirements, action, description)
