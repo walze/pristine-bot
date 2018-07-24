@@ -5,7 +5,7 @@ import { mapObj } from './obj_array';
 import Commands from '../classes/Commands';
 
 /**
- * If any Errors occur during a request, it replies to request author
+ * If any Errors occur, it replies to channel
  *
  * @export
  * @param {CommandRequest} req
@@ -26,6 +26,12 @@ export default function ReplyError(req: CommandRequest | Message, err: Error) {
   )
 }
 
+/**
+ *
+ *
+ * @param {Error} err
+ * @returns
+ */
 function InternalErrorReply(err: Error) {
   return new RichEmbed({
     title: "Internal Error",
@@ -33,6 +39,13 @@ function InternalErrorReply(err: Error) {
   })
 }
 
+/**
+ *
+ *
+ * @param {CommandRequest} req
+ * @param {Error} err
+ * @returns
+ */
 function RequestErrorReply(req: CommandRequest, err: Error) {
   const description = `${err.message}. Try using **${Commands.prefix}help ${req.command}** cx'`
 

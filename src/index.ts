@@ -10,6 +10,7 @@ import ReplyError from './bot/helpers/ReplyError';
 import { Message } from 'discord.js';
 
 client.on('message', msg => {
+  // Handles Internal Errors
   try {
     onMessage(msg)
   } catch (err) {
@@ -31,6 +32,7 @@ function onMessage(msg: Message) {
   // creates new request
   const req = new CommandRequest(msg)
 
+  // Handles Request Errors
   try {
 
     // if there is a command
