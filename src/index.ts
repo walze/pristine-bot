@@ -24,7 +24,7 @@ client.on('message', async msg => {
     // ends p-test of all but gets time only
     const t3 = Performances.find('all').end(false)
 
-    console.log('|| everything ran in', times + t3, 'ms \n')
+    console.log(`|| everything ran in ${times + t3} ms \n`)
   } catch (err) {
     ReplyError(msg, err)
   }
