@@ -30,6 +30,9 @@ client.on('message', async msg => {
   }
 })
 
+/**
+ * Triggered on every message
+ */
 async function onMessage(msg: Message) {
 
   // returns if msg is from bot

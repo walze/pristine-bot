@@ -11,13 +11,13 @@ export class Performance {
   }
 
   /**
+   * Ends perf test, retuns time in ms
    *
-   *
-   * @param {number} [breaks=0]
-   * @returns
+   * @param {(number | false)} [breaks=0] doesn't log if false
+   * @returns {number}
    * @memberof Performance
    */
-  public end(breaks: number | false = 0) {
+  public end(breaks: number | false = 0): number {
     const diff = Math.round((performance.now() - this.t0) * 1e2) / 1e2
     let string = `|| ${this.name} ran in ${diff} ms`;
 
