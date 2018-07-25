@@ -38,9 +38,8 @@ async function onMessage(msg: Message) {
   // returns if msg is from bot
   if (msg.author.id === msg.client.user.id) return
 
-  // starts performance test for request and command
+  // starts performance test
   Performances.start('request')
-  Performances.start('command')
 
   // creates new request
   const req = new CommandRequest(msg)
@@ -58,6 +57,8 @@ async function onMessage(msg: Message) {
       // ends request p-test
       t1 = Performances.find('request').end()
 
+      Performances.start('command')
+      
       // Executes command
       await Commands.execute(req)
 
