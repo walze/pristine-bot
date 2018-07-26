@@ -7,6 +7,11 @@ const client = new Client()
 import config from '../config.json'
 
 client.login(config.token)
+
+// Restart
+client.on('error', () => client.login(config.token))
+client.on('disconnect', () => client.login(config.token))
+
 client.on('ready', () => {
   client.user.setActivity('s-help')
 

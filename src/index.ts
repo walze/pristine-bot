@@ -58,7 +58,7 @@ async function onMessage(msg: Message) {
       t1 = Performances.find('request').end()
 
       Performances.start('command')
-      
+
       // Executes command
       await Commands.execute(req)
 

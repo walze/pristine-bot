@@ -1,4 +1,5 @@
 .cache/
+.vs/
 builds/
 node_modules/
 config.json
