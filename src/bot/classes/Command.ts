@@ -2,7 +2,6 @@ import Action from './Action'
 import CommandRequest from "./Request"
 import log from "../helpers/logger"
 import { mapObj } from '../helpers/obj_array'
-import { isArray } from 'util'
 
 /**
  *
@@ -33,7 +32,7 @@ export default class Command extends Action {
     log(`|| running "${req.msg.author.username}'s" command "${req.command}" at "${req.msg.guild.name}"...`)
 
     this._checkRequirements(req)
-    return this._loadingThenRun(req)
+    return this._run(req)
   }
 
   /**
@@ -44,18 +43,11 @@ export default class Command extends Action {
    * @returns
    * @memberof Command
    */
-  private _loadingThenRun(req: CommandRequest) {
-    // Sends loading message, it's deleted after run
-    return req.msg.channel.send('*processing... >//<*')
-      .then(async loading => {
-        // waits from action to run
-        const result = await this.runAction(req)
+  private async _run(req: CommandRequest) {
+    // waits from action to run
+    const result = await this.runAction(req)
 
-        if (isArray(loading)) loading[0].delete()
-        else loading.delete()
-
-        return result
-      })
+    return result
   }
 
   /**
