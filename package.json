@@ -4,14 +4,12 @@
   "description": "",
   "main": "./builds/index.js",
   "scripts": {
-    "start": "concurrently \"npm run parcel-bot\" \"npm run bot\"",
-    "start:db": "concurrently \"npm run parcel-db\" \"npm run db\"",
+    "start": "concurrently \"npm run tscw\" \"npm run bot\"",
     "boot": "npm run build && node builds/index",
-    "build": "parcel build ./src/index.ts --target=node -d builds/dist",
+    "build": "npm run tsc",
     "bot": "nodemon builds/bot/index.js --inspect --trace-warnings --config nodemon.json",
-    "db": "nodemon builds/db/db.js --inspect --trace-warnings --config nodemon.json",
-    "parcel-db": "parcel ./src/database/db.ts --log-level 3 --target=node -d builds/db/",
-    "parcel-bot": "parcel ./src/index.ts --log-level 3 --target=node -d builds/bot/"
+    "tsc": "tsc",
+    "tscw": "tsc -w"
   },
   "author": "Wallace Fares",
   "license": "ISC",
