@@ -2,11 +2,11 @@
   "name": "pristine-bot",
   "version": "1.0.0",
   "description": "",
-  "main": "./builds/dist/index.js",
+  "main": "./builds/index.js",
   "scripts": {
     "start": "concurrently \"npm run parcel-bot\" \"npm run bot\"",
     "start:db": "concurrently \"npm run parcel-db\" \"npm run db\"",
-    "boot": "npm run build && node builds/dist/index",
+    "boot": "npm run build && node builds/index",
     "build": "parcel build ./src/index.ts --target=node -d builds/dist",
     "bot": "nodemon builds/bot/index.js --inspect --trace-warnings --config nodemon.json",
     "db": "nodemon builds/db/db.js --inspect --trace-warnings --config nodemon.json",
