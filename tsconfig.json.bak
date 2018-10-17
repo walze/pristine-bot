@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "resolveJsonModule": true,
+    "target": "es6",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "inlineSourceMap": true,
+    "outDir": "dist",
+    "noEmitOnError": true,
+    "rootDir": "./src",
+    "importHelpers": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "alwaysStrict": true,
+    "noUnusedLocals": true,
+    "noFallthroughCasesInSwitch": true,
+    "types": [
+      "node"
+    ],
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "allowSyntheticDefaultImports": true,
+    "sourceRoot": "./src",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+  },
+}

@@ -62,18 +62,15 @@ export default class Performances {
   }
 
   /**
-   * Finds a perf test, errors if not found
-   *
-   * @static
-   * @param {string} name
-   * @returns {Performance}
-   * @memberof Performances
+   * Ends a perf test, errors if not found
    */
-  public static find(name: string): Performance {
+  public static end(name: string, breaks: number | false = 0) {
     const test = this.tests.find(item => item.name === name)
 
-    if (test instanceof Performance)
-      return test
+    if (test) {
+      const time = test.end(breaks)
+      return time
+    }
 
     throw new Error('Test not found')
   }
