@@ -9,19 +9,12 @@ import CommandRequest from '../../bot/classes/Request'
 /**
  * Checks good and bad words on a string, user gets money of it's good and loses if it's bad
  *
- * @export
- * @class WordsMod
  */
 export default class WordsMod {
 
   /**
    * Gets wallet
    *
-   * @static
-   * @param {string} username
-   * @param {string} discriminator
-   * @returns {PromiseLike<any>} User Model
-   * @memberof WordsMod
    */
   public static getWallet(username: string, discriminator: string): PromiseLike<any> {
     return User.find({
@@ -34,9 +27,9 @@ export default class WordsMod {
 
   public readonly text: string = ''
   public readonly result: {
-    good: string | undefined,
-    bad: string | undefined,
-  } | null = null
+    good: string | undefined;
+    bad: string | undefined;
+  } | undefined = undefined
   public readonly shouldEmit: boolean = false
   public money = 0
   public interval = 20000
@@ -72,7 +65,6 @@ export default class WordsMod {
   /**
    * Replies and saves to DB
    *
-   * @memberof WordsMod
    */
   public emit() {
     if (!this.shouldEmit) return
@@ -84,26 +76,24 @@ export default class WordsMod {
   /**
    * Replies to author of they said a good or bad word
    *
-   * @private
-   * @memberof WordsMod
    */
   private _reply() {
-    this.request().msg.channel.send(this.text).then(message => {
-      let singleMessage = message as Message
+    this
+      .request().msg.channel
+      .send(this.text)
+      .then(message => {
+        let singleMessage = message as Message
 
-      if (isArray(message))
-        singleMessage = message[0]
+        if (isArray(message))
+          singleMessage = message[0]
 
-      setTimeout(() => singleMessage.delete(), this.interval)
-    })
+        setTimeout(() => singleMessage.delete(), this.interval)
+      })
   }
 
   /**
    * creates or updates User on DB
    *
-   * @private
-   * @returns
-   * @memberof WordsMod
    */
   private async _saveDB() {
     const username = this.request().msg.author.username
@@ -117,23 +107,20 @@ export default class WordsMod {
 
     const { dataValues } = res as any
 
-    User.update({
-      balance: this.result!.good ? dataValues.balance += 50 : dataValues.balance += -50,
-      goods: this.result!.good ? ++dataValues.goods : dataValues.goods,
-      bads: this.result!.bad ? ++dataValues.bads : dataValues.bads,
-    },
-                { where: { id: dataValues.id } },
-    ).then(() => console.log(`Updated User: ${username}#${discriminator}`))
+    User.update(
+      {
+        balance: this.result!.good ? dataValues.balance += 50 : dataValues.balance += -50,
+        goods: this.result!.good ? ++dataValues.goods : dataValues.goods,
+        bads: this.result!.bad ? ++dataValues.bads : dataValues.bads,
+      },
+      { where: { id: dataValues.id } },
+    )
+      .then(() => console.log(`Updated User: ${username}#${discriminator}`))
   }
 
   /**
    * creates new entry on DB
    *
-   * @private
-   * @param {string} username
-   * @param {string} discriminator
-   * @returns
-   * @memberof WordsMod
    */
   private async _newEntry(username: string, discriminator: string) {
 
@@ -152,7 +139,7 @@ export default class WordsMod {
    * Finds good and bad words
    *
    */
-  private _find(text: string) {
+  private _find = (text: string) => {
     const words = text.split(' ')
 
     const foundGood = words.find(word =>

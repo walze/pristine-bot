@@ -7,12 +7,8 @@ import Commands from '../classes/Commands';
 /**
  * If any Errors occur, it replies to channel
  *
- * @export
- * @param {CommandRequest} req
- * @param {Error} err
- * @returns
  */
-export default function ReplyError(req: CommandRequest | Message, err: Error) {
+export const ReplyError = (req: CommandRequest | Message, err: Error) => {
   trace(err)
 
   if (req instanceof Message) {
@@ -21,32 +17,21 @@ export default function ReplyError(req: CommandRequest | Message, err: Error) {
 
   req.log(true)
 
-  return req.msg.channel.send(``,
-                              { embed: RequestErrorReply(req, err) },
+  return req.msg.channel.send(
+    ``,
+    { embed: RequestErrorReply(req, err) },
   )
 }
 
-/**
- *
- *
- * @param {Error} err
- * @returns
- */
-function InternalErrorReply(err: Error) {
-  return new RichEmbed({
+export default ReplyError
+
+const InternalErrorReply = (err: Error) =>
+  new RichEmbed({
     title: "Internal Error",
     description: err.message,
   })
-}
 
-/**
- *
- *
- * @param {CommandRequest} req
- * @param {Error} err
- * @returns
- */
-function RequestErrorReply(req: CommandRequest, err: Error) {
+const RequestErrorReply = (req: CommandRequest, err: Error) => {
   const description = `${err.message}. Try using **${Commands.prefix}help ${req.command}** cx'`
 
   return new RichEmbed({

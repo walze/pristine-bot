@@ -2,20 +2,16 @@
 /**
  * Action requirements
  *
- * @export
- * @class Requirements
  */
 export class Requirements {
-  [key: string]: any
+  [key: string]: boolean | { [key: string]: boolean }
   public prefix = true
   public text = true
   public ats = false
-  public params?: { [key: string]: boolean } = {}
+  public params: { [key: string]: boolean } = {}
 
   /**
    * Creates an instance of Requirements.
-   * @param {Requirements} [required]
-   * @memberof Requirements
    */
   public constructor(required?: Requirements) {
     if (required)
