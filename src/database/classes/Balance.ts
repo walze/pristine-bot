@@ -47,7 +47,7 @@ export default class WordsMod {
    * @param {CommandRequest} request
    * @memberof WordsMod
    */
-  constructor(request: CommandRequest) {
+  public constructor(request: CommandRequest) {
     // Did it this way so i won't have the 1k lines property on console
     this.request = () => request
 
@@ -122,7 +122,7 @@ export default class WordsMod {
       goods: this.result!.good ? ++dataValues.goods : dataValues.goods,
       bads: this.result!.bad ? ++dataValues.bads : dataValues.bads,
     },
-      { where: { id: dataValues.id } },
+                { where: { id: dataValues.id } },
     ).then(() => console.log(`Updated User: ${username}#${discriminator}`))
   }
 
@@ -139,7 +139,7 @@ export default class WordsMod {
 
     console.log(`Creating User: ${username}#${discriminator}`)
 
-    return await User.create({
+    return User.create({
       username,
       discriminator,
       balance: this.result!.good ? 50 : -50,
@@ -151,10 +151,6 @@ export default class WordsMod {
   /**
    * Finds good and bad words
    *
-   * @private
-   * @param {string} text
-   * @returns
-   * @memberof WordsMod
    */
   private _find(text: string) {
     const words = text.split(' ')

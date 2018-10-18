@@ -13,8 +13,8 @@ const requirements: Requirements = {
 
 const description = 'Give you the google definition of a word'
 
-const action: actionBehaviour = async req => {
-  return await Axios.get(`https://www.google.com.br/search?q=${req.text}+meaning`)
+const action: actionBehaviour = async req =>
+  Axios.get(`https://www.google.com.br/search?q=${req.text}+meaning`)
     .then(async res => {
       const dom = new JSDOM(res.data, {
         contentType: "text/html",
@@ -40,21 +40,19 @@ const action: actionBehaviour = async req => {
             icon_url: req.msg.author.avatarURL,
           },
           title: "Google definitions on " + req.text,
-          fields: all.map((def, i) => {
-            return {
+          fields: all.map((def, i) =>
+            ({
               name: `#${i + 1}`,
               value: def,
-            }
-          }),
+            })),
           timestamp: new Date(),
         },
       }
 
       if (all.length < 1) throw new Error('Not Found 404\'d')
 
-      return await req.msg.channel.send(embed)
+      return req.msg.channel.send(embed)
     })
-}
 
 const gdef = new Action(requirements, action, description)
 Commands.add('gdef', gdef)

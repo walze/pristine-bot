@@ -15,7 +15,7 @@ const wallet = new Action(
       "You've said more bad things, hmpf!"
 
     return req.msg.channel.send(congrat,
-      {
+                                {
         embed: {
           title: "Wallet",
           fields: [

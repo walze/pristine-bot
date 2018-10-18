@@ -5,7 +5,7 @@ import { RichEmbedOptions } from 'discord.js';
 import Axios from 'axios';
 
 const debug = new Action({},
-  async req => {
+                         async req => {
     req.log(true)
 
     const embed: RichEmbedOptions = {
@@ -34,13 +34,13 @@ const debug = new Action({},
       ],
     }
 
-    return await req.msg.channel.send(``, { embed })
+    return req.msg.channel.send(``, { embed })
   },
-  'debug for dev~~s~~',
+                         'debug for dev~~s~~',
 )
 
 const image = new Action({},
-  async req => {
+                         async req => {
     req.msg.delete()
 
     if (req.text!.match(/https?:\/\//))
@@ -48,45 +48,44 @@ const image = new Action({},
     else
       return req.msg.channel.send('Invalid request')
   },
-  'Posts an image from a link',
+                         'Posts an image from a link',
 )
 
 const say = new Action({},
-  req => {
+                       req => {
     req.msg.delete()
     return req.msg.channel.send(`${req.text}`)
   },
-  'Bot says whatever you type',
+                       'Bot says whatever you type',
 )
 
 const thonkwot = new Action({ text: false },
-  req => {
+                            req => {
     req.msg.delete()
     return req.msg.channel.send('', { file: 'https://cdn.discordapp.com/emojis/409528321685061634.png' })
   },
-  ':thonkwot:',
+                            ':thonkwot:',
 )
 
 const roast = new Action({ text: false },
-  req => {
+                         req => {
     const at = req.ats[0]
 
     return Axios.get('https://insult.mattbas.org/api/insult/')
       .then(async res => {
         if (at)
-          return await req.msg.channel.send(`${at.tag}, ${res.data}`)
+          return req.msg.channel.send(`${at.tag}, ${res.data}`)
         else
-          return await req.msg.reply(res.data)
+          return req.msg.reply(res.data)
       })
   },
-  ':roasts:',
+                         ':roasts:',
 )
 
 const settings = new Action(
   { text: false },
-  req => {
-    return req.msg.channel.send(`Prefix ***${Commands.prefix}***\nSeparator ***${Commands.separator}***`)
-  },
+  req =>
+    req.msg.channel.send(`Prefix ***${Commands.prefix}***\nSeparator ***${Commands.separator}***`),
   'Shows prefix and separator',
 )
 

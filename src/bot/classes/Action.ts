@@ -24,7 +24,7 @@ export default class Action {
    * @param {string} [description='*none*'] What command will do
    * @memberof Action
    */
-  constructor(
+  public constructor(
     requirements: Requirements,
     public readonly behaviour: actionBehaviour,
     public readonly description: string = '*none*',

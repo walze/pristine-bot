@@ -13,8 +13,8 @@ const requirements: Requirements = {
 
 const description = 'Googles some text'
 
-const action: actionBehaviour = async req => {
-  return await Axios.get(`https://www.google.com.br/search?q=${req.text}`)
+const action: actionBehaviour = async req =>
+  Axios.get(`https://www.google.com.br/search?q=${req.text}`)
     .then(async res => {
       const dom = new JSDOM(res.data, {
         contentType: "text/html",
@@ -40,9 +40,8 @@ const action: actionBehaviour = async req => {
 
       const text = links.map(lk => `${lk}\n`)
 
-      return await req.msg.channel.send(text)
+      return req.msg.channel.send(text)
     })
-}
 
 const google = new Action(requirements, action, description)
 Commands.add('google', google)

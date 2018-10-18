@@ -16,8 +16,8 @@ const requirements: Requirements = {
 
 const description = 'Talk with me :3'
 
-const action: actionBehaviour = async req => {
-  return await new Promise((res) => {
+const action: actionBehaviour = async req =>
+  new Promise((res) => {
 
     req.msg.channel.send('*typing...*').then(async afterTyping => {
       bot.create(async (err: any, session: any) => {
@@ -35,7 +35,6 @@ const action: actionBehaviour = async req => {
     })
 
   })
-}
 
 const talk = new Action(requirements, action, description)
 

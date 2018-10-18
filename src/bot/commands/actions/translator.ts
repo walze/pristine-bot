@@ -15,15 +15,14 @@ const requirements: Requirements = {
 
 const description = 'Translates given text to ~~almost~~ any language ~~precision not guaranteed~~'
 
-const action: actionBehaviour = async request => {
-  return await translate(request.text, {
+const action: actionBehaviour = async request =>
+  translate(request.text, {
     from: switchText(request.params.from) || 'auto',
     to: switchText(request.params.to),
   }).then((res: Response) => {
     request.msg.channel.send(`${res.text}`)
     return res
   })
-}
 
 const translator = new Action(requirements, action, description)
 Commands.add('tl', translator)

@@ -1,5 +1,7 @@
-// tslint:disable-next-line:no-var-requires
-require('source-map-support').install();
+// tslint:disable:no-var-requires
+// tslint:disable:no-require-imports
+require('source-map-support')
+  .install()
 process.setMaxListeners(0)
 
 import CommandRequest from './bot/classes/Request'
@@ -7,6 +9,7 @@ import CommandRequest from './bot/classes/Request'
 import client from './setup'
 import Performances from './bot/classes/Performances'
 
+// tslint:disable-next-line:no-import-side-effect
 import './bot/commands/barrel'
 import ReplyError from './bot/helpers/ReplyError'
 import { Message } from 'discord.js'
@@ -35,7 +38,7 @@ client.on('message', async msg => {
 /**
  * Triggered on every message
  */
-async function onMessage(msg: Message) {
+const onMessage = async (msg: Message) => {
 
   // returns if msg is from bot
   if (msg.author.id === msg.client.user.id) return 0
@@ -81,6 +84,7 @@ async function onMessage(msg: Message) {
     return [t1, t2, t3].reduce((prev, curr) => prev + curr)
   } catch (err) {
     ReplyError(req, err)
+
     return 0
   }
 }

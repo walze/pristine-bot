@@ -7,9 +7,9 @@
  */
 export class Requirements {
   [key: string]: any
-  public prefix?: boolean = true
-  public text?: boolean = true
-  public ats?: boolean = false
+  public prefix = true
+  public text = true
+  public ats = false
   public params?: { [key: string]: boolean } = {}
 
   /**
@@ -17,7 +17,7 @@ export class Requirements {
    * @param {Requirements} [required]
    * @memberof Requirements
    */
-  constructor(required?: Requirements) {
+  public constructor(required?: Requirements) {
     if (required)
       for (const prop in required)
         this[prop] = required[prop]

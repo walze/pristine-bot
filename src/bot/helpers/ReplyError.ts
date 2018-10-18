@@ -22,7 +22,7 @@ export default function ReplyError(req: CommandRequest | Message, err: Error) {
   req.log(true)
 
   return req.msg.channel.send(``,
-    { embed: RequestErrorReply(req, err) },
+                              { embed: RequestErrorReply(req, err) },
   )
 }
 

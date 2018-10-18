@@ -1,17 +1,23 @@
 {
     "defaultSeverity": "warning",
     "extends": [
-        "tslint:recommended"
+        "tslint:all"
     ],
     "jsRules": {},
     "rules": {
         "semicolon": false,
         "quotemark": false,
+        "linebreak-style": false,
         "curly": false,
         "no-console": false,
         "arrow-parens": false,
         "variable-name": false,
         "ordered-imports": false,
+        "member-ordering": false,
+        "typedef": false,
+        "no-default-export": false,
+        "comment-format": false,
+        "strict-type-predicates": true,
         "object-literal-sort-keys": false,
         "max-line-length": false,
         "max-classes-per-file": false

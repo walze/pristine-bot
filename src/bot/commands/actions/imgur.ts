@@ -17,8 +17,8 @@ const description = 'Searches images on Imgur'
 // yes, i know
 const config = { client_id: "bebb4e6140bcb51" }
 
-const action: actionBehaviour = async req => {
-  return await Axios.get(`https://api.imgur.com/3/gallery/search/?q=${req.text}`, {
+const action: actionBehaviour = async req =>
+  Axios.get(`https://api.imgur.com/3/gallery/search/?q=${req.text}`, {
     headers: { Authorization: `Client-ID ${config.client_id}` },
   })
     .then(async res => {
@@ -53,10 +53,8 @@ const action: actionBehaviour = async req => {
 
       const text = `Album #${params.id + 1} out of ${filtered.length}\nImage #${params.image_id + 1} out of ${params.album.images.length} `
 
-      return await req.msg.channel.send(text, { embed })
+      return req.msg.channel.send(text, { embed })
     })
-
-}
 
 const imgur = new Action(requirements, action, description)
 Commands.add('imgur', imgur)
@@ -64,11 +62,10 @@ Commands.add('imgur', imgur)
 function filter(albums: IImgurResponse[]) {
   return albums
     .filter(album => album.images_count >= 1)
-    .map(album => {
-      return {
+    .map(album =>
+      ({
         title: album.title,
         description: album.description,
         images: album.images.map(img => img.link),
-      };
-    })
+      }))
 }

@@ -30,7 +30,7 @@ export default class CommandRequest {
   public text: string | null = null
   public ats: Iat[] = []
   public params: IIndexObj = {}
-  public hasPrefix: boolean = false
+  public hasPrefix = false
 
   private readonly _commandRegex = new RegExp(`^${Commands.prefix}(\\w+)`)
   private readonly _atsRegexGlobal = new RegExp(`<@!?(\\d+)>`, 'g')
@@ -43,7 +43,7 @@ export default class CommandRequest {
    * @param {Message} msg
    * @memberof CommandRequest
    */
-  constructor(public readonly msg: Message) {
+  public constructor(public readonly msg: Message) {
     const props = this._filterProps()
     if (!props || !props.command.name) return
 
@@ -198,13 +198,6 @@ export default class CommandRequest {
   /**
    * Gets Ats, decrement from index and splice from splits
    *
-   * @private
-   * @param {string} split
-   * @param {Iat[]} ats
-   * @param {string[]} splits
-   * @param {{ index: number }} indexRef
-   * @returns
-   * @memberof CommandRequest
    */
   private _getAts(split: string, ats: Iat[], splits: string[], indexRef: { index: number }) {
     if (this._rolesRegexGlobal.test(split)) {
@@ -223,7 +216,7 @@ export default class CommandRequest {
       // const match = split.match(this._atsRegexGlobal)
       const match2 = split.match(this._atsRegex)
 
-      if (!match2) return false
+      if (!match2) return
 
       ats.push({
         id: match2[1],

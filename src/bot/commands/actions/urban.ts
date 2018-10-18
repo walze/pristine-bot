@@ -9,14 +9,14 @@ const requirements: Requirements = {}
 
 const description = 'Searches text on Urban Dictionary'
 
-const action: actionBehaviour = async req => {
-  return await Axios
+const action: actionBehaviour = async req =>
+  Axios
     .get(`http://urbanscraper.herokuapp.com/search/${req.text}`)
     .then(async res => {
 
       const response: IUrbanResponse[] = res.data.slice(0, req.params.amount || 1)
 
-      if (!response) return await req.msg.reply('404\'d')
+      if (!response) return req.msg.reply('404\'d')
 
       const embed = {
         embed: {
@@ -32,9 +32,8 @@ const action: actionBehaviour = async req => {
         },
       }
 
-      return await req.msg.channel.send(embed)
+      return req.msg.channel.send(embed)
     })
-}
 
 const urban = new Action(requirements, action, description)
 

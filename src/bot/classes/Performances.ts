@@ -1,7 +1,7 @@
 import { performance } from 'perf_hooks';
 
 export class Performance {
-  constructor(
+  public constructor(
     public name: string,
     public t0: number,
   ) { }

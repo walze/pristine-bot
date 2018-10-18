@@ -10,9 +10,9 @@ const requirements: Requirements = {
 
 const description = 'Shows the definition of a word ~~or not~~'
 
-const action: actionBehaviour = async req => {
+const action: actionBehaviour = async req =>
 
-  return await new Promise((resolve, rej) => {
+  new Promise((resolve, rej) => {
 
     wordnet.lookup(req.text, async (err: any, defs: IDefinitionResponse[]) => {
 
@@ -25,12 +25,11 @@ const action: actionBehaviour = async req => {
             icon_url: req.msg.author.avatarURL,
           },
           title: "Definitions of " + req.text,
-          fields: defs.map((item, i) => {
-            return {
+          fields: defs.map((item, i) =>
+            ({
               name: `Definition #${i + 1}`,
               value: item.glossary,
-            }
-          }),
+            })),
           timestamp: new Date(),
         },
       }
@@ -38,8 +37,6 @@ const action: actionBehaviour = async req => {
       resolve(await req.msg.channel.send(embed))
     })
   })
-
-}
 
 const def = new Action(requirements, action, description)
 Commands.add('define', def)

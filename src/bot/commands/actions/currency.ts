@@ -22,7 +22,7 @@ const action: actionBehaviour = async req => {
 
   const fromTo = `${req.params.from}_${req.params.to}`
 
-  return await Axios.get(`https://free.currencyconverterapi.com/api/v5/convert?q=${fromTo}&compact=y`)
+  return Axios.get(`https://free.currencyconverterapi.com/api/v5/convert?q=${fromTo}&compact=y`)
     .then(async res => {
       const resFromTo = res.data[fromTo]
 
@@ -34,9 +34,9 @@ const action: actionBehaviour = async req => {
       const multiplier = Number(req.text)
 
       if (Boolean(multiplier))
-        return await req.msg.channel.send(`\`\`${req.text} ${req.params.from} = ${val * multiplier} ${req.params.to}\`\``)
+        return req.msg.channel.send(`\`\`${req.text} ${req.params.from} = ${val * multiplier} ${req.params.to}\`\``)
 
-      return await req.msg.channel.send(`\`\`1 ${req.params.from} = ${val} ${req.params.to}\`\``)
+      return req.msg.channel.send(`\`\`1 ${req.params.from} = ${val} ${req.params.to}\`\``)
     })
 
 }

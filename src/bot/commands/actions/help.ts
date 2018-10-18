@@ -18,12 +18,11 @@ const action: actionBehaviour = async req => {
         icon_url: req.msg.author.avatarURL,
       },
       title: "Commands List",
-      fields: Commands.declarations.map(cmd => {
-        return {
+      fields: Commands.declarations.map(cmd =>
+        ({
           name: cmd.name,
           value: cmd.description,
-        }
-      }),
+        })),
       timestamp: new Date(),
     },
   }
@@ -65,7 +64,7 @@ const action: actionBehaviour = async req => {
   }
 
   await req.msg.channel.send(embed)
-  return await req.msg.channel.send(`Example: \`\`${Commands.prefix}COMMAND TEXT @someone ARGUMENT${Commands.separator}VALUE \`\``)
+  return req.msg.channel.send(`Example: \`\`${Commands.prefix}COMMAND TEXT @someone ARGUMENT${Commands.separator}VALUE \`\``)
 }
 
 const help = new Action(requirements, action, description)

@@ -17,7 +17,7 @@ export default class Command extends Action {
    * @param {Action} action What command will do and some information about it
    * @memberof Command
    */
-  constructor(public name: string, action: Action) {
+  public constructor(public name: string, action: Action) {
     super(action.required, action.behaviour, action.description)
   }
 

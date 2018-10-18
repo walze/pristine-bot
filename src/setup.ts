@@ -21,10 +21,10 @@ client.on('ready', () => {
 })
 
 // Error Handling
-process.on('unhandledRejection', (reason, promise) => {
+process.on('unhandledRejection', <T>(_: T, promise: Promise<T>) => {
   console.error('!!!!! unhandle_rejection !!!!!'.toUpperCase())
 
-  promise.catch((...args: any[]) => console.trace('UNHANDLED >', ...args))
+  promise.catch((...args: T[]) => console.trace('UNHANDLED >', ...args))
 })
 
 export default client
