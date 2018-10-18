@@ -13,9 +13,7 @@ export class Performance {
   /**
    * Ends perf test, retuns time in ms
    *
-   * @param {(number | false)} [breaks=0] doesn't log if false
-   * @returns {number}
-   * @memberof Performance
+   * @param breaks doesn't log if false
    */
   public end(breaks: number | false = 0): number {
     const diff = Math.round((performance.now() - this.t0) * 1e2) / 1e2
@@ -33,8 +31,6 @@ export class Performance {
 /**
  * Used to make Performance Tests
  *
- * @export
- * @class Performances
  */
 export default class Performances {
   public static tests: Performance[] = []
@@ -42,10 +38,6 @@ export default class Performances {
   /**
    * Starts a performance test
    *
-   * @static
-   * @param {string} name
-   * @returns
-   * @memberof Performances
    */
   public static start(name: string) {
     const found = this.tests.find(test => test.name === name)
@@ -58,6 +50,7 @@ export default class Performances {
     }
 
     found.reset()
+
     return found
   }
 
@@ -69,6 +62,7 @@ export default class Performances {
 
     if (test) {
       const time = test.end(breaks)
+
       return time
     }
 

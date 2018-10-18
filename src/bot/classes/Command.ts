@@ -3,19 +3,12 @@ import CommandRequest from "./Request"
 import log from "../helpers/logger"
 import { mapObj } from '../helpers/obj_array'
 
-/**
- *
- *
- * @export
- * @class Command
- */
 export default class Command extends Action {
 
   /**
    * Creates an instance of Command.
-   * @param {string} name What the user will have to type to trigger
-   * @param {Action} action What command will do and some information about it
-   * @memberof Command
+   * @param  name What the user will have to type to trigger
+   * @param  action What command will do and some information about it
    */
   public constructor(public name: string, action: Action) {
     super(action.required, action.behaviour, action.description)
@@ -24,24 +17,18 @@ export default class Command extends Action {
   /**
    * Runs Command
    *
-   * @param {CommandRequest} req
-   * @returns
-   * @memberof Command
    */
   public run(req: CommandRequest) {
     log(`|| running "${req.msg.author.username}'s" command "${req.command}" at "${req.msg.guild.name}"...`)
 
     this._checkRequirements(req)
+
     return this._run(req)
   }
 
   /**
    * Runs action
    *
-   * @private
-   * @param {CommandRequest} req
-   * @returns
-   * @memberof Command
    */
   private async _run(req: CommandRequest) {
     // waits from action to run
@@ -53,9 +40,6 @@ export default class Command extends Action {
   /**
    * Checks action requirements. Throws error if misses any requirements
    *
-   * @private
-   * @param {CommandRequest} req
-   * @memberof Command
    */
   private _checkRequirements(req: CommandRequest) {
     let errorString = ''

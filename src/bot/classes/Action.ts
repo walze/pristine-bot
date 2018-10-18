@@ -5,24 +5,19 @@ import { Requirements } from './Requirements';
 /**
  * Holds a command's functionality, description and requirements.
  *
- * @export
- * @class Action
  */
 export default class Action {
   /**
    * What command needs to run
    *
-   * @type {Requirements}
-   * @memberof Action
    */
   public readonly required: Requirements
 
   /**
    * Creates an instance of Action.
-   * @param {Requirements} requirements What command needs to run
-   * @param {actionBehaviour} behaviour Command's run function
-   * @param {string} [description='*none*'] What command will do
-   * @memberof Action
+   * @param  requirements What command needs to run
+   * @param behaviour Command's run function
+   * @param  [description='*none*'] What command will do
    */
   public constructor(
     requirements: Requirements,
@@ -36,11 +31,6 @@ export default class Action {
 
   /**
    * Runs Action behaviour
-   *
-   * @protected
-   * @param {CommandRequest} req
-   * @returns
-   * @memberof Action
    */
   protected runAction(req: CommandRequest) {
     const ran = this.behaviour(req)
