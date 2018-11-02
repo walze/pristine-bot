@@ -1,10 +1,10 @@
 import { Message } from 'discord.js'
 import { isArray } from 'util'
 
-import { User } from '../db'
 import { Good as GoodWords } from '../balance/good'
 import { Bad as BadWords } from '../balance/bad'
 import CommandRequest from '../../bot/classes/Request'
+import { User } from '../models/User';
 
 /**
  * Checks good and bad words on a string, user gets money of it's good and loses if it's bad
@@ -16,12 +16,6 @@ export default class WordsMod {
 
   /**
    * Gets wallet
-   *
-   * @static
-   * @param {string} username
-   * @param {string} discriminator
-   * @returns {PromiseLike<any>} User Model
-   * @memberof WordsMod
    */
   public static getWallet(username: string, discriminator: string): PromiseLike<any> {
     return User.find({
@@ -40,12 +34,11 @@ export default class WordsMod {
   public readonly shouldEmit: boolean = false
   public money = 0
   public interval = 20000
+
   private request: () => CommandRequest
 
   /**
    * Creates an instance of WordsMod.
-   * @param {CommandRequest} request
-   * @memberof WordsMod
    */
   constructor(request: CommandRequest) {
     // Did it this way so i won't have the 1k lines property on console
@@ -113,7 +106,10 @@ export default class WordsMod {
       where: { username, discriminator },
     })
 
-    if (!res) return this._newEntry(username, discriminator)
+    if (!res) {
+      this._newEntry(username, discriminator)
+      return
+    }
 
     const { dataValues } = res as any
 

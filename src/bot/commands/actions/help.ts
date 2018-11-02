@@ -3,6 +3,7 @@ import { Requirements } from '../../classes/Requirements'
 import Action from '../../classes/Action'
 import Commands from '../../classes/Commands'
 import { mapObj } from '../../helpers/obj_array'
+import { RichEmbedOptions } from 'discord.js';
 
 const requirements: Requirements = {
   text: false,
@@ -11,21 +12,20 @@ const requirements: Requirements = {
 const description = 'Shows all commands or details a specific command'
 
 const action: actionBehaviour = async req => {
-  const embed = {
-    embed: {
-      author: {
-        name: req.msg.author.username,
-        icon_url: req.msg.author.avatarURL,
-      },
-      title: "Commands List",
-      fields: Commands.declarations.map(cmd => {
-        return {
-          name: cmd.name,
-          value: cmd.description,
-        }
-      }),
-      timestamp: new Date(),
+  const embed: RichEmbedOptions = {
+    author: {
+      name: req.msg.author.username,
+      icon_url: req.msg.author.avatarURL,
     },
+    title: "Commands List",
+    fields: Commands.declarations.map(cmd => {
+      return {
+        name: cmd.name,
+        value: cmd.description,
+        inline: true,
+      }
+    }),
+    timestamp: new Date(),
   }
 
   if (req.text !== '') {
@@ -47,8 +47,8 @@ const action: actionBehaviour = async req => {
       else return false
     }).filter((el: string) => el).join(' | ')
 
-    embed.embed.title = `${req.text} details`
-    embed.embed.fields = [
+    embed.title = `${req.text} details`
+    embed.fields = [
       {
         name: 'Description',
         value: command.description,
@@ -56,6 +56,7 @@ const action: actionBehaviour = async req => {
       {
         name: 'Required',
         value: mappedRequirements || '*none*',
+
       },
       {
         name: 'Arguments',
@@ -64,7 +65,7 @@ const action: actionBehaviour = async req => {
     ]
   }
 
-  await req.msg.channel.send(embed)
+  await req.msg.channel.send({ embed })
   return await req.msg.channel.send(`Example: \`\`${Commands.prefix}COMMAND TEXT @someone ARGUMENT${Commands.separator}VALUE \`\``)
 }
 

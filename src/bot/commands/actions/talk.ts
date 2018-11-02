@@ -20,9 +20,9 @@ const action: actionBehaviour = async req => {
   return await new Promise((res) => {
 
     req.msg.channel.send('*typing...*').then(async afterTyping => {
-      bot.create(async (err: any, session: any) => {
+      bot.create(async (_: any, __: any) => {
         // tslint:disable-next-line:no-shadowed-variable
-        bot.ask(req.text, async (err: any, response: any) => {
+        bot.ask(req.text, async (_: any, response: any) => {
 
           if (isArray(afterTyping)) afterTyping = afterTyping[0]
 
