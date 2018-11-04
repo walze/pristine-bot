@@ -1,3 +1,4 @@
+import { ITextParams } from './Requirements';
 import { log } from 'console'
 import { Message } from "discord.js"
 import { IIndexObj } from '../helpers/obj_array'
@@ -15,7 +16,7 @@ export interface ICommandInfoType {
 
 export interface IPropsType {
   command: ICommandInfoType
-  params: IIndexObj
+  params: IIndexObj<ITextParams>
   text: string
   ats: Iat[]
 }
@@ -29,7 +30,7 @@ export default class CommandRequest {
   public command: string | null = null
   public text: string | null = null
   public ats: Iat[] = []
-  public params: IIndexObj = {}
+  public params: IIndexObj<ITextParams> = {}
   public hasPrefix: boolean = false
 
   private readonly _commandRegex = new RegExp(`^${Commands.prefix}(\\w+)`)
@@ -176,7 +177,7 @@ export default class CommandRequest {
    */
   private _getAtsParams(splits: string[]) {
     // starts props
-    const params: IIndexObj = {}
+    const params: IIndexObj<ITextParams> = {}
     const ats: Iat[] = []
 
     // using object to pass reference so i won't have to do i = func()
@@ -244,7 +245,7 @@ export default class CommandRequest {
    * @returns
    * @memberof CommandRequest
    */
-  private _getParams(split: string, params: IIndexObj, splits: string[], indexRef: { index: number }) {
+  private _getParams(split: string, params: IIndexObj<ITextParams>, splits: string[], indexRef: { index: number }) {
     const param = split.split(Commands.separator)
 
     if (param.length > 2) throw new Error('Wrong argument syntax')

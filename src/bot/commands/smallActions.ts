@@ -13,12 +13,12 @@ const debug = new Action({},
       fields: [
         {
           name: 'Command',
-          value: req.command,
+          value: req.command || '*none*',
           inline: true,
         },
         {
           name: 'Text',
-          value: req.text || '*empty*',
+          value: req.text || '*none*',
           inline: true,
         },
         {

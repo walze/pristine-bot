@@ -32,10 +32,12 @@ const action: actionBehaviour = async req => {
     const command = Commands.find(req.text!)
 
     const args = mapObj(command.required, (value, prop) => {
-      if (prop === 'params')
-        return mapObj(value, (required, arg) =>
-          `${arg} | ${required ? '*needed*' : '*optional*'}\n`,
+      return prop === 'params'
+        ? mapObj(
+          value,
+          (required, arg) => `${arg} | ${required ? '*needed*' : '*optional*'}\n`,
         ).join('')
+        : ''
     }).join('')
 
     const mappedRequirements = mapObj(command.required, (value, prop) => {
@@ -45,7 +47,7 @@ const action: actionBehaviour = async req => {
       if (prop === 'params' && value.obligatory === true)
         return 'arguments'
       else return false
-    }).filter((el: string) => el).join(' | ')
+    }).filter(el => el).join(' | ')
 
     embed.title = `${req.text} details`
     embed.fields = [

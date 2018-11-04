@@ -1,4 +1,7 @@
 
+export interface IRequiredParams { [key: string]: boolean }
+export interface ITextParams { [key: string]: string }
+
 /**
  * Action requirements
  *
@@ -10,7 +13,7 @@ export class Requirements {
   public prefix?: boolean = true
   public text?: boolean = true
   public ats?: boolean = false
-  public params?: { [key: string]: boolean } = {}
+  public params?: IRequiredParams = {}
 
   /**
    * Creates an instance of Requirements.

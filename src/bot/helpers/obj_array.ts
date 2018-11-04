@@ -1,22 +1,32 @@
 import { isObject } from 'util';
 
-export interface IIndexObj {
-  [key: string]: any
+export type ValueOf<T> = T[Extract<keyof T, string>]
+
+export interface IIndexObj<T> {
+  [key: string]: ValueOf<T>
 }
 
-export type mapObjCallback = (propValue: any, propName: string) => any
-
-export function mapObj(obj: any, callback: mapObjCallback): any {
+export function mapObj<A, B>(
+  obj: A,
+  callback: (
+    TValue: ValueOf<A>,
+    TProp: string,
+  ) => B | void,
+) {
   if (!isObject(obj)) throw new Error('Not Object')
 
-  const array = []
+  const array: Array<B | void> = []
 
-  for (const prop in obj)
-    array.push(callback(obj[prop], prop))
+  // tslint:disable-next-line:forin
+  for (const prop in obj) {
+    const value: ValueOf<A> = obj[prop]
+    const newValue = callback(value, prop)
+    array.push(newValue)
+  }
 
   return array
 }
 
-export function objToArray(obj: object) {
+export function objToArray<T>(obj: T) {
   return mapObj(obj, value => value)
 }

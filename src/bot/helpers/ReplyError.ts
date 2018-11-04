@@ -1,5 +1,5 @@
 import { trace } from 'console';
-import { Message, RichEmbed } from 'discord.js';
+import { Message, RichEmbed, RichEmbedOptions } from 'discord.js';
 import CommandRequest from '../classes/Request';
 import { mapObj } from './obj_array';
 import Commands from '../classes/Commands';
@@ -49,7 +49,7 @@ function InternalErrorReply(err: Error) {
 function RequestErrorReply(req: CommandRequest, err: Error) {
   const description = `${err.message}. Try using **${Commands.prefix}help ${req.command}** cx'`
 
-  return new RichEmbed({
+  const embed: RichEmbedOptions = {
     title: "Request Error Information",
     description,
     author: {
@@ -59,7 +59,7 @@ function RequestErrorReply(req: CommandRequest, err: Error) {
     fields: [
       {
         name: 'Command',
-        value: req.command,
+        value: req.command || '*none*',
         inline: true,
       },
       {
@@ -78,5 +78,7 @@ function RequestErrorReply(req: CommandRequest, err: Error) {
         inline: true,
       },
     ],
-  })
+  }
+
+  return embed
 }
