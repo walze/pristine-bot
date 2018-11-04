@@ -1,6 +1,6 @@
 import Command from './Command'
 import Action from './Action'
-import CommandRequest from './Request'
+import CommandRequest from './CommandRequest'
 
 /**
  * Handles all bot's commands

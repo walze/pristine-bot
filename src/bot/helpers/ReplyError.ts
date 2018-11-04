@@ -1,5 +1,5 @@
 import { Message, RichEmbed, RichEmbedOptions } from 'discord.js';
-import CommandRequest from '../classes/Request';
+import CommandRequest from '../classes/CommandRequest';
 import { mapObj } from './obj_array';
 import Commands from '../classes/Commands';
 

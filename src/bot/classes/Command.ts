@@ -1,5 +1,5 @@
 import Action from './Action'
-import CommandRequest from "./Request"
+import CommandRequest from "./CommandRequest"
 import log from "../helpers/logger"
 import { mapObj } from '../helpers/obj_array'
 

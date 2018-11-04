@@ -1,4 +1,4 @@
-import CommandRequest from "./bot/classes/Request";
+import CommandRequest from "./bot/classes/CommandRequest";
 
 export type actionBehaviour = (request: CommandRequest) => Promise<any>
 

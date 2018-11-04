@@ -2,7 +2,7 @@
 require('source-map-support').install();
 process.setMaxListeners(0)
 
-import CommandRequest from './bot/classes/Request'
+import CommandRequest from './bot/classes/CommandRequest'
 // import WordsMod from './database/classes/Balance'
 import client from './setup'
 import Performances from './bot/classes/Performances'

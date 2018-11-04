@@ -1,5 +1,5 @@
 import { actionBehaviour } from '../../types';
-import CommandRequest from './Request';
+import CommandRequest from './CommandRequest';
 import { Requirements } from './Requirements';
 
 /**

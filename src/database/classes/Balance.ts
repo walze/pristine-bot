@@ -3,7 +3,7 @@ import { isArray } from 'util'
 
 import { Good as GoodWords } from '../balance/good'
 import { Bad as BadWords } from '../balance/bad'
-import CommandRequest from '../../bot/classes/Request'
+import CommandRequest from '../../bot/classes/CommandRequest'
 import { User } from '../models/User';
 
 /**
