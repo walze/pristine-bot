@@ -1,4 +1,3 @@
-import { trace } from 'console';
 import { Message, RichEmbed, RichEmbedOptions } from 'discord.js';
 import CommandRequest from '../classes/Request';
 import { mapObj } from './obj_array';
@@ -13,7 +12,7 @@ import Commands from '../classes/Commands';
  * @returns
  */
 export default function ReplyError(req: CommandRequest | Message, err: Error) {
-  trace(err)
+  console.error(err)
 
   if (req instanceof Message) {
     return req.channel.send(``, { embed: InternalErrorReply(err) })
