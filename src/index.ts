@@ -12,30 +12,7 @@ import ReplyError from './bot/helpers/ReplyError'
 import { Message } from 'discord.js'
 import Commands from './bot/classes/Commands';
 
-client.on('message', async msg => {
-
-  // Handles Internal Errors
-  try {
-    // starts performance test for everything
-    Performances.start('all')
-
-    const times = await onMessage(msg)
-
-    if (!times || times < 1) return
-
-    // ends p-test of all but gets time only
-    const t3 = Performances.end('all', false)
-
-    console.log(`|| everything ran in ${times + t3} ms \n`)
-  } catch (err) {
-    ReplyError(msg, err)
-  }
-})
-
-/**
- * Triggered on every message
- */
-async function onMessage(msg: Message) {
+const runTasks = async (msg: Message) => {
 
   // returns if msg is from bot
   if (msg.author.id === msg.client.user.id) return 0
@@ -51,6 +28,7 @@ async function onMessage(msg: Message) {
 
     let t1 = 0
     let t2 = 0
+    let t3 = 0
 
     // if there is a command
     if (req.command) {
@@ -74,7 +52,6 @@ async function onMessage(msg: Message) {
     // const mod = new WordsMod(req)
     // mod.emit()
 
-    let t3 = 0
     if (req.command)
       t3 = Performances.end('wordsmod')
 
@@ -84,3 +61,26 @@ async function onMessage(msg: Message) {
     return 0
   }
 }
+
+export const onMessage = async (msg: Message) => {
+  // Handles Internal Errors
+  try {
+
+    // starts performance test for everything
+    Performances.start('all');
+
+    const times = await runTasks(msg);
+
+    if (!times || times < 1)
+      return;
+
+    // ends p-test of all but gets time only
+    const t3 = Performances.end('all', false);
+
+    console.log(`|| everything ran in ${times + t3} ms \n`);
+  } catch (err) {
+    ReplyError(msg, err);
+  }
+}
+
+client.on('message', onMessage)

@@ -14,7 +14,8 @@
         "ordered-imports": false,
         "object-literal-sort-keys": false,
         "max-line-length": false,
-        "max-classes-per-file": false
+        "max-classes-per-file": false,
+        "only-arrow-functions": false
     },
     "rulesDirectory": [],
     "linterOptions": {
