@@ -21,7 +21,7 @@ const runTasks = async (msg: Message) => {
   Performances.start('request')
 
   // creates new request
-  const req = new CommandRequest(msg)
+  const request = new CommandRequest(msg)
 
   // Handles Request Errors
   try {
@@ -31,7 +31,7 @@ const runTasks = async (msg: Message) => {
     let t3 = 0
 
     // if there is a command
-    if (req.command) {
+    if (request.command) {
       console.log('\n')
 
       // ends request p-test
@@ -40,7 +40,7 @@ const runTasks = async (msg: Message) => {
       Performances.start('command')
 
       // Executes command
-      await Commands.execute(req)
+      await Commands.execute(request)
 
       // ends command p-test after run
       t2 = Performances.end('command')
@@ -52,12 +52,12 @@ const runTasks = async (msg: Message) => {
     // const mod = new WordsMod(req)
     // mod.emit()
 
-    if (req.command)
+    if (request.command)
       t3 = Performances.end('wordsmod')
 
     return [t1, t2, t3].reduce((prev, curr) => prev + curr)
   } catch (err) {
-    ReplyError(req, err)
+    ReplyError(request, err)
     return 0
   }
 }

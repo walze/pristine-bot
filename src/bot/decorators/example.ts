@@ -1,4 +1,5 @@
 import log from "../helpers/logger";
+import Performances from '../classes/Performances';
 
 // target - Either the constructor function of the class for a static member or the prototype of the class for an instance member.
 // key - The name of the member.
@@ -16,4 +17,20 @@ export function test(target: any, key: string, descriptor: any) {
   };
 
   return descriptor;
+}
+
+export function PerformanceTest() {
+  return function <T extends { new(...args: any[]): {} }>(constructor: T) {
+    return class extends constructor {
+
+      constructor(...args: any[]) {
+        Performances.start(constructor.name)
+
+        super(...args)
+
+        Performances.end(constructor.name, 1)
+      }
+
+    }
+  }
 }
