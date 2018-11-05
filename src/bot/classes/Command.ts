@@ -63,7 +63,7 @@ export default class Command extends Action {
     if (this.required.prefix === req.hasPrefix) {
       if ((this.required.text !== (req.text !== '')) && this.required.text)
         errorString += '\nThis command requires some text'
-      if ((this.required.ats !== (req.ats.length > 0)) && this.required.ats)
+      if ((this.required.ats !== (req.atsLength > 0)) && this.required.ats)
         errorString += '\nThis command requires @someone'
 
       mapObj(this.required.params, (required, prop) => {

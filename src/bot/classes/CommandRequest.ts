@@ -29,10 +29,10 @@ export default class CommandRequest {
 
   public command: string | null = null
   public text: string | null = null
-  public ats: Iat[] = []
   public params: IIndexObj<ITextParams> = {}
   public hasPrefix: boolean = false
 
+  private _ats: Iat[] = []
   private readonly _commandRegex = new RegExp(`^${Commands.prefix}(\\w+)`)
   private readonly _atsRegexGlobal = new RegExp(`<@!?(\\d+)>`, 'g')
   private readonly _atsRegex = new RegExp(`<@!?(\\d+)>`)
@@ -41,8 +41,6 @@ export default class CommandRequest {
 
   /**
    * Gets and sets props
-   * @param {Message} msg
-   * @memberof CommandRequest
    */
   constructor(public readonly msg: Message) {
     const props = this._filterProps()
@@ -52,29 +50,34 @@ export default class CommandRequest {
   }
 
   /**
-   * Throws if not found
-   *
-   * @param {number} pos
-   * @returns {Iat}
-   * @memberof CommandRequest
+   * !!!! USE METHODS GET ATS, ONLY USE THIS FOR MAPS !!!!
    */
-  public getAt(pos: number): Iat {
-    const found = this.ats.find((item, i) => i === pos && item.type === 'AT')
-    if (!found) throw new Error('@ not found')
+  public get ats() {
+    console.warn('!!!! USE METHODS GET ATS, ONLY USE THIS FOR MAPS !!!!')
+
+    return [...this._ats]
+  }
+
+  public get atsLength() {
+    return this._ats.length
+  }
+
+  /**
+   * Throws if not found
+   */
+  public at(pos: number): Iat {
+    const found = this._ats.find((item, i) => i === pos && item.type === 'AT')
+    if (!found) throw new Error('@ expected but haven\'t got any')
 
     return found
   }
 
   /**
    * Throws if not found
-   *
-   * @param {number} pos
-   * @returns {Iat}
-   * @memberof CommandRequest
    */
-  public getAtRole(pos: number): Iat {
-    const found = this.ats.find((item, i) => i === pos && item.type === 'ROLE')
-    if (!found) throw new Error('Role @ not found')
+  public roleAt(pos: number): Iat {
+    const found = this._ats.find((item, i) => i === pos && item.type === 'ROLE')
+    if (!found) throw new Error('Role @ expected but haven\'t got any')
 
     return found
   }
@@ -82,10 +85,9 @@ export default class CommandRequest {
   /**
    * Logs Request instance
    *
-   * @param {boolean} [logBool] Logs to console if true
-   * @param {...any[]} args Additional logs
-   * @returns {object} Copy of Request
-   * @memberof CommandRequest
+   * @param [logBool] Logs to console if true
+   * @param args Additional logs
+   * @returns Copy of Request
    */
   public log(logBool?: boolean, ...args: any[]): object {
     const filtered: any = {}
@@ -102,25 +104,17 @@ export default class CommandRequest {
 
   /**
    * Sets all props of this
-   *
-   * @private
-   * @param {IPropsType} props
-   * @memberof CommandRequest
    */
   private _setProperties(props: IPropsType) {
     this.command = props.command.name
     this.hasPrefix = props.command.hasPrefix
     this.params = props.params
     this.text = props.text
-    this.ats = props.ats
+    this._ats = props.ats
   }
 
   /**
    * Gets props
-   *
-   * @private
-   * @returns {(IPropsType | void)}
-   * @memberof CommandRequest
    */
   private _filterProps(): IPropsType | void {
     const splits = this.msg.content.split(' ')
@@ -154,10 +148,6 @@ export default class CommandRequest {
 
   /**
    * Searches on commands if the text contains any commands that doesn't require prefix
-   *
-   * @private
-   * @returns
-   * @memberof CommandRequest
    */
   private _getNonPrefixCommand() {
     const command = Commands.includesCommand(this.msg.content)
@@ -169,11 +159,6 @@ export default class CommandRequest {
   }
 
   /**
-   *
-   * @private
-   * @param {string[]} splits
-   * @returns
-   * @memberof CommandRequest
    */
   private _getAtsParams(splits: string[]) {
     // starts props
@@ -236,14 +221,6 @@ export default class CommandRequest {
 
   /**
    * Gets params/arguments
-   *
-   * @private
-   * @param {string} split
-   * @param {IIndexObj} params
-   * @param {string[]} splits
-   * @param {number[]} indexRef
-   * @returns
-   * @memberof CommandRequest
    */
   private _getParams(split: string, params: IIndexObj<ITextParams>, splits: string[], indexRef: { index: number }) {
     const param = split.split(Commands.separator)

@@ -68,7 +68,7 @@ function RequestErrorReply(req: CommandRequest, err: Error) {
       },
       {
         name: '@\'s',
-        value: req.ats.length > 0 ? req.ats.map(at => at.tag).join(' | ') : '*none*',
+        value: req.atsLength > 0 ? req.ats.map(at => at.tag).join(' | ') : '*none*',
         inline: true,
       },
       {

@@ -23,7 +23,7 @@ const debug = new Action({},
         },
         {
           name: '@\'s',
-          value: req.ats.length > 0 ? req.ats.map(at => at.tag).join(' | ') : '*none*',
+          value: req.atsLength > 0 ? req.ats.map(at => at.tag).join(' | ') : '*none*',
           inline: true,
         },
         {
@@ -69,7 +69,7 @@ const thonkwot = new Action({ text: false },
 
 const roast = new Action({ text: false },
   req => {
-    const at = req.ats[0]
+    const at = req.at(0)
 
     return Axios.get('https://insult.mattbas.org/api/insult/')
       .then(async res => {

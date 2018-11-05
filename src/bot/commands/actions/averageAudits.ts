@@ -12,7 +12,7 @@ const requirements: Requirements = {
 const description = 'Shows average time between audits from a user'
 
 const action: actionBehaviour = req => {
-  const at = req.getAt(0)
+  const at = req.at(0)
 
   if (!at.id) throw new Error('Invalid ID')
 
