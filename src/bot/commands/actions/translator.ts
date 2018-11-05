@@ -1,9 +1,11 @@
 import { Languages } from './helpers/langs'
-import * as translate from 'google-translate-api'
+import * as def from 'google-translate-api'
 import { actionBehaviour } from '../../../types';
 import { Requirements } from '../../classes/Requirements';
 import Action from '../../classes/Action';
 import Commands from '../../classes/Commands';
+
+const { default: translate } = def
 
 const requirements: Requirements = {
   text: true,
@@ -16,6 +18,7 @@ const requirements: Requirements = {
 const description = 'Translates given text to ~~almost~~ any language ~~precision not guaranteed~~'
 
 const action: actionBehaviour = async request => {
+
   return await translate(request.text, {
     from: switchText(request.params.from) || 'auto',
     to: switchText(request.params.to),

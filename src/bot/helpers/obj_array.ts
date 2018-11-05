@@ -13,7 +13,7 @@ export function mapObj<A, B>(
     TProp: string,
   ) => B | void,
 ) {
-  if (!isObject(obj)) throw new Error('Not Object')
+  if (!isObject(obj)) throw new Error(`Not Object, ${typeof obj} instead`)
 
   const array: Array<B | void> = []
 
