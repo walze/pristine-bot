@@ -3,7 +3,11 @@
 import { Good as GoodWords } from '../balance/good'
 import { Bad as BadWords } from '../balance/bad'
 import CommandRequest from '../../bot/classes/CommandRequest'
-import { User, IUserModel } from '../models/User';
+import { User, IUserModel, newUser } from '../models/User';
+
+// average formula, oldAvg + ((newValue - oldAvg) / totalSize)
+
+export interface IWordModResult { good?: string, bad?: string }
 
 /**
  * Checks good and bad words on a string, user gets money of it's good and loses if it's bad
@@ -27,7 +31,7 @@ export default class WordsMod {
   }
 
   public readonly text: string = ''
-  public readonly result: { good?: string, bad?: string } = {}
+  public readonly result: IWordModResult = {}
   public readonly shouldEmit: boolean = false
   public interval = 5000
 
@@ -93,7 +97,7 @@ export default class WordsMod {
     })
 
     if (!user) {
-      this._newEntry(username, discriminator)
+      await newUser(username, discriminator, this.result)
       return
     }
 
@@ -106,22 +110,6 @@ export default class WordsMod {
       { where: { id: user.id as number } },
     )
       .then(() => console.log(`Updated User: ${username}#${discriminator}`))
-  }
-
-  /**
-   * creates new entry on DB
-   */
-  private async _newEntry(username: string, discriminator: string) {
-
-    console.log(`Creating User: ${username}#${discriminator}`)
-
-    return await User.create({
-      username,
-      discriminator,
-      balance: this.result!.good ? 50 : -50,
-      goods: this.result!.good ? 1 : 0,
-      bads: this.result!.bad ? 1 : 0,
-    })
   }
 
   /**
