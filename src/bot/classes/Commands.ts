@@ -2,8 +2,6 @@ import Command from './Command'
 import Action from './Action'
 import CommandRequest from './CommandRequest'
 
-import './bot/commands/barrel'
-
 /**
  * Handles all bot's commands
  *
@@ -69,3 +67,5 @@ export default class Commands {
     console.log('\n')
   }
 }
+
+import '../commands/barrel'

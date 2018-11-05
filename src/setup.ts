@@ -4,13 +4,13 @@ import { log } from 'console'
 
 const client = new Client()
 
-import config from '../config.json'
+import token from '../token.json'
 
-client.login(config.token)
+client.login(token)
 
 // Restart
-client.on('error', () => client.login(config.token))
-client.on('disconnect', () => client.login(config.token))
+client.on('error', () => client.login(token))
+client.on('disconnect', () => client.login(token))
 
 client.on('ready', () => {
   client.user.setActivity('s-help')
