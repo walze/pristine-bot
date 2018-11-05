@@ -7,7 +7,7 @@ import Commands from '../../classes/Commands';
 // tslint:disable-next-line:no-var-requires
 const cleverbot = require('cleverbot.io')
 
-const bot = new cleverbot('Vo42zXO1zvSwkeis', 'f0QvprQvbAhrOFE4SdJPT3UAVhkXg6bJ')
+const bot = new cleverbot('MLMxCR7Y6uZwY8cA', 'pLKDtbcAETWaMTvv2WZMiT0z2hslqkYu')
 bot.setNick('Blyad');
 
 const requirements: Requirements = {
