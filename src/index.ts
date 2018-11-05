@@ -7,7 +7,6 @@ import CommandRequest from './bot/classes/CommandRequest'
 import client from './setup'
 import Performances from './bot/classes/Performances'
 
-import './bot/commands/barrel'
 import ReplyError from './bot/helpers/ReplyError'
 import { Message } from 'discord.js'
 import Commands from './bot/classes/Commands';

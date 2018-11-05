@@ -2,6 +2,8 @@ import Command from './Command'
 import Action from './Action'
 import CommandRequest from './CommandRequest'
 
+import './bot/commands/barrel'
+
 /**
  * Handles all bot's commands
  *
@@ -16,16 +18,11 @@ export default class Commands {
   public static separator = '='
 
   public static execute(req: CommandRequest) {
-    return this.find(req.command!).run(req)
+    return this.find(req.command).run(req)
   }
 
   /**
    * Checks if text contains any commands
-   *
-   * @static
-   * @param {string} text
-   * @returns
-   * @memberof Commands
    */
   public static includesCommand(text: string) {
     return this.declarations.find((cmd) => text.includes(cmd.name))
@@ -33,11 +30,6 @@ export default class Commands {
 
   /**
    * Adds command to bot
-   *
-   * @static
-   * @param {string} name
-   * @param {Action} action
-   * @memberof Commands
    */
   public static add(name: string, action: Action) {
     this.declarations.push(new Command(name, action))
@@ -45,13 +37,8 @@ export default class Commands {
 
   /**
    * Throws if not found
-   *
-   * @static
-   * @param {string} name
-   * @returns
-   * @memberof Commands
    */
-  public static find(name: string) {
+  public static find(name: string | null) {
     const found = this.declarations.find(cmd => cmd.name === name)
 
     if (!found) throw new Error(`Command "${name}" not found`)
@@ -62,10 +49,7 @@ export default class Commands {
   /**
    * Logs all commands
    *
-   * @static
-   * @param {number} [everyX=3] Breaks line after logging X commands
-   * @returns
-   * @memberof Commands
+   * @param [everyX=3] Breaks line after logging X commands
    */
   public static log(everyX: number = 3) {
     console.log(`\nLoaded ${this.declarations.length} Commands`)
