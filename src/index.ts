@@ -3,7 +3,7 @@ require('source-map-support').install();
 process.setMaxListeners(0)
 
 import CommandRequest from './bot/classes/CommandRequest'
-// import WordsMod from './database/classes/Balance'
+import WordsMod from './database/classes/WordsMod'
 import client from './setup'
 import Performances from './bot/classes/Performances'
 
@@ -48,8 +48,8 @@ const runTasks = async (msg: Message) => {
     Performances.start('wordsmod')
 
     // creates wordsmod and emits it
-    // const mod = new WordsMod(req)
-    // mod.emit()
+    const mod = new WordsMod(request)
+    mod.emit()
 
     if (request.command)
       t3 = Performances.end('wordsmod')

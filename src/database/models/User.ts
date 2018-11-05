@@ -1,7 +1,7 @@
 import Sequelize from 'sequelize';
 import { sql } from '../db';
 
-interface IUserModel {
+export interface IUserModel {
     id?: number;
     goods: number;
     bads: number;

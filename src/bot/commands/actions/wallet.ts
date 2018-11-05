@@ -1,6 +1,6 @@
 import Action from "../../../bot/classes/Action";
 import Commands from '../../../bot/classes/Commands';
-import WordsMod from '../../../database/classes/Balance';
+import WordsMod from '../../../database/classes/WordsMod';
 
 const wallet = new Action(
   { text: false },
@@ -19,8 +19,8 @@ const wallet = new Action(
         embed: {
           title: "Wallet",
           fields: [
-            { name: 'Goods', value: user.goods, inline: true },
-            { name: 'Bads', value: user.bads, inline: true },
+            { name: 'Goods', value: `${user.goods}`, inline: true },
+            { name: 'Bads', value: `${user.bads}`, inline: true },
             { name: 'Balance', value: user.balance + '$' },
           ],
         },

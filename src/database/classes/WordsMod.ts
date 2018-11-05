@@ -1,10 +1,9 @@
-import { Message } from 'discord.js'
-import { isArray } from 'util'
+// import { Message } from 'discord.js'
 
 import { Good as GoodWords } from '../balance/good'
 import { Bad as BadWords } from '../balance/bad'
 import CommandRequest from '../../bot/classes/CommandRequest'
-import { User } from '../models/User';
+import { User, IUserModel } from '../models/User';
 
 /**
  * Checks good and bad words on a string, user gets money of it's good and loses if it's bad
@@ -17,23 +16,20 @@ export default class WordsMod {
   /**
    * Gets wallet
    */
-  public static getWallet(username: string, discriminator: string): PromiseLike<any> {
-    return User.find({
-      where: {
-        username,
-        discriminator,
-      },
-    })
+  public static getWallet(username: string, discriminator: string) {
+    return new Promise<IUserModel | null>((res, rej) =>
+      User.findOne({
+        where: { username, discriminator },
+      })
+        .then(res)
+        .catch(rej),
+    )
   }
 
   public readonly text: string = ''
-  public readonly result: {
-    good: string | undefined,
-    bad: string | undefined,
-  } | null = null
+  public readonly result: { good?: string, bad?: string } = {}
   public readonly shouldEmit: boolean = false
-  public money = 0
-  public interval = 20000
+  public interval = 5000
 
   private request: () => CommandRequest
 
@@ -64,72 +60,56 @@ export default class WordsMod {
 
   /**
    * Replies and saves to DB
-   *
-   * @memberof WordsMod
    */
   public emit() {
     if (!this.shouldEmit) return
 
-    this._reply()
+    // this._reply()
     this._saveDB()
   }
 
   /**
    * Replies to author of they said a good or bad word
-   *
-   * @private
-   * @memberof WordsMod
    */
-  private _reply() {
-    this.request().msg.channel.send(this.text).then(message => {
-      let singleMessage = message as Message
+  // private _reply() {
+  //   this.request().msg.channel.send(this.text).then(message => {
+  //     let singleMessage = message as Message
 
-      if (isArray(message))
-        singleMessage = message[0]
+  //     if (Array.isArray(message))
+  //       singleMessage = message[0]
 
-      setTimeout(() => singleMessage.delete(), this.interval)
-    })
-  }
+  //     setTimeout(() => singleMessage.delete(), this.interval)
+  //   })
+  // }
 
   /**
    * creates or updates User on DB
-   *
-   * @private
-   * @returns
-   * @memberof WordsMod
    */
   private async _saveDB() {
-    const username = this.request().msg.author.username
-    const discriminator = this.request().msg.author.discriminator
+    const { username, discriminator } = this.request().msg.author
 
-    const res: any = await User.find({
+    const user = await User.findOne({
       where: { username, discriminator },
     })
 
-    if (!res) {
+    if (!user) {
       this._newEntry(username, discriminator)
       return
     }
 
-    const { dataValues } = res as any
-
-    User.update({
-      balance: this.result!.good ? dataValues.balance += 50 : dataValues.balance += -50,
-      goods: this.result!.good ? ++dataValues.goods : dataValues.goods,
-      bads: this.result!.bad ? ++dataValues.bads : dataValues.bads,
-    },
-      { where: { id: dataValues.id } },
-    ).then(() => console.log(`Updated User: ${username}#${discriminator}`))
+    User.update(
+      {
+        balance: this.result.good ? user.balance += 50 : user.balance += -50,
+        goods: this.result.good ? ++user.goods : user.goods,
+        bads: this.result.bad ? ++user.bads : user.bads,
+      },
+      { where: { id: user.id as number } },
+    )
+      .then(() => console.log(`Updated User: ${username}#${discriminator}`))
   }
 
   /**
    * creates new entry on DB
-   *
-   * @private
-   * @param {string} username
-   * @param {string} discriminator
-   * @returns
-   * @memberof WordsMod
    */
   private async _newEntry(username: string, discriminator: string) {
 
@@ -146,11 +126,6 @@ export default class WordsMod {
 
   /**
    * Finds good and bad words
-   *
-   * @private
-   * @param {string} text
-   * @returns
-   * @memberof WordsMod
    */
   private _find(text: string) {
     const words = text.split(' ')
