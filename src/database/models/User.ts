@@ -31,21 +31,40 @@ export const User = sql.define<IUserModel, IUserModel>('user', {
 /**
  * creates new entry on DB
  */
-export async function newUser(
+export const newUser = async (
     username: string,
     discriminator: string,
-    result: IWordModResult,
-) {
-
+    result: IWordModResult = {},
+) => {
     console.log(`Creating User: ${username}#${discriminator}`)
 
     return await User.create({
         username,
         discriminator,
-        balance: result.good ? 50 : -50,
+        balance: 0,
         goods: result.good ? 1 : 0,
         bads: result.bad ? 1 : 0,
         lastMessage: new Date().toISOString(),
         totalMessages: 1,
     })
+}
+
+/**
+ * Returns user of found, undefined if not
+ */
+export const findOrCreate = async (
+    username: string,
+    discriminator: string,
+    result: IWordModResult,
+) => {
+    const user = await User.findOne({
+        where: { username, discriminator },
+    })
+
+    if (!user) {
+        await newUser(username, discriminator, result)
+        return
+    }
+
+    return user
 }

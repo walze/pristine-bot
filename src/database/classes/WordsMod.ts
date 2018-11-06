@@ -3,7 +3,7 @@
 import { Good as GoodWords } from '../balance/good'
 import { Bad as BadWords } from '../balance/bad'
 import CommandRequest from '../../bot/classes/CommandRequest'
-import { User, IUserModel, newUser } from '../models/User';
+import { User, IUserModel, findOrCreate } from '../models/User';
 
 // average formula, oldAvg + ((newValue - oldAvg) / totalSize)
 
@@ -33,6 +33,7 @@ export default class WordsMod {
   public readonly text: string = ''
   public readonly result: IWordModResult = {}
   public readonly shouldEmit: boolean = false
+  public readonly shift: (50 | -50 | 0) = 0
   public interval = 5000
 
   private request: () => CommandRequest
@@ -52,11 +53,15 @@ export default class WordsMod {
 
     if (this.result.good && this.result.bad) return
 
-    if (this.result.good)
+    if (this.result.good) {
+      this.shift = 50
       this.text += `Just gave 50$ to ***${this.request().msg.author.username}*** for being positive`
+    }
 
-    if (this.result.bad)
+    if (this.result.bad) {
+      this.shift = -50
       this.text += `Just stole 50$ from ***${this.request().msg.author.username}*** for being negative`
+    }
 
     if (this.result.good || this.result.bad)
       this.shouldEmit = true
@@ -92,18 +97,13 @@ export default class WordsMod {
   private async _saveDB() {
     const { username, discriminator } = this.request().msg.author
 
-    const user = await User.findOne({
-      where: { username, discriminator },
-    })
+    const user = await findOrCreate(username, discriminator, this.result)
 
-    if (!user) {
-      await newUser(username, discriminator, this.result)
-      return
-    }
+    if (!user) { return }
 
     User.update(
       {
-        balance: this.result.good ? user.balance += 50 : user.balance += -50,
+        balance: user.balance += this.shift,
         goods: this.result.good ? ++user.goods : user.goods,
         bads: this.result.bad ? ++user.bads : user.bads,
       },
@@ -126,9 +126,6 @@ export default class WordsMod {
       BadWords.some(bad => new RegExp(`^${bad}$`, 'i').test(word)),
     )
 
-    return {
-      good: foundGood,
-      bad: foundBad,
-    }
+    return { good: foundGood, bad: foundBad }
   }
 }
