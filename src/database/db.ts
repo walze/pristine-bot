@@ -15,8 +15,8 @@ export const sql = new Sequelize(options)
 
 export const Iquery = sql.getQueryInterface()
 
-Iquery.dropAllTables().then(() => {
+// Iquery.dropAllTables().then(() => {
 
-  sql.sync().then(() => console.log(`\nDB synced`))
+sql.sync().then(() => console.log(`\nDB synced`))
 
-})
+// })

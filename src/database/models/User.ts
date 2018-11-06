@@ -9,6 +9,7 @@ export interface IUserModel {
     username: string;
     discriminator: string;
     balance: number;
+    messageAvg: number;
     lastMessage: string;
     totalMessages: number;
 }
@@ -24,6 +25,7 @@ export const User = sql.define<IUserModel, IUserModel>('user', {
     username: Sequelize.STRING,
     discriminator: Sequelize.STRING,
     balance: Sequelize.BIGINT,
+    messageAvg: Sequelize.FLOAT,
     lastMessage: Sequelize.DATE,
     totalMessages: Sequelize.BIGINT,
 })
@@ -44,6 +46,7 @@ export const newUser = async (
         balance: 0,
         goods: result.good ? 1 : 0,
         bads: result.bad ? 1 : 0,
+        messageAvg: 0,
         lastMessage: new Date().toISOString(),
         totalMessages: 1,
     })
@@ -55,7 +58,7 @@ export const newUser = async (
 export const findOrCreate = async (
     username: string,
     discriminator: string,
-    result: IWordModResult,
+    result: IWordModResult = {},
 ) => {
     const user = await User.findOne({
         where: { username, discriminator },

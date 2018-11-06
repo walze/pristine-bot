@@ -3,6 +3,7 @@ import { actionBehaviour, Iat } from "../../../types";
 import { Requirements } from '../../classes/Requirements';
 import Action from '../../classes/Action';
 import Commands from '../../classes/Commands';
+import { date_diff } from '../../helpers/date_diff';
 
 const requirements: Requirements = {
   ats: true,
@@ -24,7 +25,7 @@ const action: actionBehaviour = req => {
       req.msg.channel.send(
         calculateAverage(auditsResp, at),
       ),
-  )
+    )
 }
 
 const audits = new Action(requirements, action, description)
@@ -62,13 +63,4 @@ function calculateAverage(audit: GuildAuditLogs, at: Iat) {
     `;
 
   return text
-}
-
-function date_diff(oldD: number, newD: number) {
-  const old = new Date(oldD).getTime();
-  const recent = new Date(newD).getTime();
-
-  const seconds = Math.abs(recent - old) / 1000;
-
-  return seconds
 }

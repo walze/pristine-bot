@@ -5,8 +5,6 @@ import { Bad as BadWords } from '../balance/bad'
 import CommandRequest from '../../bot/classes/CommandRequest'
 import { User, IUserModel, findOrCreate } from '../models/User';
 
-// average formula, oldAvg + ((newValue - oldAvg) / totalSize)
-
 export interface IWordModResult { good?: string, bad?: string }
 
 /**
