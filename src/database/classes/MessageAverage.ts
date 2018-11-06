@@ -1,6 +1,6 @@
-import { Message } from 'discord.js';
-import { findOrCreate, IUserModel, User } from '../models/User';
-import { date_diff } from '../../bot/helpers/date_diff';
+import { Message } from 'discord.js'
+import { findOrCreate, IUserModel, User } from '../models/User'
+import { date_diff } from '../../bot/helpers/date_diff'
 
 // average formula, oldAvg + ((newValue - oldAvg) / totalSize)
 
@@ -20,16 +20,16 @@ export class MessageAverage {
     const { id } = msg.author
     this._user = findOrCreate(id)
 
-    this._calculate();
+    this._calculate()
   }
 
   private async _calculate() {
     const user = await this._user
-    if (!user) return;
+    if (!user) return
 
-    const newTime = new Date();
-    const oldTime = new Date(user.lastMessage);
-    const newValue = date_diff(oldTime.getTime(), newTime.getTime());
+    const newTime = new Date()
+    const oldTime = new Date(user.lastMessage)
+    const newValue = date_diff(oldTime.getTime(), newTime.getTime())
 
     const newAvg = MessageAverage.formula(user.messageAvg, newValue, user.totalMessages + 1)
 

@@ -12,7 +12,48 @@ import { Message } from 'discord.js'
 import Commands from './bot/classes/Commands';
 import { MessageAverage } from './database/classes/MessageAverage';
 
+// export interface ITask<A, C> {
+//   class: new (...args: any[]) => A,
+//   args: Array<unknown>,
+//   callback?: (instance: A) => C,
+//   time?: number,
+// }
+
+// export class TaskRunner {
+//   public static readonly tasks: Array<ITask<any, any>>
+
+//   public static addTask<A, C>(obj: ITask<A, C>) {
+//     const Ctr = obj.class
+//     const args = obj.args
+
+//     const instance = new Ctr(...args)
+
+//     this.tasks.push(obj)
+
+//     return instance
+//   }
+
+//   public static runTasks() {
+
+//     return 1
+//   }
+// }
+
 const runTasks = async (msg: Message) => {
+
+  // const request1 = TaskRunner.addTask({
+  //   class: CommandRequest,
+  //   args: [msg],
+  //   callback: requestInstance => Commands.execute(requestInstance),
+  // })
+
+  // TaskRunner.addTask({
+  //   class: WordsMod,
+  //   args: [request1],
+  //   callback: mod => mod.emit(),
+  // })
+
+  // TaskRunner.runTasks()
 
   // returns if msg is from bot
   if (msg.author.id === msg.client.user.id) return 0
