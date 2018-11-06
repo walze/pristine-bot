@@ -17,8 +17,8 @@ export class MessageAverage {
   private _user: Promise<IUserModel | undefined>
 
   constructor(msg: Message) {
-    const { username, discriminator } = msg.author
-    this._user = findOrCreate(username, discriminator)
+    const { id } = msg.author
+    this._user = findOrCreate(id)
 
     this._calculate();
   }
@@ -35,7 +35,7 @@ export class MessageAverage {
 
     console.log('Time between last message:', `${newValue} seconds`)
     console.log('New Average:', newAvg)
-    console.log(`${user.username}#${user.discriminator}\n`)
+    console.log(`${user.id}\n`)
 
     const updateData = {
       lastMessage: newTime.toISOString(),
@@ -43,7 +43,7 @@ export class MessageAverage {
       messageAvg: newAvg,
     }
 
-    const where = { username: user.username, discriminator: user.discriminator }
+    const where = { id: user.id }
 
     User.update(updateData, { where })
   }

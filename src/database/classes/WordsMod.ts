@@ -18,10 +18,10 @@ export default class WordsMod {
   /**
    * Gets wallet
    */
-  public static getWallet(username: string, discriminator: string) {
+  public static getWallet(id: string) {
     return new Promise<IUserModel | null>((res, rej) =>
       User.findOne({
-        where: { username, discriminator },
+        where: { id },
       })
         .then(res)
         .catch(rej),
@@ -93,9 +93,9 @@ export default class WordsMod {
    * creates or updates User on DB
    */
   private async _saveDB() {
-    const { username, discriminator } = this.request().msg.author
+    const { id } = this.request().msg.author
 
-    const user = await findOrCreate(username, discriminator, this.result)
+    const user = await findOrCreate(id, this.result)
 
     if (!user) { return }
 
@@ -105,9 +105,9 @@ export default class WordsMod {
         goods: this.result.good ? ++user.goods : user.goods,
         bads: this.result.bad ? ++user.bads : user.bads,
       },
-      { where: { id: user.id as number } },
+      { where: { id: user.id } },
     )
-      .then(() => console.log(`Updated User: ${username}#${discriminator}`))
+      .then(() => console.log(`Updated User: ${id}`))
   }
 
   /**

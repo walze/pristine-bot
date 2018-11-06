@@ -6,7 +6,7 @@ const wallet = new Action(
   { text: false },
 
   async req => {
-    const user = await WordsMod.getWallet(req.msg.author.username, req.msg.author.discriminator)
+    const user = await WordsMod.getWallet(req.msg.author.id)
 
     if (!user) return req.msg.reply('you have no wallet yet. Try saying something nice so I can make you one.')
 

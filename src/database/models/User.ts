@@ -3,11 +3,9 @@ import { sql } from '../db';
 import { IWordModResult } from '../classes/WordsMod';
 
 export interface IUserModel {
-    id?: number;
+    id: string;
     goods: number;
     bads: number;
-    username: string;
-    discriminator: string;
     balance: number;
     messageAvg: number;
     lastMessage: string;
@@ -16,14 +14,11 @@ export interface IUserModel {
 
 export const User = sql.define<IUserModel, IUserModel>('user', {
     id: {
-        type: Sequelize.INTEGER,
-        autoIncrement: true,
+        type: Sequelize.STRING,
         primaryKey: true,
     },
     goods: Sequelize.BIGINT,
     bads: Sequelize.BIGINT,
-    username: Sequelize.STRING,
-    discriminator: Sequelize.STRING,
     balance: Sequelize.BIGINT,
     messageAvg: Sequelize.FLOAT,
     lastMessage: Sequelize.DATE,
@@ -34,15 +29,13 @@ export const User = sql.define<IUserModel, IUserModel>('user', {
  * creates new entry on DB
  */
 export const newUser = async (
-    username: string,
-    discriminator: string,
+    id: string,
     result: IWordModResult = {},
 ) => {
-    console.log(`Creating User: ${username}#${discriminator}`)
+    console.log(`Creating User: ${id}`)
 
     return await User.create({
-        username,
-        discriminator,
+        id,
         balance: 0,
         goods: result.good ? 1 : 0,
         bads: result.bad ? 1 : 0,
@@ -56,16 +49,13 @@ export const newUser = async (
  * Returns user of found, undefined if not
  */
 export const findOrCreate = async (
-    username: string,
-    discriminator: string,
+    id: string,
     result: IWordModResult = {},
 ) => {
-    const user = await User.findOne({
-        where: { username, discriminator },
-    })
+    const user = await User.findOne({ where: { id } })
 
     if (!user) {
-        await newUser(username, discriminator, result)
+        await newUser(id, result)
         return
     }
 
