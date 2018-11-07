@@ -17,18 +17,20 @@ type TaskFunction<A, B> = (value: A) => B;
 export class Task<A> {
 
   constructor(
-    public func: (...args: any[]) => any,
+    public callback: (...args: any[]) => any,
+    public _taskRunner: TaskRunner,
+    public previousTask?: Task<unknown>,
   ) { }
 
-  public next<C = undefined>(func: TaskFunction<A, C>) {
-    return new Task<C>(func)
+  public next<B = undefined>(func: TaskFunction<A, B>): Task<B> {
+    return new Task<B>(func, this._taskRunner, this)
   }
 }
 
 export class TaskRunner {
 
-  public static addTask<A, B = undefined>(func: TaskFunction<A, B>) {
-    return new Task<B>(func)
+  public static startTask<A>(func: TaskFunction<undefined, A>) {
+    return new Task<A>(func, this)
   }
 
 }
@@ -36,7 +38,7 @@ export class TaskRunner {
 const runTasks = async (msg: Message) => {
 
   TaskRunner
-    .addTask(() => new CommandRequest(msg))
+    .startTask(() => new CommandRequest(msg))
     .next(request1 => Commands.execute(request1))
 
   // TaskRunner.runTasks()
