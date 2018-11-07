@@ -1,3 +1,4 @@
+import { Message } from 'discord.js';
 // tslint:disable-next-line:no-var-requires
 require('source-map-support').install();
 process.setMaxListeners(0)
@@ -8,50 +9,35 @@ import client from './setup'
 import Performances from './bot/classes/Performances'
 
 import ReplyError from './bot/helpers/ReplyError'
-import { Message } from 'discord.js'
 import Commands from './bot/classes/Commands';
 import { MessageAverage } from './database/classes/MessageAverage';
 
-// export interface ITask<A, C> {
-//   class: new (...args: any[]) => A,
-//   args: Array<unknown>,
-//   callback?: (instance: A) => C,
-//   time?: number,
-// }
+type TaskFunction<A, B> = (value: A) => B;
 
-// export class TaskRunner {
-//   public static readonly tasks: Array<ITask<any, any>>
+export class Task<A> {
 
-//   public static addTask<A, C>(obj: ITask<A, C>) {
-//     const Ctr = obj.class
-//     const args = obj.args
+  constructor(
+    public func: (...args: any[]) => any,
+  ) { }
 
-//     const instance = new Ctr(...args)
+  public next<C = undefined>(func: TaskFunction<A, C>) {
+    return new Task<C>(func)
+  }
+}
 
-//     this.tasks.push(obj)
+export class TaskRunner {
 
-//     return instance
-//   }
+  public static addTask<A, B = undefined>(func: TaskFunction<A, B>) {
+    return new Task<B>(func)
+  }
 
-//   public static runTasks() {
-
-//     return 1
-//   }
-// }
+}
 
 const runTasks = async (msg: Message) => {
 
-  // const request1 = TaskRunner.addTask({
-  //   class: CommandRequest,
-  //   args: [msg],
-  //   callback: requestInstance => Commands.execute(requestInstance),
-  // })
-
-  // TaskRunner.addTask({
-  //   class: WordsMod,
-  //   args: [request1],
-  //   callback: mod => mod.emit(),
-  // })
+  TaskRunner
+    .addTask(() => new CommandRequest(msg))
+    .next(request1 => Commands.execute(request1))
 
   // TaskRunner.runTasks()
 
