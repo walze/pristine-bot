@@ -13,17 +13,18 @@ import Commands from './bot/classes/Commands';
 import { MessageAverage } from './database/classes/MessageAverage';
 import { TasksRunner } from './bot/classes/TaskRunner';
 
-client.on('message', (_: Message) => {
+client.on('message', (msg: Message) => {
 
   const requestTask = new TasksRunner()
+    .start(() => new CommandRequest(msg))
 
   requestTask
-    .start(() => 'asd')
-    .next(__ => 7)
-    .next(a => [a, 1])
-    .next(test => [test, 'end'])
+    .next(requestParam => Commands.execute(requestParam))
     .end()
 
+  const request = requestTask.callback()
+
+  return request
 })
 
 const runTasks = async (msg: Message) => {

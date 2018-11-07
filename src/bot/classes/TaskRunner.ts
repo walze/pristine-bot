@@ -4,7 +4,7 @@ type TaskCallback<A, B> = (value: A) => B;
 class Task<CallbackReturn> {
 
   constructor(
-    public callback: (...args: any[]) => any,
+    public callback: (...args: any[]) => CallbackReturn,
     public runner: TasksRunner,
   ) { }
 
@@ -21,7 +21,7 @@ class Task<CallbackReturn> {
   }
 
   public end() {
-    this.runner.end()
+    return this.runner.end()
   }
 }
 
@@ -29,13 +29,9 @@ export class TasksRunner {
 
   private _tasks: Array<Task<unknown>> = []
 
-  public get tasksLength() {
-    return this._tasks.length
-  }
-
   public addTask(task: Task<unknown>) {
-    console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
     this._tasks.push(task)
+
     return task
   }
 
@@ -50,8 +46,6 @@ export class TasksRunner {
   public end() {
     let arg = this._tasks[0].callback()
 
-    console.log('\n', this._tasks, '\n')
-
     return this._tasks.map(task => {
       let error: string | false = false
 
@@ -62,11 +56,7 @@ export class TasksRunner {
         error = `${err.message} || ${err.name}`
       }
 
-      return {
-        task,
-        arg,
-        error,
-      }
+      return { task, arg, error }
     })
   }
 }
