@@ -11,35 +11,22 @@ import Performances from './bot/classes/Performances'
 import ReplyError from './bot/helpers/ReplyError'
 import Commands from './bot/classes/Commands';
 import { MessageAverage } from './database/classes/MessageAverage';
+import { TasksRunner } from './bot/classes/TaskRunner';
 
-type TaskFunction<A, B> = (value: A) => B;
+client.on('message', (_: Message) => {
 
-export class Task<A> {
+  const requestTask = new TasksRunner()
 
-  constructor(
-    public callback: (...args: any[]) => any,
-    public _taskRunner: TaskRunner,
-    public previousTask?: Task<unknown>,
-  ) { }
+  requestTask
+    .start(() => 'asd')
+    .next(__ => 7)
+    .next(a => [a, 1])
+    .next(test => [test, 'end'])
+    .end()
 
-  public next<B = undefined>(func: TaskFunction<A, B>): Task<B> {
-    return new Task<B>(func, this._taskRunner, this)
-  }
-}
-
-export class TaskRunner {
-
-  public static startTask<A>(func: TaskFunction<undefined, A>) {
-    return new Task<A>(func, this)
-  }
-
-}
+})
 
 const runTasks = async (msg: Message) => {
-
-  TaskRunner
-    .startTask(() => new CommandRequest(msg))
-    .next(request1 => Commands.execute(request1))
 
   // TaskRunner.runTasks()
 
@@ -113,5 +100,3 @@ export const onMessage = async (msg: Message) => {
     ReplyError(msg, err);
   }
 }
-
-client.on('message', onMessage)
