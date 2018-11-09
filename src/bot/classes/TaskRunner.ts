@@ -1,18 +1,21 @@
 
 type TaskCallback<A, B> = (value: A) => B;
 
-class Task<CallbackReturn> {
+class Task<TaskType, OldTaskType> {
 
   constructor(
-    public callback: (...args: any[]) => CallbackReturn,
+    public callback: (value: OldTaskType) => TaskType,
     public runner: TasksRunner,
   ) { }
 
-  public next<NewCallbackReturn = undefined>(
-    func: TaskCallback<CallbackReturn, NewCallbackReturn>,
-  ): Task<NewCallbackReturn> {
+  public next<NewTaskType = void>(
+    newCallback: TaskCallback<TaskType, NewTaskType>,
+  ) {
 
-    const newTask = new Task<NewCallbackReturn>(func, this.runner)
+    const newTask = new Task<NewTaskType, TaskType>(
+      newCallback,
+      this.runner,
+    )
 
     this.runner.addTask(newTask)
 
@@ -25,38 +28,52 @@ class Task<CallbackReturn> {
   }
 }
 
+interface IEnd {
+  task: Task<unknown, unknown>;
+  return: unknown;
+  error: string | boolean;
+}
+
 export class TasksRunner {
 
-  private _tasks: Array<Task<unknown>> = []
+  private _tasks: Array<Task<unknown, unknown>> = []
 
-  public addTask(task: Task<unknown>) {
+  public addTask(task: Task<any, any>) {
     this._tasks.push(task)
 
     return task
   }
 
   public start<B = undefined>(func: TaskCallback<undefined, B>) {
-    const newTask = new Task<B>(func, this)
+    const newTask = new Task<B, any>(func, this)
 
     this.addTask(newTask)
 
-    return this._tasks[this._tasks.length - 1] as Task<B>;
+    return this._tasks[this._tasks.length - 1] as Task<B, any>;
   }
 
   public end() {
-    let arg = this._tasks[0].callback()
+    let arg: unknown
+    const result: IEnd[] = []
 
-    return this._tasks.map(task => {
+    this._tasks.map(task => {
       let error: string | false = false
 
       try {
         arg = task.callback(arg)
       } catch (e) {
+        arg = null
         const err = e as Error
         error = `${err.message} || ${err.name}`
       }
 
-      return { task, arg, error }
+      result.push({
+        task,
+        return: arg,
+        error,
+      })
     })
+
+    return result
   }
 }
