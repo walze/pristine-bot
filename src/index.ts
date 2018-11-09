@@ -15,12 +15,17 @@ import { TasksRunner } from './bot/classes/TaskRunner';
 
 client.on('message', (msg: Message) => {
 
-  const tasks = new TasksRunner()
+  const tasks = new TasksRunner((cb) => {
+    Performances.start('request')
+    const res = cb()
+    Performances.end('request')
+    return res
+  })
     .start(() => new CommandRequest(msg))
-    .next(requestParam => Commands.execute(requestParam))
+    .next(async requestParam => await Commands.execute(requestParam))
     .end()
 
-  console.log(tasks[0].return)
+  console.log('\n\n', tasks)
 })
 
 const runTasks = async (msg: Message) => {

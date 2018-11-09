@@ -1,6 +1,12 @@
 
 type TaskCallback<A, B> = (value: A) => B;
 
+interface IEndTask {
+  task: Task<unknown, unknown>;
+  return: unknown;
+  error: string | boolean;
+}
+
 class Task<TaskType, OldTaskType> {
 
   constructor(
@@ -28,15 +34,27 @@ class Task<TaskType, OldTaskType> {
   }
 }
 
-interface IEnd {
-  task: Task<unknown, unknown>;
-  return: unknown;
-  error: string | boolean;
-}
-
 export class TasksRunner {
 
   private _tasks: Array<Task<unknown, unknown>> = []
+  private _EndMiddleware: (
+    callback: () => IEndTask[],
+  ) => any
+  private _StepMiddleware: (
+    callback: () => any,
+  ) => any
+
+  constructor(
+    _EndMiddleware?: (
+      callback: () => IEndTask[],
+    ) => any,
+    _StepMiddleware?: (
+      callback: () => any,
+    ) => any,
+  ) {
+    this._StepMiddleware = _StepMiddleware || ((callback) => callback())
+    this._EndMiddleware = _EndMiddleware || ((callback) => callback())
+  }
 
   public addTask(task: Task<any, any>) {
     this._tasks.push(task)
@@ -53,14 +71,19 @@ export class TasksRunner {
   }
 
   public end() {
+    return this._EndMiddleware(() => this._end())
+  }
+
+  private _end() {
     let arg: unknown
-    const result: IEnd[] = []
+    const result: IEndTask[] = []
 
     this._tasks.map(task => {
       let error: string | false = false
 
       try {
-        arg = task.callback(arg)
+        const middlewareResult = this._StepMiddleware(() => task.callback(arg))
+        arg = middlewareResult
       } catch (e) {
         arg = null
         const err = e as Error
