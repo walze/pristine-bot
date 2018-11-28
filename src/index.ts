@@ -10,6 +10,7 @@ import Performances from './bot/classes/Performances'
 
 import ReplyError from './bot/helpers/ReplyError'
 import Commands from './bot/classes/Commands'
+import { MessageAverage } from './database/classes/MessageAverage'
 
 const runTasks = async (msg: Message) => {
 
@@ -51,7 +52,7 @@ const runTasks = async (msg: Message) => {
     const mod = new WordsMod(request)
     mod.emit()
     // tslint:disable-next-line:no-unused-expression
-    // new MessageAverage(msg)
+    new MessageAverage(msg)
 
     if (request.command)
       t3 = Performances.end('wordsmod')

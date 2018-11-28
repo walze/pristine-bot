@@ -3,7 +3,7 @@ import { Requirements } from '../../classes/Requirements'
 import Action from '../../classes/Action'
 import Commands from '../../classes/Commands'
 import { mapObj } from '../../helpers/obj_array'
-import { RichEmbedOptions } from 'discord.js';
+import { RichEmbedOptions } from 'discord.js'
 
 const requirements: Requirements = {
   text: false,
@@ -29,7 +29,7 @@ const action: actionBehaviour = async req => {
   }
 
   if (req.text !== '') {
-    const command = Commands.find(req.text!)
+    const command = Commands.find(req.text)
 
     const args = mapObj(command.required, (value, prop) => {
       return prop === 'params'
@@ -68,7 +68,7 @@ const action: actionBehaviour = async req => {
   }
 
   await req.msg.channel.send({ embed })
-  return await req.msg.channel.send(`Example: \`\`${Commands.prefix}COMMAND TEXT @someone ARGUMENT${Commands.separator}VALUE \`\``)
+  return await req.msg.channel.send(`Example: \`\`${Commands.prefix}COMMAND TEXT @someone --ARGUMENT VALUE \`\``)
 }
 
 const help = new Action(requirements, action, description)

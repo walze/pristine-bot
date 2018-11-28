@@ -34,11 +34,11 @@ export default class CommandRequest {
   public hasPrefix: boolean = false
 
   private _ats: Iat[] = []
+
   private readonly _commandRegex = new RegExp(`^${Commands.prefix}(\\w+)`)
   private readonly _paramsRegex = /--([^\s=]+)[\s=]([^\s]+)/g
+  private readonly _atsRegex = /<@(&?)!?(\d+)>/g
 
-  private readonly _atsRegex = new RegExp(`<@!?(\\d+)>`, 'g')
-  private readonly _rolesRegex = new RegExp(`<@&(\\d+)>`, 'g')
 
   /**
    * Gets and sets props
@@ -94,7 +94,7 @@ export default class CommandRequest {
     const filtered: any = {}
 
     for (const prop in this)
-      if (prop[0] !== '_' && prop !== 'msg')
+      if (prop !== 'msg')
         filtered[prop] = this[prop]
 
     if (logBool)
@@ -134,17 +134,20 @@ export default class CommandRequest {
       if (!command.name) return
     }
 
-    // gets props
-    const { params, ats } = this._getAtsParams(msg)
+    const params = this._getParams(msg)
+    const ats: Iat[] = this._getAts(msg)
 
-    const text = msg
-      .replace(this._rolesRegex, '')
+    const text = this._getText(msg)
+
+    return { ats, command, params, text }
+  }
+
+  private _getText(msg: string) {
+    return msg
       .replace(this._atsRegex, '')
       .replace(this._commandRegex, '')
       .replace(this._paramsRegex, '')
       .trim()
-
-    return { ats, command, params, text }
   }
 
   /**
@@ -159,18 +162,6 @@ export default class CommandRequest {
     return command.name
   }
 
-  /**
-   */
-  private _getAtsParams(msg: string) {
-    const params = this._getParams(msg)
-    const ats: Iat[] = []
-
-    const { userAts, roleAts } = this._getAts(msg)
-    ats.push(...userAts, ...roleAts)
-
-    return { ats, params }
-  }
-
   private _getParams(msg: string) {
     const params: IIndexObj<ITextParams> = {}
     const paramsMatches = globalMatch(this._paramsRegex, msg)
@@ -182,22 +173,20 @@ export default class CommandRequest {
   }
 
   private _getAts(msg: string) {
-    const userAtsMatch = globalMatch(this._atsRegex, msg) || []
-    const roleAtsMatch = globalMatch(this._rolesRegex, msg) || []
+    const atsMatches = globalMatch(this._atsRegex, msg) || []
 
-    const userAts: Iat[] = userAtsMatch.map(match => ({
-      id: match[1],
-      tag: match[0],
-      type: 'USER' as 'USER',
-    }))
+    const ats: Iat[] = atsMatches.map(match => {
+      const { 0: tag, 1: roleFlag, 2: id } = match
 
-    const roleAts: Iat[] = roleAtsMatch.map(match => ({
-      id: match[1],
-      tag: match[0],
-      type: 'ROLE' as 'ROLE',
-    }))
+      const type: 'ROLE' | 'USER' = roleFlag
+        ? 'ROLE'
+        : 'USER'
 
-    return { userAts, roleAts }
+      return { id, tag, type }
+    })
+
+
+    return ats
   }
 
 }
