@@ -9,28 +9,9 @@ import client from './setup'
 import Performances from './bot/classes/Performances'
 
 import ReplyError from './bot/helpers/ReplyError'
-import Commands from './bot/classes/Commands';
-import { MessageAverage } from './database/classes/MessageAverage';
-import { TasksRunner } from './bot/classes/TaskRunner';
-
-client.on('message', (msg: Message) => {
-
-  const tasks = new TasksRunner((cb) => {
-    Performances.start('request')
-    const res = cb()
-    Performances.end('request')
-    return res
-  })
-    .start(() => new CommandRequest(msg))
-    .next(async requestParam => await Commands.execute(requestParam))
-    .end()
-
-  console.log('\n\n', tasks)
-})
+import Commands from './bot/classes/Commands'
 
 const runTasks = async (msg: Message) => {
-
-  // TaskRunner.runTasks()
 
   // returns if msg is from bot
   if (msg.author.id === msg.client.user.id) return 0
@@ -70,7 +51,7 @@ const runTasks = async (msg: Message) => {
     const mod = new WordsMod(request)
     mod.emit()
     // tslint:disable-next-line:no-unused-expression
-    new MessageAverage(msg)
+    // new MessageAverage(msg)
 
     if (request.command)
       t3 = Performances.end('wordsmod')
@@ -82,7 +63,7 @@ const runTasks = async (msg: Message) => {
   }
 }
 
-export const onMessage = async (msg: Message) => {
+const onMessage = async (msg: Message) => {
   // Handles Internal Errors
   try {
 
@@ -102,3 +83,5 @@ export const onMessage = async (msg: Message) => {
     ReplyError(msg, err);
   }
 }
+
+client.on('message', onMessage)

@@ -81,7 +81,7 @@ export interface ITranslator {
 }
 
 export interface Iat {
-  type: 'AT' | 'ROLE',
+  type: 'USER' | 'ROLE',
   id: string,
   tag: string
 }
