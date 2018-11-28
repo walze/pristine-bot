@@ -4,6 +4,7 @@ import { Message } from "discord.js"
 import { IIndexObj } from '../helpers/obj_array'
 import { Iat } from "../../types"
 import Commands from "./Commands"
+import { globalMatch } from '../helpers/globalMatch';
 
 // s-debug argument-value
 // Eg. s-debug event=MEMBER_ADD_BAN amount=5 @wiva#9996
@@ -33,11 +34,11 @@ export default class CommandRequest {
   public hasPrefix: boolean = false
 
   private _ats: Iat[] = []
+
   private readonly _commandRegex = new RegExp(`^${Commands.prefix}(\\w+)`)
-  private readonly _atsRegexGlobal = new RegExp(`<@!?(\\d+)>`, 'g')
-  private readonly _atsRegex = new RegExp(`<@!?(\\d+)>`)
-  private readonly _rolesRegexGlobal = new RegExp(`<@&(\\d+)>`, 'g')
-  // private readonly _rolesRegex = new RegExp(`<@&(\\d+)>`)
+  private readonly _paramsRegex = /--([^\s=]+)[\s=]([^\s]+)/g
+  private readonly _atsRegex = /<@(&?)!?(\d+)>/g
+
 
   /**
    * Gets and sets props
@@ -66,7 +67,7 @@ export default class CommandRequest {
    * Throws if not found
    */
   public at(pos: number): Iat {
-    const found = this._ats.find((item, i) => i === pos && item.type === 'AT')
+    const found = this._ats.find((item, i) => i === pos && item.type === 'USER')
     if (!found) throw new Error('@ expected but haven\'t got any')
 
     return found
@@ -93,7 +94,7 @@ export default class CommandRequest {
     const filtered: any = {}
 
     for (const prop in this)
-      if (prop[0] !== '_' && prop !== 'msg')
+      if (prop !== 'msg')
         filtered[prop] = this[prop]
 
     if (logBool)
@@ -117,9 +118,9 @@ export default class CommandRequest {
    * Gets props
    */
   private _filterProps(): IPropsType | void {
-    const splits = this.msg.content.split(' ')
+    const { content: msg } = this.msg
 
-    const commandRegex = splits[0].match(this._commandRegex)
+    const commandRegex = msg.match(this._commandRegex)
     const command: ICommandInfoType = { name: null, hasPrefix: false }
 
     if (commandRegex) {
@@ -133,17 +134,20 @@ export default class CommandRequest {
       if (!command.name) return
     }
 
-    // remove command from split
-    splits.splice(0, 1)
+    const params = this._getParams(msg)
+    const ats: Iat[] = this._getAts(msg)
 
-    // gets props
-    const { params, ats } = this._getAtsParams(splits)
-
-    // joins remaining splits
-    const filteredText = splits.filter(el => !!el).map(split => split.trim())
-    const text = filteredText.join(' ')
+    const text = this._getText(msg)
 
     return { ats, command, params, text }
+  }
+
+  private _getText(msg: string) {
+    return msg
+      .replace(this._atsRegex, '')
+      .replace(this._commandRegex, '')
+      .replace(this._paramsRegex, '')
+      .trim()
   }
 
   /**
@@ -158,80 +162,31 @@ export default class CommandRequest {
     return command.name
   }
 
-  /**
-   */
-  private _getAtsParams(splits: string[]) {
-    // starts props
+  private _getParams(msg: string) {
     const params: IIndexObj<ITextParams> = {}
-    const ats: Iat[] = []
+    const paramsMatches = globalMatch(this._paramsRegex, msg)
 
-    // using object to pass reference so i won't have to do i = func()
-    const indexRef = { index: 0 }
+    if (paramsMatches)
+      paramsMatches.map(match => params[match[1]] = match[2])
 
-    // get props and remove them from splits
-    while (indexRef.index < splits.length) {
-      const split = splits[indexRef.index]
-
-      this._getParams(split, params, splits, indexRef)
-      this._getAts(split, ats, splits, indexRef)
-
-      indexRef.index++
-    }
-
-    return { ats, params }
+    return params
   }
 
-  /**
-   * Gets Ats, decrement from index and splice from splits
-   */
-  private _getAts(
-    split: string,
-    ats: Iat[],
-    splits: string[],
-    indexRef: { index: number },
-  ) {
-    if (this._rolesRegexGlobal.test(split)) {
+  private _getAts(msg: string) {
+    const atsMatches = globalMatch(this._atsRegex, msg) || []
 
-      ats.push({
-        id: split.replace(/<@&!?/g, '').replace(/>/g, ''),
-        tag: split,
-        type: 'ROLE',
-      })
+    const ats: Iat[] = atsMatches.map(match => {
+      const { 0: tag, 1: roleFlag, 2: id } = match
 
-      splits.splice(indexRef.index, 1)
-      indexRef.index--
+      const type: 'ROLE' | 'USER' = roleFlag
+        ? 'ROLE'
+        : 'USER'
 
-    } else if (this._atsRegexGlobal.test(split)) {
+      return { id, tag, type }
+    })
 
-      // const match = split.match(this._atsRegexGlobal)
-      const match2 = split.match(this._atsRegex)
 
-      if (!match2) return
-
-      ats.push({
-        id: match2[1],
-        tag: split,
-        type: 'AT',
-      })
-
-      splits.splice(indexRef.index, 1)
-      indexRef.index--
-    }
+    return ats
   }
 
-  /**
-   * Gets params/arguments
-   */
-  private _getParams(split: string, params: IIndexObj<ITextParams>, splits: string[], indexRef: { index: number }) {
-    const param = split.split(Commands.separator)
-
-    if (param.length > 2) throw new Error('Wrong argument syntax')
-
-    if (!param[1]) return
-
-    params[param[0]] = param[1]
-    splits.splice(indexRef.index, 1)
-    indexRef.index--
-
-  }
 }

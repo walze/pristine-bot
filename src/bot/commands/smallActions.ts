@@ -82,15 +82,6 @@ const roast = new Action({ text: false },
   ':roasts:',
 )
 
-const settings = new Action(
-  { text: false },
-  req => {
-    return req.msg.channel.send(`Prefix ***${Commands.prefix}***\nSeparator ***${Commands.separator}***`)
-  },
-  'Shows prefix and separator',
-)
-
-Commands.add('settings', settings)
 Commands.add('debug', debug)
 Commands.add('image', image)
 Commands.add('say', say)

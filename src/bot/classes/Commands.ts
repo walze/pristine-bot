@@ -13,7 +13,6 @@ export default class Commands {
   public static declarations: Command[] = []
 
   public static prefix = 's-'
-  public static separator = '='
 
   public static execute(req: CommandRequest) {
     return this.find(req.command).run(req)
