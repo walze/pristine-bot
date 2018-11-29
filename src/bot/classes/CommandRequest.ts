@@ -39,7 +39,6 @@ export default class CommandRequest {
   private readonly _paramsRegex = /--([^\s=]+)[\s=]([^\s]+)/g
   private readonly _atsRegex = /<@(&?)!?(\d+)>/g
 
-
   /**
    * Gets and sets props
    */
@@ -184,7 +183,6 @@ export default class CommandRequest {
 
       return { id, tag, type }
     })
-
 
     return ats
   }

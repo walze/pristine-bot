@@ -8,6 +8,7 @@ import Performances from '../classes/Performances';
 export function test(target: any, key: string, descriptor: any) {
   const originalMethod = descriptor.value;
 
+  // tslint:disable-next-line:space-before-function-paren
   descriptor.value = function () {
     // this = this from function running
 
