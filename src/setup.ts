@@ -4,7 +4,7 @@ import { log } from 'console'
 
 const client = new Client()
 
-import token from '../token.json'
+import { token } from '../env.json'
 
 client.login(token)
 

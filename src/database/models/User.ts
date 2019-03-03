@@ -48,15 +48,14 @@ export const newUser = async (
 /**
  * Returns user of found, undefined if not
  */
-export const findOrCreate = async (
+export const findOrCreateUser = async (
     id: string,
     result: IWordModResult = {},
 ) => {
     const user = await User.findOne({ where: { id } })
 
     if (!user) {
-        await newUser(id, result)
-        return
+        return newUser(id, result)
     }
 
     return user

@@ -3,7 +3,7 @@
 import { Good as GoodWords } from '../balance/good'
 import { Bad as BadWords } from '../balance/bad'
 import CommandRequest from '../../bot/classes/CommandRequest'
-import { User, IUserModel, findOrCreate } from '../models/User';
+import { User, IUserModel, findOrCreateUser } from '../models/User';
 
 export interface IWordModResult { good?: string, bad?: string }
 
@@ -95,7 +95,7 @@ export default class WordsMod {
   private async _saveDB() {
     const { id } = this.request().msg.author
 
-    const user = await findOrCreate(id, this.result)
+    const user = await findOrCreateUser(id, this.result)
 
     if (!user) { return }
 

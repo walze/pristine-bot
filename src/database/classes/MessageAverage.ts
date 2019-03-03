@@ -1,6 +1,9 @@
 import { Message } from 'discord.js'
-import { findOrCreate, IUserModel, User } from '../models/User'
+import { findOrCreateUser, IUserModel, User } from '../models/User'
 import { date_diff } from '../../bot/helpers/date_diff'
+import { IGuildActive, findOrCreateGuildAC, GuildActive } from '../models/GuildActive';
+import { IGuildsModel } from '../models/Guild';
+import { findOrCreateGuild } from './../models/Guild';
 
 // average formula, oldAvg + ((newValue - oldAvg) / totalSize)
 
@@ -14,37 +17,52 @@ export class MessageAverage {
     return oldAvg + ((newValue - oldAvg) / totalSize)
   }
 
-  private _user: Promise<IUserModel | undefined>
+  private _user: Promise<IUserModel>
+  private _guild: Promise<IGuildsModel>
+  private _guildAC: Promise<IGuildActive>
 
   constructor(msg: Message) {
+    const { id: guild_id } = msg.guild
     const { id } = msg.author
-    this._user = findOrCreate(id)
+    this._user = findOrCreateUser(id)
+    this._guild = findOrCreateGuild(guild_id)
+    this._guildAC = findOrCreateGuildAC(guild_id)
 
-    this._calculate()
+    this._updateAvg(id, guild_id)
   }
 
-  private async _calculate() {
-    const user = await this._user
-    if (!user) return
+  private async _updateAvg(id: string, guild_id: string) {
+    const newTimeUser = await this._calculate(this._user)
+    const newTimeGuild = await this._calculate(this._guildAC)
+
+    if (await this._guild) {
+      GuildActive.update(newTimeGuild, { where: { guild_id } })
+      User.update(newTimeUser, { where: { id } })
+    } else {
+      console.error('ERROR, NO GUILD')
+    }
+  }
+
+  private async _calculate(
+    proms: Promise<IUserModel | IGuildActive>
+  ) {
+    const instance = await proms
 
     const newTime = new Date()
-    const oldTime = new Date(user.lastMessage)
+    const oldTime = new Date(instance.lastMessage)
     const newValue = date_diff(oldTime.getTime(), newTime.getTime())
 
-    const newAvg = MessageAverage.formula(user.messageAvg, newValue, user.totalMessages + 1)
+    const newAvgUser = MessageAverage.formula(instance.messageAvg, newValue, instance.totalMessages + 1)
 
     console.log('Time between last message:', `${newValue} seconds`)
-    console.log('New Average:', newAvg)
-    console.log(`${user.id}\n`)
+    console.log('New Average:', newAvgUser)
 
     const updateData = {
       lastMessage: newTime.toISOString(),
-      totalMessages: ++user.totalMessages,
-      messageAvg: newAvg,
+      totalMessages: ++instance.totalMessages,
+      messageAvg: newAvgUser,
     }
 
-    const where = { id: user.id }
-
-    User.update(updateData, { where })
+    return updateData
   }
 }

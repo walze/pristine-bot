@@ -1,22 +1,16 @@
 import Sequelize, { Options } from 'sequelize';
+import { database, username, password, host } from '../../env.json'
 
 const options: Options = {
-  database: 'test',
-  username: 'root',
-  password: '',
-  host: 'localhost',
-  port: 3306,
+  username,
+  database,
+  password,
+  host,
   dialect: 'mysql',
   logging: false,
-  operatorsAliases: false,
 }
 
 export const sql = new Sequelize(options)
-
 export const Iquery = sql.getQueryInterface()
 
-// Iquery.dropAllTables().then(() => {
-
-sql.sync().then(() => console.log(`\nDB synced`))
-
-// })
+import './sync'

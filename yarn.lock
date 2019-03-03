@@ -763,15 +763,15 @@
   resolved "https://registry.yarnpkg.com/@types/mime/-/mime-2.0.1.tgz#dc488842312a7f075149312905b5e3c0b054c79d"
   integrity sha512-FwI9gX75FgVBJ7ywgnq/P7tw+/o1GUbtP0KzbtusLigAOgIgNISRK0ZPl4qertvXSIE8YbsVJueQ90cDt9YYyw==
 
-"@types/node@*", "@types/node@^11.9.6":
-  version "11.9.6"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-11.9.6.tgz#c632bbcc780a1349673a6e2e9b9dfa8c369d3c74"
-  integrity sha512-4hS2K4gwo9/aXIcoYxCtHpdgd8XUeDmo1siRCAH3RziXB65JlPqUFMtfy9VPj+og7dp3w1TFjGwYga4e0m9GwA==
+"@types/node@*", "@types/node@^11.10.4":
+  version "11.10.4"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-11.10.4.tgz#3f5fc4f0f322805f009e00ab35a2ff3d6b778e42"
+  integrity sha512-wa09itaLE8L705aXd8F80jnFpxz3Y1/KRHfKsYL2bPc0XF+wEWu8sR9n5bmeu8Ba1N9z2GRNzm/YdHcghLkLKg==
 
 "@types/node@^10.11.7":
-  version "10.12.27"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.12.27.tgz#eb3843f15d0ba0986cc7e4d734d2ee8b50709ef8"
-  integrity sha512-e9wgeY6gaY21on3ve0xAjgBVjGDWq/xUteK0ujsE53bUoxycMkqfnkUgMt6ffZtykZ5X12Mg3T7Pw4TRCObDKg==
+  version "10.12.29"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.12.29.tgz#c2c8d2d27bb55649fbafe8ea1731658421f38acf"
+  integrity sha512-J/tnbnj8HcsBgCe2apZbdUpQ7hs4d7oZNTYA5bekWdP0sr2NGsOpI/HRdDroEi209tEvTcTtxhD0FfED3DhEcw==
 
 "@types/q@^1.5.1":
   version "1.5.1"
@@ -853,9 +853,9 @@ acorn@^6.0.1, acorn@^6.0.4:
   integrity sha512-jPTiwtOxaHNaAPg/dmrJ/beuzLRnXtB0kQPQ8JpotKJgTB6rX6c8mlf315941pyjBSaPg8NHXS9fhP4u17DpGA==
 
 ajv@^6.5.5:
-  version "6.9.2"
-  resolved "https://registry.yarnpkg.com/ajv/-/ajv-6.9.2.tgz#4927adb83e7f48e5a32b45729744c71ec39c9c7b"
-  integrity sha512-4UFy0/LgDo7Oa/+wOAlj44tp9K78u38E5/359eSrqEp1Z5PdVfimCcs7SluXMP755RUQu6d2b4AvF0R1C9RZjg==
+  version "6.10.0"
+  resolved "https://registry.yarnpkg.com/ajv/-/ajv-6.10.0.tgz#90d0d54439da587cd7e843bfb7045f50bd22bdf1"
+  integrity sha512-nffhOpkymDECQyR0mnsUtoCE8RlX38G0rYP+wgLWFyZuUyuuojSSvi/+euOiQBIn63whYwYVIIH1TvE3tu4OEg==
   dependencies:
     fast-deep-equal "^2.0.1"
     fast-json-stable-stringify "^2.0.0"
@@ -4087,9 +4087,9 @@ node-pre-gyp@^0.10.0:
     tar "^4"
 
 node-releases@^1.1.8:
-  version "1.1.8"
-  resolved "https://registry.yarnpkg.com/node-releases/-/node-releases-1.1.8.tgz#32a63fff63c5e51b7e0f540ac95947d220fc6862"
-  integrity sha512-gQm+K9mGCiT/NXHy+V/ZZS1N/LOaGGqRAAJJs3X9Ah1g+CIbRcBgNyoNYQ+SEtcyAtB9KqDruu+fF7nWjsqRaA==
+  version "1.1.9"
+  resolved "https://registry.yarnpkg.com/node-releases/-/node-releases-1.1.9.tgz#70d0985ec4bf7de9f08fc481f5dae111889ca482"
+  integrity sha512-oic3GT4OtbWWKfRolz5Syw0Xus0KRFxeorLNj0s93ofX6PWyuzKjsiGxsCtWktBwwmTF6DdRRf2KreGqeOk5KA==
   dependencies:
     semver "^5.3.0"
 
@@ -4379,9 +4379,9 @@ p-is-promise@^2.0.0:
   integrity sha512-pzQPhYMCAgLAKPWD2jC3Se9fEfrD9npNos0y150EeqZll7akhEgGhTW/slB6lHku8AvYGiJ+YJ5hfHKePPgFWg==
 
 p-limit@^2.0.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/p-limit/-/p-limit-2.1.0.tgz#1d5a0d20fb12707c758a655f6bbc4386b5930d68"
-  integrity sha512-NhURkNcrVB+8hNfLuysU8enY5xn2KXphsHBaC2YmRNTZRc7RWusw6apSpdEj3jo4CMb6W9nrF6tTnsJsJeyu6g==
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/p-limit/-/p-limit-2.2.0.tgz#417c9941e6027a9abcba5092dd2904e255b5fbc2"
+  integrity sha512-pZbTJpoUsCzV48Mc9Nh51VbwO0X9cuPFE8gYwx9BTCt9SF8/b7Zljd2fVgOxhIF/HDTKgpVzs+GPhyKfjLLFRQ==
   dependencies:
     p-try "^2.0.0"
 
@@ -5656,10 +5656,10 @@ seq-queue@^0.0.5:
   resolved "https://registry.yarnpkg.com/seq-queue/-/seq-queue-0.0.5.tgz#d56812e1c017a6e4e7c3e3a37a1da6d78dd3c93e"
   integrity sha1-1WgS4cAXpuTnw+Ojeh2m143TyT4=
 
-sequelize@^4.42.1:
-  version "4.42.1"
-  resolved "https://registry.yarnpkg.com/sequelize/-/sequelize-4.42.1.tgz#352eeb632dffd52db82446378bd57997a6f9fd35"
-  integrity sha512-W9i/CkBjCHLzEkJQkaxXaK82MA16b7F74PjtE7EUR+d7WU/X3U+YU5givWR+/VRXay1VXDyBOfXgw9/zdhDSDg==
+sequelize@^4.43.0:
+  version "4.43.0"
+  resolved "https://registry.yarnpkg.com/sequelize/-/sequelize-4.43.0.tgz#41c36c7684b0ea23ca7be1c3af3d65f2309a4ca6"
+  integrity sha512-GkwGFVREKBf/ql6W6RXwXy1fzb/HOk0lmOBbcQrJMvJtB65Jfg7CUh+sENh0deuWk5s79JedgZJ/yEjvtzHXaQ==
   dependencies:
     bluebird "^3.5.0"
     cls-bluebird "^2.1.0"
