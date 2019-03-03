@@ -26,7 +26,7 @@ export class MessageAverage {
     const { id } = msg.author
     this._user = findOrCreateUser(id)
     this._guild = findOrCreateGuild(guild_id)
-    this._guildAC = findOrCreateGuildAC(guild_id)
+    this._guildAC = findOrCreateGuildAC(id, guild_id)
 
     this._updateAvg(id, guild_id)
   }
@@ -36,7 +36,13 @@ export class MessageAverage {
     const newTimeGuild = await this._calculate(this._guildAC)
 
     if (await this._guild) {
-      GuildActive.update(newTimeGuild, { where: { guild_id } })
+      GuildActive.update(newTimeGuild, {
+        where: {
+          user_id: id,
+          guild_id
+        }
+      })
+
       User.update(newTimeUser, { where: { id } })
     } else {
       console.error('ERROR, NO GUILD')

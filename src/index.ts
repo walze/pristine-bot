@@ -14,7 +14,7 @@ import { MessageAverage } from './database/classes/MessageAverage'
 const runTasks = (msg: Message) => {
 
   // returns if msg is from bot
-  if (msg.author.id === msg.client.user.id) return
+  if (msg.author.bot) return
 
   // creates new request
   const request = new CommandRequest(msg)
