@@ -1,7 +1,6 @@
 import Sequelize from 'sequelize';
 import { sql } from '../db';
 import { Guild } from './Guild';
-import { User } from './User';
 
 export interface IGuildActive {
   user_id: string,
@@ -17,7 +16,8 @@ export const GuildActive = sql.define<IGuildActive, IGuildActive>('guild_active'
     references: {
       model: 'users',
       key: 'id',
-    }
+    },
+    unique: 'uniqueUserAndGuild'
   },
   guild_id: {
     type: Sequelize.STRING,
@@ -25,7 +25,7 @@ export const GuildActive = sql.define<IGuildActive, IGuildActive>('guild_active'
       model: Guild,
       key: 'id',
     },
-    unique: true
+    unique: 'uniqueUserAndGuild'
   },
   messageAvg: Sequelize.FLOAT,
   lastMessage: Sequelize.DATE,
