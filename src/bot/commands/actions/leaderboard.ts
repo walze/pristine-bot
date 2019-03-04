@@ -4,6 +4,7 @@ import Action from '../../classes/Action'
 import Commands from '../../classes/Commands'
 import { User } from '../../../database/models/User';
 import client from '../../../setup'
+import { sql } from '../../../database/db';
 
 const requirements: Requirements = {
     text: false
@@ -13,6 +14,9 @@ const description = 'in constructor'
 
 const action: actionBehaviour = async req => {
     const users = await User.findAll({
+        where: {
+            messageAvg: { [sql.Op.gt]: 10 }
+        },
         attributes: ['messageAvg', 'id'],
         limit: 5,
         order: [['messageAvg', 'ASC']]
