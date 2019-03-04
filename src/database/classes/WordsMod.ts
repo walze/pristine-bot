@@ -76,20 +76,6 @@ export default class WordsMod {
   }
 
   /**
-   * Replies to author of they said a good or bad word
-   */
-  // private _reply() {
-  //   this.request().msg.channel.send(this.text).then(message => {
-  //     let singleMessage = message as Message
-
-  //     if (Array.isArray(message))
-  //       singleMessage = message[0]
-
-  //     setTimeout(() => singleMessage.delete(), this.interval)
-  //   })
-  // }
-
-  /**
    * creates or updates User on DB
    */
   private async _saveDB() {

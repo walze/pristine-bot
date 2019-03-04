@@ -9,7 +9,7 @@ const requirements: Requirements = {
     text: false
 }
 
-const description = 'Shows the definition of a word ~~or not~~'
+const description = 'in constructor'
 
 const action: actionBehaviour = async req => {
     const users = await User.findAll({
