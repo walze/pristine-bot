@@ -6,6 +6,7 @@
   "scripts": {
     "start": "concurrently \"npm run tscw\" \"npm run bot\"",
     "boot": "npm run build && node builds/index",
+    "update-bot": "git pull && npm run build",
     "build": "npm run tsc",
     "bot": "nodemon builds/bot/index.js --inspect --trace-warnings --config nodemon.json",
     "tsc": "tsc",
@@ -32,7 +33,6 @@
     "wordnet": "^0.1.2"
   },
   "devDependencies": {
-    "parcel-bundler": "^1.11.0",
     "source-map-support": "^0.5.10",
     "tslib": "^1.9.3",
     "typescript": "^3.3.3333"

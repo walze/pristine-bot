@@ -14,7 +14,7 @@ const requirements: Requirements = {
     }
 }
 
-const description = 'in constructor'
+const description = 'Lists the most active users using the average time between messages'
 
 const action: actionBehaviour = async req => {
     const { id: guild_id } = req.msg.guild
