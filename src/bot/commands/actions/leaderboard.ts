@@ -2,28 +2,36 @@ import { actionBehaviour } from "../../../types"
 import { Requirements } from '../../classes/Requirements'
 import Action from '../../classes/Action'
 import Commands from '../../classes/Commands'
-import { User } from '../../../database/models/User';
 import client from '../../../setup'
 import { sql } from '../../../database/db';
+import { GuildActive } from '../../../database/models/GuildActive';
+import { RichEmbedOptions } from 'discord.js';
 
 const requirements: Requirements = {
-    text: false
+    text: false,
+    params: {
+        limit: false,
+    }
 }
 
 const description = 'in constructor'
 
 const action: actionBehaviour = async req => {
-    const users = await User.findAll({
+    const { id: guild_id } = req.msg.guild
+    const { limit } = req.params
+
+    const users = await GuildActive.findAll({
         where: {
-            messageAvg: { [sql.Op.gt]: 10 }
+            guild_id,
+            messageAvg: { [sql.Op.gt]: limit || 10 }
         },
-        attributes: ['messageAvg', 'id'],
+        attributes: ['messageAvg', 'user_id'],
         limit: 5,
         order: [['messageAvg', 'ASC']]
     })
 
     const usersNames = await Promise.all(users.map(async u => {
-        const { username, tag } = await client.fetchUser(u.id)
+        const { username, tag } = await client.fetchUser(u.user_id)
 
         return {
             username,
@@ -32,8 +40,18 @@ const action: actionBehaviour = async req => {
         }
     }))
 
+    const embed: RichEmbedOptions = {
+        title: 'Leaderboard',
+        fields: usersNames.map((u, i) => {
+            return {
+                name: `#${i + 1} ${u.tag}`,
+                value: `${u.avg} seconds between messages`
+            }
+        })
+    }
 
-    req.msg.channel.sendCode('json', JSON.stringify(usersNames))
+
+    req.msg.channel.send('Current most active users are...', { embed })
 }
 
 const def = new Action(requirements, action, description)
