@@ -25,15 +25,17 @@ const action: actionBehaviour = async req => {
             guild_id,
             messageAvg: { [sql.Op.gt]: limit || 10 }
         },
-        attributes: ['messageAvg', 'user_id'],
+        attributes: ['messageAvg', 'user_id', 'lastMessage'],
         limit: 5,
         order: [['messageAvg', 'ASC']]
     })
 
     const usersNames = await Promise.all(users.map(async u => {
         const { username, tag } = await client.fetchUser(u.user_id)
+        const lastMessage = new Date(u.lastMessage).toJSON().slice(0, 10).split('-').reverse().join('/')
 
         return {
+            lastMessage,
             username,
             tag,
             avg: u.messageAvg
@@ -44,7 +46,7 @@ const action: actionBehaviour = async req => {
         title: 'Leaderboard',
         fields: usersNames.map((u, i) => {
             return {
-                name: `#${i + 1} ${u.tag}`,
+                name: `#${i + 1} - ${u.tag} @ ${u.lastMessage}`,
                 value: `${u.avg} seconds between messages`
             }
         })

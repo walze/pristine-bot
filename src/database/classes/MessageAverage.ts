@@ -1,20 +1,22 @@
 import { Message } from 'discord.js'
 import { findOrCreateUser, IUserModel, User } from '../models/User'
 import { date_diff } from '../../bot/helpers/date_diff'
-import { IGuildActive, findOrCreateGuildAC, GuildActive } from '../models/GuildActive';
-import { IGuildsModel } from '../models/Guild';
-import { findOrCreateGuild } from './../models/Guild';
+import { IGuildActive, findOrCreateGuildAC, GuildActive } from '../models/GuildActive'
+import { IGuildsModel } from '../models/Guild'
+import { findOrCreateGuild } from './../models/Guild'
 
-// average formula, oldAvg + ((newValue - oldAvg) / totalSize)
+
 
 export class MessageAverage {
-
+  /**
+   * average formula
+   */
   public static formula = (
     oldAvg: number,
     newValue: number,
     totalSize: number,
   ) => {
-    return oldAvg + ((newValue - oldAvg) / totalSize)
+    return oldAvg + ((newValue - oldAvg) / (totalSize / 10))
   }
 
   private _user: Promise<IUserModel>
@@ -24,6 +26,7 @@ export class MessageAverage {
   constructor(msg: Message) {
     const { id: guild_id } = msg.guild
     const { id } = msg.author
+
     this._user = findOrCreateUser(id)
     this._guild = findOrCreateGuild(guild_id)
     this._guildAC = findOrCreateGuildAC(id, guild_id)
@@ -31,19 +34,16 @@ export class MessageAverage {
     this._updateAvg(id, guild_id)
   }
 
-  private async _updateAvg(id: string, guild_id: string) {
+  private async _updateAvg(user_id: string, guild_id: string) {
     const newTimeUser = await this._calculate(this._user)
     const newTimeGuild = await this._calculate(this._guildAC)
 
     if (await this._guild) {
       GuildActive.update(newTimeGuild, {
-        where: {
-          user_id: id,
-          guild_id
-        }
+        where: { user_id, guild_id }
       })
 
-      User.update(newTimeUser, { where: { id } })
+      User.update(newTimeUser, { where: { id: user_id } })
     } else {
       console.error('ERROR, NO GUILD')
     }
