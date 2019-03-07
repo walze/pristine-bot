@@ -35,8 +35,8 @@ export class MessageAverage {
   }
 
   private async _updateAvg(user_id: string, guild_id: string) {
-    const newTimeUser = await this._calculate(this._user)
-    const newTimeGuild = await this._calculate(this._guildAC)
+    const newTimeUser = await MessageAverage.calculate(await this._user)
+    const newTimeGuild = await MessageAverage.calculate(await this._guildAC)
 
     if (await this._guild) {
       GuildActive.update(newTimeGuild, {
@@ -49,11 +49,7 @@ export class MessageAverage {
     }
   }
 
-  private async _calculate(
-    proms: Promise<IUserModel | IGuildActive>
-  ) {
-    const instance = await proms
-
+  public static calculate = async (instance: IUserModel | IGuildActive) => {
     const newTime = new Date()
     const oldTime = new Date(instance.lastMessage)
     const newValue = date_diff(oldTime.getTime(), newTime.getTime())

@@ -6,6 +6,7 @@ import client from '../../../setup'
 import { sql } from '../../../database/db';
 import { GuildActive } from '../../../database/models/GuildActive';
 import { RichEmbedOptions } from 'discord.js';
+import { MessageAverage } from './../../../database/classes/MessageAverage';
 
 const requirements: Requirements = {
     text: false,
@@ -20,31 +21,35 @@ const action: actionBehaviour = async req => {
     const { id: guild_id } = req.msg.guild
     const { limit } = req.params
 
-    const users = await GuildActive.findAll({
+    const records = await GuildActive.findAll({
         where: {
             guild_id,
-            messageAvg: { [sql.Op.gt]: limit || 10 }
+            totalMessages: { [sql.Op.gt]: limit || 10 }
         },
-        attributes: ['messageAvg', 'user_id', 'lastMessage'],
-        limit: 5,
-        order: [['messageAvg', 'ASC']]
+        // limit: 5,
+        // order: [['messageAvg', 'ASC']]
     })
 
-    const usersNames = await Promise.all(users.map(async u => {
-        const { username, tag } = await client.fetchUser(u.user_id)
-        const lastMessage = new Date(u.lastMessage).toJSON().slice(0, 10).split('-').reverse().join('/')
+    const recordsFiltered = (await Promise.all(
+        records.map(async record => {
+            const updatedRecord = await MessageAverage.calculate(record)
+            const { username, tag } = await client.fetchUser(record.user_id)
+            const lastMessage = new Date(updatedRecord.lastMessage).toJSON().slice(0, 10).split('-').reverse().join('/')
 
-        return {
-            lastMessage,
-            username,
-            tag,
-            avg: u.messageAvg
-        }
-    }))
+            return {
+                lastMessage,
+                username,
+                tag,
+                avg: Math.round(updatedRecord.messageAvg)
+            }
+        })
+    ))
+        .sort((a, b) => a.avg - b.avg)
+        .slice(0, 5)
 
     const embed: RichEmbedOptions = {
         title: 'Leaderboard',
-        fields: usersNames.map((u, i) => {
+        fields: recordsFiltered.map((u, i) => {
             return {
                 name: `#${i + 1} - ${u.tag} @ ${u.lastMessage}`,
                 value: `${u.avg} seconds between messages`
