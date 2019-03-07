@@ -16,7 +16,9 @@ export class MessageAverage {
     newValue: number,
     totalSize: number,
   ) => {
-    return oldAvg + ((newValue - oldAvg) / (totalSize / 10))
+    const total = totalSize > 10 ? totalSize / 10 : totalSize
+
+    return oldAvg + ((newValue - oldAvg) / total)
   }
 
   private _user: Promise<IUserModel>
