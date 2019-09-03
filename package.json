@@ -18,7 +18,8 @@
     "discord.js": "^11.5.1",
     "immutable": "^4.0.0-rc.12",
     "nodemon": "^1.19.2",
-    "ramda": "^0.26.1"
+    "ramda": "^0.26.1",
+    "ts-toolbelt": "^3.8.63"
   },
   "devDependencies": {
     "@types/node": "^12.7.3",

@@ -27,13 +27,14 @@ export const changeCommand = (
   return Map(object)
 }
 
-export const getCommand = (command: ICommand) => command.toJSON() as unknown as ICommandNoIter
+export const getCommand = (command: ICommand) => command.toJSON() as unknown as Readonly<ICommandNoIter>
 
 // TYPES
 interface ICommandNoIter {
   readonly message: Message
-
+  action?: string,
   content?: string,
+  promises?: Array<PromiseLike<unknown>>,
   messageSendOptions?: MessageOptions | RichEmbed | Attachment,
 }
 
@@ -43,7 +44,6 @@ interface ICommandInitial extends ICommandNoIter {
 
 export type ICommand = {
   [key in keyof ReturnType<makeCommand>]: ReturnType<makeCommand>[key]
-
 }
 
 export type makeCommand = typeof makeCommand

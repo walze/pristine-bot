@@ -11,23 +11,24 @@ import { pipe } from 'ramda'
 import { replyMessage } from './bot/reply';
 import { makeCommand } from './bot/command';
 
-const runTasks = (message: Message) => {
+const runPipeline = (message: Message) => {
   // returns if msg is from bot
   if (message.author.bot) return
 
   const command = makeCommand({ message })
-  const piped = pipe(
+  const runPipeline = pipe(
     parseCommand,
     replyMessage,
+    console.log,
   )
 
-  console.log(piped(command))
+  runPipeline(command)
 }
 
 const onMessage = async (message: Message) => {
   // Handles Internal Errors
   try {
-    runTasks(message)
+    runPipeline(message)
   } catch (err) {
     ReplyError(message, err)
   }
