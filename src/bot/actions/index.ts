@@ -1,33 +1,29 @@
 import { Map } from 'immutable';
 import { ICommand, getCommand, changeCommand } from '../command';
-import { Actions } from './enum';
+import { Actions } from './helpers/enum';
 
 let actions = Map<Actions, IAction>();
 
 export const createAction = (
   name: Actions,
   description: string,
-  action: <T>() => Promise<T> | void,
+  action: (command: ICommand) => Promise<ICommand>,
 ) => {
   actions = actions.set(name, { name, description, action })
 }
 
-export const runAction = (command: ICommand): ICommand => {
-  const { action: name, promises = [] } = getCommand(command)
+export const runAction = (command: ICommand) => {
+  const { action: name } = getCommand(command)
   if (!name) return command;
 
   const action = actions.get(Actions[name])
   if (!action) return command;
 
-  const promise = action.action() || new Promise(rs => rs())
-
-  return changeCommand(command, {
-    promises: [...promises, promise],
-  })
+  return action.action(command);
 }
 
 interface IAction {
   name: Actions,
   description: string,
-  action: <T>() => Promise<T> | void
+  action: (command: ICommand) => Promise<ICommand>
 }

@@ -1,7 +1,7 @@
 // tslint:disable-next-line:no-var-requires
 require('source-map-support').install()
 
-import './bot/actions/importActions'
+import './bot/actions/helpers/importActions'
 
 import { Message } from 'discord.js'
 import ReplyError from './bot/helpers/ReplyError';

@@ -1,6 +1,6 @@
 import { changeCommand, ICommand, getCommand } from './command';
 import { Map } from 'immutable';
-import { Actions } from './actions/enum';
+import { Actions } from './actions/helpers/enum';
 
 export interface IArgument {
   match?: RegExpMatchArray,
@@ -12,25 +12,24 @@ const filterArgs = (
   acc: IArgument[],
   string: string,
   index: number,
+  array: string[],
 ) => {
   const arg = string.match(/--(\w+)/)
 
   if (arg) {
     const [, key] = arg
+    const value = array[index + 1]
 
     return [
       ...acc,
-      { match: arg, key },
+      { match: arg, key, value },
     ]
   }
 
   const previous = acc[index - 1]
 
-  // previous
-  if (previous && previous.match) {
-    previous.value = string
-    delete previous.match
-
+  if ((previous && previous.match) || arg) {
+    delete acc[index - 1].match
     return [...acc]
   }
 
@@ -71,6 +70,8 @@ export const parseCommand = (command: ICommand) => {
   const args = split.reduce(filterArgs, [] as IArgument[])
   const userMessage = filterMessage(args)
   const flags = Map(filterFlags(args))
+
+  // console.log(args)
 
   return changeCommand(
     command,

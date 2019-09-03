@@ -16,12 +16,14 @@
   "license": "ISC",
   "dependencies": {
     "discord.js": "^11.5.1",
+    "google-translate-api": "^2.3.0",
     "immutable": "^4.0.0-rc.12",
     "nodemon": "^1.19.2",
     "ramda": "^0.26.1",
     "ts-toolbelt": "^3.8.63"
   },
   "devDependencies": {
+    "@types/google-translate-api": "^2.3.0",
     "@types/node": "^12.7.3",
     "@types/ramda": "^0.26.21",
     "source-map-support": "^0.5.13",

@@ -9,12 +9,6 @@ export default function ReplyError(message: Message, err: Error) {
   return message.channel.send(``, { embed: InternalErrorReply(err) })
 }
 
-/**
- *
- *
- * @param {Error} err
- * @returns
- */
 function InternalErrorReply(err: Error) {
   return new RichEmbed({
     title: "Internal Error",

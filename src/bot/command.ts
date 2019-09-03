@@ -1,7 +1,7 @@
 import { Message, MessageOptions, RichEmbed, Attachment } from 'discord.js'
 
 import { Map } from 'immutable'
-import { Actions } from './actions/enum';
+import { Actions } from './actions/helpers/enum';
 
 export const makeCommand = (obj: ICommandNoIter) => {
   const object: ICommandInitial = {
