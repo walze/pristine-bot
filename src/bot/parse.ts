@@ -1,13 +1,14 @@
 import { changeCommand, ICommand, getCommand } from './command';
+import { Map } from 'immutable';
 
-export interface IArgs {
+export interface IArgument {
   match?: RegExpMatchArray,
   key?: string,
   value?: string,
 }
 
 const filterArgs = (
-  acc: IArgs[],
+  acc: IArgument[],
   string: string,
   index: number,
 ) => {
@@ -38,6 +39,22 @@ const filterArgs = (
   ]
 }
 
+const filterMessage = (args: IArgument[]) => args
+  .filter(arg => arg.key === 'message')
+  .map(arg => arg.value)
+  .join(' ')
+
+const filterFlags = (args: IArgument[]) => args
+  .filter(arg => arg.key !== 'message')
+  .reduce(
+    (acc, arg) => {
+      if (!arg.key || !arg.value) return acc;
+
+      return { ...acc, [arg.key]: arg.value }
+    },
+    {} as { [key: string]: string },
+  )
+
 export const parseCommand = (command: ICommand) => {
   const { message: { content } } = getCommand(command)
 
@@ -46,13 +63,16 @@ export const parseCommand = (command: ICommand) => {
 
   if (pristine.toLowerCase().trim() !== 'pristine,') return command;
 
-  const args = split
-    .reduce(filterArgs, [] as IArgs[])
+  const args = split.reduce(filterArgs, [] as IArgument[])
+  const userMessage = filterMessage(args)
+  const flags = Map(filterFlags(args))
 
-  const userMessage = args
-    .filter(arg => arg.key === 'message')
-    .map(arg => arg.value)
-    .join(' ')
-
-  return changeCommand(command, { content: userMessage, action })
+  return changeCommand(
+    command,
+    {
+      content: userMessage,
+      action,
+      flags,
+    },
+  )
 }

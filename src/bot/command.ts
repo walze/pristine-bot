@@ -34,6 +34,7 @@ interface ICommandNoIter {
   readonly message: Message
   action?: string,
   content?: string,
+  flags?: Map<string, string>
   promises?: Array<PromiseLike<unknown>>,
   messageSendOptions?: MessageOptions | RichEmbed | Attachment,
 }
