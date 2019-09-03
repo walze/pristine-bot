@@ -16,13 +16,12 @@ const runTasks = (message: Message) => {
   if (message.author.bot) return
 
   const command = newCommand({ message })
-
-  console.log(
-    pipe(
-      parseCommand,
-      replyMessage,
-    )(command),
+  const piped = pipe(
+    parseCommand,
+    replyMessage,
   )
+
+  console.log(piped(command))
 }
 
 const onMessage = async (message: Message) => {
