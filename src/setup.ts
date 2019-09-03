@@ -12,7 +12,7 @@ client.on('error', () => client.login(token))
 client.on('disconnect', () => client.login(token))
 
 client.on('ready', () => {
-  client.user.setActivity('s-help')
+  client.user.setActivity('pristine, help')
 
   log('Bot Ready\n')
 })

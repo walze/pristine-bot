@@ -1,23 +1,36 @@
+// tslint:disable-next-line:no-var-requires
+require('source-map-support').install()
+
 import { Message } from 'discord.js'
 import ReplyError from './bot/helpers/ReplyError';
 
 import { client } from './setup';
-// tslint:disable-next-line:no-var-requires
-require('source-map-support').install()
+import { parseCommand } from './bot/parse';
 
-const runTasks = (msg: Message) => {
+import { pipe } from 'ramda'
+import { replyMessage } from './bot/reply';
+import { newCommand } from './bot/newCommand';
+
+const runTasks = (message: Message) => {
   // returns if msg is from bot
-  if (msg.author.bot) return
+  if (message.author.bot) return
 
-  console.log(msg.content)
+  const command = newCommand({ message })
+
+  console.log(
+    pipe(
+      parseCommand,
+      replyMessage,
+    )(command),
+  )
 }
 
-const onMessage = async (msg: Message) => {
+const onMessage = async (message: Message) => {
   // Handles Internal Errors
   try {
-    runTasks(msg)
+    runTasks(message)
   } catch (err) {
-    ReplyError(msg, err)
+    ReplyError(message, err)
   }
 }
 

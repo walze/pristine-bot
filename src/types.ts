@@ -76,7 +76,7 @@ export interface ITranslator {
   raw: ''
 }
 
-export interface Iat {
+export interface IAt {
   type: 'USER' | 'ROLE',
   id: string,
   tag: string
