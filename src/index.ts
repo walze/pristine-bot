@@ -12,17 +12,16 @@ import { replyMessage } from './bot/reply';
 import { makeCommand } from './bot/command';
 
 const runPipeline = (message: Message) => {
-  // returns if msg is from bot
   if (message.author.bot) return
 
   const command = makeCommand({ message })
-  const runPipeline = pipe(
+  const run = pipe(
     parseCommand,
     replyMessage,
     console.log,
   )
 
-  runPipeline(command)
+  run(command)
 }
 
 const onMessage = async (message: Message) => {
