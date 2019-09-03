@@ -1,32 +1,14 @@
-import { Message, MessageOptions, RichEmbed, Attachment } from 'discord.js';
+import { Message, MessageOptions, RichEmbed, Attachment } from 'discord.js'
+
 import { Map } from 'immutable'
-
-interface ICommandNoIter {
-  readonly message: Message;
-  content?: string,
-  messageSendOptions?: MessageOptions | RichEmbed | Attachment,
-}
-
-interface ICommandInitial extends ICommandNoIter {
-  [Symbol.iterator](): Iterator<[keyof ICommandNoIter, ICommandNoIter[keyof ICommandNoIter]]>
-}
-
-export type ICommand = {
-  [key in keyof ReturnType<makeCommand>]: ReturnType<makeCommand>[key];
-};
-
-export type makeCommand = typeof makeCommand
 
 export const makeCommand = (obj: ICommandNoIter) => {
   const object: ICommandInitial = {
     ...obj,
     *[Symbol.iterator]() {
-      const properties = Object.keys(this) as Array<keyof ICommandInitial>;
-      for (const key of properties) {
-        const value = this[key] as ICommandInitial[keyof ICommandInitial];
+      const properties = Object.keys(this) as Array<keyof ICommandInitial>
 
-        yield [key, value];
-      }
+      for (const key of properties) yield [key, this[key]]
     },
   }
 
@@ -46,3 +28,22 @@ export const changeCommand = (
 }
 
 export const getCommand = (command: ICommand) => command.toJSON() as unknown as ICommandNoIter
+
+// TYPES
+interface ICommandNoIter {
+  readonly message: Message
+
+  content?: string,
+  messageSendOptions?: MessageOptions | RichEmbed | Attachment,
+}
+
+interface ICommandInitial extends ICommandNoIter {
+  [Symbol.iterator](): Iterator<[keyof ICommandNoIter, ICommandNoIter[keyof ICommandNoIter]]>
+}
+
+export type ICommand = {
+  [key in keyof ReturnType<makeCommand>]: ReturnType<makeCommand>[key]
+
+}
+
+export type makeCommand = typeof makeCommand
