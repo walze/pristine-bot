@@ -9,13 +9,13 @@ import { parseCommand } from './bot/parse';
 
 import { pipe } from 'ramda'
 import { replyMessage } from './bot/reply';
-import { newCommand } from './bot/newCommand';
+import { makeCommand } from './bot/command';
 
 const runTasks = (message: Message) => {
   // returns if msg is from bot
   if (message.author.bot) return
 
-  const command = newCommand({ message })
+  const command = makeCommand({ message })
   const piped = pipe(
     parseCommand,
     replyMessage,

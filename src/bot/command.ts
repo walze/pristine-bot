@@ -12,12 +12,12 @@ interface ICommandInitial extends ICommandNoIter {
 }
 
 export type ICommand = {
-  [key in keyof ReturnType<newCommand>]: ReturnType<newCommand>[key];
+  [key in keyof ReturnType<makeCommand>]: ReturnType<makeCommand>[key];
 };
 
-export type newCommand = typeof newCommand
+export type makeCommand = typeof makeCommand
 
-export const newCommand = (obj: ICommandNoIter) => {
+export const makeCommand = (obj: ICommandNoIter) => {
   const object: ICommandInitial = {
     ...obj,
     *[Symbol.iterator]() {
@@ -36,13 +36,13 @@ export const newCommand = (obj: ICommandNoIter) => {
 export const changeCommand = (
   command: ICommand,
   changes: Partial<ICommandNoIter>,
-): ReturnType<newCommand> => {
-  const object = newCommand({
-    ...getCommandJSON(command),
+): ReturnType<makeCommand> => {
+  const object = makeCommand({
+    ...getCommand(command),
     ...changes,
   })
 
   return Map(object)
 }
 
-export const getCommandJSON = (command: ICommand) => command.toJSON() as unknown as ICommandNoIter
+export const getCommand = (command: ICommand) => command.toJSON() as unknown as ICommandNoIter
