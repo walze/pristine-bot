@@ -1,10 +1,9 @@
 import { Client } from 'discord.js'
-import Commands from './bot/classes/Commands'
 import { log } from 'console'
 
-const client = new Client()
-
 import { token } from '../env.json'
+
+export const client = new Client()
 
 client.login(token)
 
@@ -15,8 +14,6 @@ client.on('disconnect', () => client.login(token))
 client.on('ready', () => {
   client.user.setActivity('s-help')
 
-  Commands.log()
-
   log('Bot Ready\n')
 })
 
@@ -26,5 +23,3 @@ process.on('unhandledRejection', (_, promise) => {
 
   promise.catch(console.error)
 })
-
-export default client
