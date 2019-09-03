@@ -20,6 +20,7 @@
     "immutable": "^4.0.0-rc.12",
     "nodemon": "^1.19.2",
     "ramda": "^0.26.1",
+    "string.prototype.matchall": "^3.0.1",
     "ts-toolbelt": "^3.8.63"
   },
   "devDependencies": {
