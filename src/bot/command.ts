@@ -1,6 +1,7 @@
 import { Message, MessageOptions, RichEmbed, Attachment } from 'discord.js'
 
 import { Map } from 'immutable'
+import { Actions } from './actions/enum';
 
 export const makeCommand = (obj: ICommandNoIter) => {
   const object: ICommandInitial = {
@@ -32,7 +33,7 @@ export const getCommand = (command: ICommand) => command.toJSON() as unknown as 
 // TYPES
 interface ICommandNoIter {
   readonly message: Message
-  action?: string,
+  action?: keyof typeof Actions,
   content?: string,
   flags?: Map<string, string>
   promises?: Array<PromiseLike<unknown>>,

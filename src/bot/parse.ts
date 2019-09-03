@@ -1,5 +1,6 @@
 import { changeCommand, ICommand, getCommand } from './command';
 import { Map } from 'immutable';
+import { Actions } from './actions/enum';
 
 export interface IArgument {
   match?: RegExpMatchArray,
@@ -58,7 +59,11 @@ const filterFlags = (args: IArgument[]) => args
 export const parseCommand = (command: ICommand) => {
   const { message: { content } } = getCommand(command)
 
-  const [pristine, action, ...split] = content
+  const [
+    pristine,
+    action,
+    ...split
+  ] = content
     .split(/\s+/)
 
   if (pristine.toLowerCase().trim() !== 'pristine,') return command;
@@ -71,7 +76,7 @@ export const parseCommand = (command: ICommand) => {
     command,
     {
       content: userMessage,
-      action,
+      action: action as keyof typeof Actions,
       flags,
     },
   )
