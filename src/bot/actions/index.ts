@@ -1,5 +1,5 @@
 import { Map } from 'immutable';
-import { ICommand, getCommand, changeCommand } from '../command';
+import { ICommand, getCommand } from '../command';
 import { Actions } from './helpers/enum';
 
 let actions = Map<Actions, IAction>();
@@ -7,7 +7,7 @@ let actions = Map<Actions, IAction>();
 export const createAction = (
   name: Actions,
   description: string,
-  action: (command: ICommand) => Promise<ICommand>,
+  action: ActionFn,
 ) => {
   actions = actions.set(name, { name, description, action })
 }
@@ -25,5 +25,7 @@ export const runAction = (command: ICommand) => {
 interface IAction {
   name: Actions,
   description: string,
-  action: (command: ICommand) => Promise<ICommand>
+  action: ActionFn
 }
+
+export type ActionFn = (command: ICommand) => Promise<ICommand>

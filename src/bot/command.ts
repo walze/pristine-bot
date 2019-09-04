@@ -33,11 +33,11 @@ export const getCommand = (command: ICommand) => command.toJSON() as unknown as 
 // TYPES
 interface ICommandNoIter {
   readonly message: Message
-  action?: keyof typeof Actions,
-  content?: string,
-  flags?: Map<string, string>
-  promises?: Array<PromiseLike<unknown>>,
-  messageSendOptions?: MessageOptions | RichEmbed | Attachment,
+  readonly action?: keyof typeof Actions,
+  readonly content?: string,
+  readonly flags?: Map<string, string>
+  readonly promises?: Array<PromiseLike<unknown>>,
+  readonly messageSendOptions?: MessageOptions | RichEmbed | Attachment,
 }
 
 interface ICommandInitial extends ICommandNoIter {
