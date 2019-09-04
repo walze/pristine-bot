@@ -12,6 +12,10 @@ export const createAction = (
   actions = actions.set(name, { name, description, action })
 }
 
+export const validadeAction = (command: ICommand) => {
+
+}
+
 export const runAction = (command: ICommand) => {
   const { action: name } = command
   if (!name) return command;

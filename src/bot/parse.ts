@@ -1,4 +1,4 @@
-import { changeCommand, ICommand } from './command';
+import { mutateCommand, ICommand } from './command';
 import { Map } from 'immutable';
 import { Actions } from './actions/helpers/enum';
 import matchAll from 'string.prototype.matchall'
@@ -39,7 +39,7 @@ export const parseCommand = (command: ICommand) => {
   const userMessage = joined.replace(flagRegex, '')
   const flags = Map(filterFlags(args))
 
-  return changeCommand(
+  return mutateCommand(
     command,
     {
       content: userMessage,

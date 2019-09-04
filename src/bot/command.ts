@@ -17,7 +17,7 @@ export const makeCommand = (obj: ICommandNoIter) => {
     .toJSON() as Readonly<ICommandNoIter>
 }
 
-export const changeCommand = (
+export const mutateCommand = (
   command: ICommand,
   changes: Partial<ICommandNoIter>,
 ) => makeCommand(

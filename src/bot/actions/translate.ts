@@ -1,7 +1,7 @@
 import { createAction } from "."
 import { Actions } from "./helpers/enum"
 import { languages } from './helpers/languages';
-import { changeCommand } from '../command';
+import { mutateCommand } from '../command';
 
 import translate from 'translate'
 
@@ -33,6 +33,6 @@ createAction(
       },
     )
 
-    return changeCommand(command, { content: text })
+    return mutateCommand(command, { content: text })
   },
 )

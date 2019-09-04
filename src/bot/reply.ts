@@ -1,4 +1,4 @@
-import { ICommand, changeCommand } from './command';
+import { ICommand, mutateCommand } from './command';
 
 export const replyMessage = async (
   commandPromise: ICommand | Promise<ICommand>,
@@ -11,7 +11,7 @@ export const replyMessage = async (
   const promise = message.channel
     .send(content, messageSendOptions)
 
-  return changeCommand(
+  return mutateCommand(
     command, {
       promises: [...promises, promise],
     },
