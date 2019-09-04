@@ -1,5 +1,5 @@
 import { Map } from 'immutable';
-import { ICommand, getCommand } from '../command';
+import { ICommand } from '../command';
 import { Actions } from './helpers/enum';
 
 let actions = Map<Actions, IAction>();
@@ -13,7 +13,7 @@ export const createAction = (
 }
 
 export const runAction = (command: ICommand) => {
-  const { action: name } = getCommand(command)
+  const { action: name } = command
   if (!name) return command;
 
   const action = actions.get(Actions[name])

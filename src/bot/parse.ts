@@ -1,4 +1,4 @@
-import { changeCommand, ICommand, getCommand } from './command';
+import { changeCommand, ICommand } from './command';
 import { Map } from 'immutable';
 import { Actions } from './actions/helpers/enum';
 import matchAll from 'string.prototype.matchall'
@@ -22,7 +22,7 @@ const filterFlags = (args: IArgument[]) => args
   )
 
 export const parseCommand = (command: ICommand) => {
-  const { message: { content } } = getCommand(command)
+  const { message: { content } } = command
 
   const [
     pristine,
