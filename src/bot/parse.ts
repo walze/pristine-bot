@@ -42,8 +42,9 @@ export const parseCommand = (command: ICommand) => {
   return mutateCommand(
     command,
     {
+      isCommand: !!pristine,
       content: userMessage,
-      action: action as keyof typeof Actions,
+      actionName: action as keyof typeof Actions,
       flags,
     },
   )

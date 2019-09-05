@@ -19,7 +19,7 @@ client.on('ready', () => {
 
 // Error Handling
 process.on('unhandledRejection', (_, promise) => {
-  console.error('!!!!! unhandle_rejection !!!!!'.toUpperCase())
+  console.error('//// unhandle_rejection ////'.toUpperCase())
 
   promise.catch(console.error)
 })

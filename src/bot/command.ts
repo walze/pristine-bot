@@ -3,6 +3,9 @@ import { Message, MessageOptions, RichEmbed, Attachment } from 'discord.js'
 import { Map } from 'immutable'
 import { Actions } from './actions/helpers/enum';
 
+export const commandError = (command: ICommand, errorMessage: string) =>
+  mutateCommand(command, { error: new Error(errorMessage) });
+
 export const makeCommand = (obj: ICommandNoIter) => {
   const object: ICommandInitial = {
     ...obj,
@@ -33,8 +36,10 @@ export const mutateCommand = (
 // _____ //
 // _____ //
 interface ICommandNoIter {
-  message: Message
-  action?: keyof typeof Actions,
+  message: Message,
+  error?: Error,
+  isCommand?: boolean,
+  actionName?: keyof typeof Actions,
   content?: string,
   flags?: Map<string, string>
   promises?: Array<PromiseLike<unknown>>,

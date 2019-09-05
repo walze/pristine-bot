@@ -1,12 +1,14 @@
-import { Message, RichEmbed } from 'discord.js';
+import { RichEmbed } from 'discord.js'
+import { ICommand } from '../command'
 
 /**
  * If any Errors occur, it replies to channel
  */
-export default function ReplyError(message: Message, err: Error) {
-  console.error(err)
+export default function ReplyError(command: ICommand) {
+  if (!command.isCommand || !command.error) return
+  const { error, message } = command
 
-  return message.channel.send(``, { embed: InternalErrorReply(err) })
+  return message.channel.send(``, { embed: InternalErrorReply(error) })
 }
 
 function InternalErrorReply(err: Error) {
