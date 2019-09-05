@@ -2,11 +2,12 @@ import { Message, MessageOptions, RichEmbed, Attachment } from 'discord.js'
 
 import { Map } from 'immutable'
 import { Actions } from './actions/helpers/enum';
+import { IIndexAny } from './helpers/types';
 
 export const commandError = <T>(command: ICommand<T>, errorMessage: string) =>
   mutateCommand(command, { error: new Error(errorMessage) });
 
-export const makeCommand = <T = {}>(obj: Partial<ICommand<T>>) => {
+export const makeCommand = <T = IIndexAny>(obj: Partial<ICommand<T>>) => {
   const object = {
     ...obj,
     *[Symbol.iterator]() {
@@ -35,14 +36,14 @@ export const mutateCommand = <T>(
 // TYPES //
 // _____ //
 // _____ //
-export interface ICommand<T = {}> {
+export interface ICommand<T = IIndexAny> {
   message: Message
   error?: Error
   isCommand?: boolean
   actionName?: keyof typeof Actions
   content?: string
   flags?: Map<keyof T, string>
-  params?: T
+  params: T
   promises?: Array<PromiseLike<any>>
   messageSendOptions?: MessageOptions | RichEmbed | Attachment
   [Symbol.iterator](): Iterator<[keyof ICommand, ICommand[keyof ICommand]]>
