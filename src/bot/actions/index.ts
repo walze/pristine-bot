@@ -2,18 +2,19 @@ import { Map } from 'immutable';
 import { ICommand, commandError } from '../command';
 import { Actions } from './helpers/enum';
 
-let actions = Map<Actions, IAction>();
+let actions = Map<Actions, IAction<any>>();
 
-export const createAction = (
+export const createAction = <T>(
   name: Actions,
   description: string,
-  action: ActionFn,
+  params: T,
+  action: ActionFn<T>,
 ) => {
-  actions = actions.set(name, { name, description, action })
+  actions = actions.set(name, { name, description, action, params })
 }
 
 export const validadeAction = (command: ICommand) => {
-  throw commandError(command, 'test error')
+  // throw commandError(command, 'test error')
 
   return command
 }
@@ -28,10 +29,11 @@ export const runAction = (command: ICommand) => {
   return action.action(command);
 }
 
-interface IAction {
+interface IAction<T = {}> {
   name: Actions,
   description: string,
-  action: ActionFn
+  params: T,
+  action: ActionFn<T>
 }
 
-export type ActionFn = (command: ICommand) => Promise<ICommand>
+export type ActionFn<T = {}> = (command: ICommand<T>) => Promise<ICommand<T>>

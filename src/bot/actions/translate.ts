@@ -1,7 +1,7 @@
 import { createAction } from "."
 import { Actions } from "./helpers/enum"
-import { languages } from './helpers/languages';
-import { mutateCommand } from '../command';
+import { languages } from './helpers/languages'
+import { mutateCommand, commandError } from '../command'
 
 import translate from 'translate'
 
@@ -15,15 +15,19 @@ const switchText = (language: string = ''): string | undefined => {
     if (languages[lang] === language)
       return languages[lang]
 
-  return undefined;
+  return undefined
 }
 
 createAction(
   Actions.translate,
   'Translates given text to ~~almost~~ any language ~~precision not guaranteed~~',
+  {
+    from: false,
+    to: true,
+  },
   async command => {
     const { flags, content } = command
-    if (!flags || !content) throw new Error('This command needs arguments');
+    if (!flags || !content) throw commandError(command, 'This command needs arguments')
 
     const text = await translate(
       content,

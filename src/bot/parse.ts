@@ -45,7 +45,7 @@ export const parseCommand = (command: ICommand) => {
       isCommand: !!pristine,
       content: userMessage,
       actionName: action as keyof typeof Actions,
-      flags,
+      flags: flags as Map<keyof {}, string>,
     },
   )
 }
