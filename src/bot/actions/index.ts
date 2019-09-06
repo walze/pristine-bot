@@ -1,9 +1,8 @@
-import { Map } from 'immutable';
 import { ICommand, commandError } from '../command';
 import { Actions } from './helpers/enum';
 import { IIndexedAny } from '../helpers/types';
 
-let actions = Map<Actions, IAction<any>>();
+let actions = new Map<Actions, IAction<any>>();
 
 export const createAction = <T>(
   name: Actions,
