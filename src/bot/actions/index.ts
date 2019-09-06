@@ -1,8 +1,8 @@
-import { ICommand, commandError } from '../command';
-import { Actions } from './helpers/enum';
-import { IIndexedAny } from '../helpers/types';
+import { ICommand, commandError } from '../command'
+import { Actions } from './helpers/enum'
+import { IIndexedAny } from '../helpers/types'
 
-let actions = new Map<Actions, IAction<any>>();
+let actions = new Map<Actions, IAction<any>>()
 
 export const createAction = <T>(
   name: Actions,
@@ -14,37 +14,33 @@ export const createAction = <T>(
 }
 
 export const validadeAction = (command: ICommand) => {
-  // throw commandError(command, 'test error')
-  const {
-    params,
-    flags,
-  } = command
-  const required = params as { [key: string]: any }
+  const { flags, actionName } = command
 
-  for (const key in required) if (required.hasOwnProperty(key)) {
-    const keyIsRequired = required[key];
-    if (!flags && keyIsRequired)
-      throw commandError(command, `expected ${key} but no flags given`)
-    if (!flags) throw commandError(command, `expected ${key} but no flags given`);
+  if (!actionName) return command
+
+  const action = actions.get(Actions[actionName])
+  if (!action) return command
+
+  for (const key in action.params) if (action.params.hasOwnProperty(key)) {
+    const keyIsRequired = action.params[key]
+
+    if (!flags) throw commandError(command, `expected ${key} but did not find any flags`)
 
     if (keyIsRequired && !flags[key])
-      throw commandError(command, `expected ${key} but no flag given`)
+      throw commandError(command, `expected flag "${key}" but was not given`)
   }
 
   return command
 }
 
 export const runAction = (command: ICommand) => {
-  const { actionName: name } = command
-  if (!name) return command;
+  const { action } = command
+  if (!action) return command
 
-  const action = actions.get(Actions[name])
-  if (!action) return command;
-
-  return action.action(command);
+  return action.action(command)
 }
 
-interface IAction<T = IIndexedAny> {
+export interface IAction<T = IIndexedAny> {
   name: Actions,
   description: string,
   params: T,

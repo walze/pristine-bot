@@ -26,8 +26,8 @@ const runPipeline = async (message: Message) => {
   )
 
   const ran = await run(command)
-  delete ran.message
-  console.log(ran)
+  const { message: _, ...obj } = ran
+  console.log(obj)
 
   return ran
 }
@@ -35,10 +35,8 @@ const runPipeline = async (message: Message) => {
 const onMessage = async (message: Message) => {
   // Handles Internal Errors
   try {
-    runPipeline(message)
+    await runPipeline(message)
   } catch (err) {
-    delete err.message
-
     ReplyError(err as ICommand)
   }
 }
