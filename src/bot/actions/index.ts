@@ -19,7 +19,10 @@ export const validadeAction = (command: ICommand) => {
   if (!actionName) return command
 
   const action = actions.get(Actions[actionName])
-  if (!action) return command
+  if (!action) {
+    console.log('command not found')
+    return command
+  }
 
   for (const key in action.params) if (action.params.hasOwnProperty(key)) {
     const keyIsRequired = action.params[key]

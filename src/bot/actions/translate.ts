@@ -1,7 +1,7 @@
 import { createAction } from "."
 import { Actions } from "./helpers/enum"
 import { languages } from './helpers/languages'
-import { mutateCommand, commandError } from '../command'
+import { mutateCommand } from '../command'
 
 import translate from 'translate'
 
@@ -27,7 +27,6 @@ createAction(
   },
   async command => {
     const { flags, content } = command
-    if (!flags || !content) throw commandError(command, 'This command needs arguments')
 
     const text = await translate(
       content,

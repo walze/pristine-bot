@@ -15,6 +15,7 @@
   "author": "Wallace Fares",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.19.0",
     "discord.js": "^11.5.1",
     "google-translate-api": "^2.3.0",
     "nodemon": "^1.19.2",

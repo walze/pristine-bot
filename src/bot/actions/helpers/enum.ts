@@ -1,4 +1,4 @@
 export enum Actions {
   'translate',
-  'find-image',
+  'imgur',
 }

@@ -1,1 +1,2 @@
 import '../translate'
+import '../imgur'
