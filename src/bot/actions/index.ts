@@ -1,4 +1,4 @@
-import { ICommand, commandError } from '../command'
+import { ICommand, commandError, mutateCommand } from '../command'
 import { Actions } from './helpers/enum'
 import { IIndexedAny } from '../helpers/types'
 
@@ -30,7 +30,7 @@ export const validadeAction = (command: ICommand) => {
       throw commandError(command, `expected flag "${key}" but was not given`)
   }
 
-  return command
+  return mutateCommand(command, { action })
 }
 
 export const runAction = (command: ICommand) => {
