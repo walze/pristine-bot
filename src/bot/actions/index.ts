@@ -1,7 +1,7 @@
 import { Map } from 'immutable';
 import { ICommand, commandError } from '../command';
 import { Actions } from './helpers/enum';
-import { IIndexAny } from '../helpers/types';
+import { IIndexedAny } from '../helpers/types';
 
 let actions = Map<Actions, IAction<any>>();
 
@@ -26,9 +26,9 @@ export const validadeAction = (command: ICommand) => {
     const keyIsRequired = required[key];
     if (!flags && keyIsRequired)
       throw commandError(command, `expected ${key} but no flags given`)
-    if (!flags) return;
+    if (!flags) throw commandError(command, `expected ${key} but no flags given`);
 
-    if (keyIsRequired && !flags.get(key))
+    if (keyIsRequired && !flags[key])
       throw commandError(command, `expected ${key} but no flag given`)
   }
 
@@ -45,11 +45,11 @@ export const runAction = (command: ICommand) => {
   return action.action(command);
 }
 
-interface IAction<T = IIndexAny> {
+interface IAction<T = IIndexedAny> {
   name: Actions,
   description: string,
   params: T,
   action: ActionFn<T>
 }
 
-export type ActionFn<T = IIndexAny> = (command: ICommand<T>) => Promise<ICommand<T>>
+export type ActionFn<T = IIndexedAny> = (command: ICommand<T>) => Promise<ICommand<T>>

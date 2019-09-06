@@ -32,8 +32,8 @@ createAction(
     const text = await translate(
       content,
       {
-        from: switchText(flags.get('from')) || 'en',
-        to: switchText(flags.get('to')),
+        from: switchText(flags.from) || 'en',
+        to: switchText(flags.to),
       },
     )
 

@@ -1,1 +1,1 @@
-export interface IIndexAny { [key: string]: any }
+export interface IIndexedAny { [key: string]: any }
