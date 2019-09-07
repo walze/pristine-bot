@@ -1,26 +1,15 @@
+import { reduce } from 'ramda'
+
 import { mutateCommand, ICommand } from './command';
 import { Actions } from './actions/helpers/enum';
 import matchAll from 'string.prototype.matchall'
-
-import { reduce } from 'ramda'
-
-export interface IArgument {
-  key?: string,
-  value?: string,
-}
 
 const flagRegex = /--(\w+)[=\s]?(\w+)?/g
 
 export const parseCommand = (command: ICommand) => {
   const { message: { content } } = command
 
-  const [
-    pristine,
-    action,
-    ...split
-  ] = content
-    .split(/\s+/)
-
+  const [pristine, action, ...split] = content.split(/\s+/)
   if (pristine.toLowerCase().trim() !== 'pristine,') return command;
 
   const joined = split.join(' ')
