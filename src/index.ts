@@ -12,7 +12,7 @@ import { parseCommand } from './bot/parse'
 import { pipe } from 'ramda'
 import { replyMessage } from './bot/reply'
 import { makeCommand, ICommand } from './bot/command'
-import { runAction, validadeAction } from './bot/actions'
+import { runAction, validadeAction } from './bot/actions/actions'
 
 const runPipeline = async (message: Message) => {
   if (message.author.bot) return

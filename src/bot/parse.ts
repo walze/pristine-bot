@@ -3,7 +3,6 @@ import { Actions } from './actions/helpers/enum';
 import matchAll from 'string.prototype.matchall'
 
 export interface IArgument {
-  match?: RegExpMatchArray,
   key?: string,
   value?: string,
 }

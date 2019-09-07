@@ -1,7 +1,7 @@
 import { IImgurResponse } from '../../types';
 import Axios from 'axios';
 import { RichEmbedOptions } from 'discord.js';
-import { createAction } from '.';
+import { createAction } from './actions';
 import { Actions } from './helpers/enum';
 import { mutateCommand } from '../command';
 

@@ -1,4 +1,4 @@
-import { createAction } from "."
+import { createAction } from "./actions"
 import { Actions } from "./helpers/enum"
 import { languages } from './helpers/languages'
 import { mutateCommand } from '../command'

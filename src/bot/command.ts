@@ -2,7 +2,7 @@ import { Message, MessageOptions, RichEmbed, Attachment } from 'discord.js'
 
 import { Actions } from './actions/helpers/enum'
 import { IIndexedAny } from './helpers/types'
-import { IAction } from './actions'
+import { IAction } from './actions/actions'
 
 export const commandError = <T>(command: ICommand<T>, errorMessage: string) =>
   mutateCommand(command, { error: new Error(errorMessage) })
