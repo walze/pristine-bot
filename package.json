@@ -22,7 +22,7 @@
     "ramda": "^0.26.1",
     "string.prototype.matchall": "^3.0.1",
     "translate": "^1.1.0",
-    "ts-toolbelt": "^3.8.63"
+    "ts-toolbelt": "^3.8.72"
   },
   "devDependencies": {
     "@types/google-translate-api": "^2.3.0",
