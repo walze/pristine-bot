@@ -28,23 +28,18 @@ createAction(
       })
       .then(async res => {
         const albums: IImgurResponse[] = res.data.data
-
         if (albums.length < 1) throw new Error(`Nothing found on "${cmd.content}"`)
 
-        const filtered = filter(albums)
+        const filtered = filterEmpty(albums)
 
-        const indexes = {
-          album: Number(flags.album) - 1,
-          image: Number(flags.image) - 1,
-        }
-
-        console.log(indexes)
+        const albumN = Number(flags.album) - 1
+        const imageN = Number(flags.image) - 1
 
         const params = {
-          id: indexes.album || 0,
-          image_id: indexes.image || 0,
-          album: filtered[indexes.album || 0],
-          image: filtered[indexes.album || 0].images[indexes.image || 0],
+          id: albumN || 0,
+          image_id: imageN || 0,
+          album: filtered[albumN || 0],
+          image: filtered[albumN || 0].images[imageN || 0],
         }
 
         const embed: RichEmbedOptions = {
@@ -73,7 +68,7 @@ createAction(
   },
 )
 
-function filter(albums: IImgurResponse[]) {
+function filterEmpty(albums: IImgurResponse[]) {
   return albums
     .filter(album => album.images_count >= 1)
     .map(album => {
