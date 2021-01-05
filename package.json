@@ -15,7 +15,7 @@
   "author": "Wallace Fares",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "better-log": "^1.3.3",
     "cleverbot.io": "^1.0.4",
     "concurrently": "^4.1.0",
