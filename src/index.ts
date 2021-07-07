@@ -1,51 +1,43 @@
-import { Message } from 'discord.js'
 // tslint:disable-next-line:no-var-requires
 require('source-map-support').install()
-process.setMaxListeners(0)
 
-import CommandRequest from './bot/classes/CommandRequest'
-import WordsMod from './database/classes/WordsMod'
-import client from './setup'
+import './bot/actions/helpers/importActions'
 
+import { Message } from 'discord.js'
 import ReplyError from './bot/helpers/ReplyError'
-import Commands from './bot/classes/Commands'
-import { MessageAverage } from './database/classes/MessageAverage'
 
-const runTasks = (msg: Message) => {
+import { client } from './setup'
+import { parseCommand } from './bot/parse'
 
-  // returns if msg is from bot
-  if (msg.author.bot) return
+import { pipe } from 'ramda'
+import { replyMessage } from './bot/reply'
+import { makeCommand, ICommand } from './bot/command'
+import { runAction, validadeAction } from './bot/actions/actions'
 
-  // creates new request
-  const request = new CommandRequest(msg)
+const runPipeline = async (message: Message) => {
+  if (message.author.bot) return
 
-  // Handles Request Errors
-  try {
+  const command = makeCommand({ message })
+  const run = pipe(
+    parseCommand,
+    validadeAction,
+    runAction,
+    replyMessage,
+  )
 
-    if (request.command) {
-      Commands.execute(request)
-    }
+  const ran = await run(command)
+  const { message: _, ...obj } = ran
+  console.log(obj)
 
-    // creates wordsmod and emits it
-    const mod = new WordsMod(request)
-    mod.emit()
-
-    // tslint:disable-next-line:no-unused-expression
-    new MessageAverage(msg)
-
-  } catch (err) {
-    ReplyError(request, err)
-  }
+  return ran
 }
 
-const onMessage = async (msg: Message) => {
+const onMessage = async (message: Message) => {
   // Handles Internal Errors
   try {
-
-    runTasks(msg)
-
+    await runPipeline(message)
   } catch (err) {
-    ReplyError(msg, err)
+    ReplyError(err as ICommand)
   }
 }
 

@@ -1,7 +1,3 @@
-import CommandRequest from "./bot/classes/CommandRequest";
-
-export type actionBehaviour = (request: CommandRequest) => Promise<any>
-
 export interface IImgurResponse {
   id: string,
   title: string,
@@ -80,7 +76,7 @@ export interface ITranslator {
   raw: ''
 }
 
-export interface Iat {
+export interface IAt {
   type: 'USER' | 'ROLE',
   id: string,
   tag: string
