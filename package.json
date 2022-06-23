@@ -22,7 +22,7 @@
     "discord.js": "^11.4.2",
     "express": "^4.16.4",
     "google-translate-api": "^2.3.0",
-    "jsdom": "^14.0.0",
+    "jsdom": "^16.5.0",
     "mysql2": "^1.6.5",
     "nodemon": "^1.18.10",
     "sequelize": "^4.43.0",
