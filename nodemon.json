@@ -1,0 +1,9 @@
+{
+  "verbose": true,
+  "ignore": ["node_modules"],
+  "watch": ["src", "dist"],
+  "execMap": {
+    "ts": "pnpm build",
+    "js": "pnpm start"
+  }
+}
