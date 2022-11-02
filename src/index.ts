@@ -1,52 +1,45 @@
-import { Message } from 'discord.js'
-// tslint:disable-next-line:no-var-requires
-require('source-map-support').install()
-process.setMaxListeners(0)
+import { config } from "dot-env";
+import { Client, GatewayIntentBits, REST, Routes } from "discord.js";
+import assert from "assert";
 
-import CommandRequest from './bot/classes/CommandRequest'
-import WordsMod from './database/classes/WordsMod'
-import client from './setup'
+config();
+const { TOKEN, CLIENT_ID } = process.env;
+assert(TOKEN, "TOKEN is not defined");
+assert(CLIENT_ID, "CLIENT_ID is not defined");
 
-import ReplyError from './bot/helpers/ReplyError'
-import Commands from './bot/classes/Commands'
-import { MessageAverage } from './database/classes/MessageAverage'
+const commands = [
+  {
+    name: "ping",
+    description: "Replies with Pong!",
+  },
+];
 
-const runTasks = (msg: Message) => {
+const rest = new REST({ version: "10" }).setToken(TOKEN);
 
-  // returns if msg is from bot
-  if (msg.author.bot) return
-
-  // creates new request
-  const request = new CommandRequest(msg)
-
-  // Handles Request Errors
+(async () => {
   try {
+    console.log("Started refreshing application (/) commands.");
 
-    if (request.command) {
-      Commands.execute(request)
-    }
+    await rest.put(Routes.applicationCommands(CLIENT_ID), { body: commands });
 
-    // creates wordsmod and emits it
-    const mod = new WordsMod(request)
-    mod.emit()
-
-    // tslint:disable-next-line:no-unused-expression
-    new MessageAverage(msg)
-
-  } catch (err) {
-    ReplyError(request, err)
+    console.log("Successfully reloaded application (/) commands.");
+  } catch (error) {
+    console.error(error);
   }
-}
+})();
 
-const onMessage = async (msg: Message) => {
-  // Handles Internal Errors
-  try {
+const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
-    runTasks(msg)
+client.on("ready", () => {
+  console.log(`Logged in as ${client.user.tag}!`);
+});
 
-  } catch (err) {
-    ReplyError(msg, err)
+client.on("interactionCreate", async (interaction) => {
+  if (!interaction.isChatInputCommand()) return;
+
+  if (interaction.commandName === "ping") {
+    await interaction.reply("Pong!");
   }
-}
+});
 
-client.on('message', onMessage)
+client.login(TOKEN);

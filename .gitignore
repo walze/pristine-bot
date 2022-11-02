@@ -1,5 +1,2 @@
-.cache/
-.vs/
-builds/
-node_modules/
-env.json
+node_modules
+.env
